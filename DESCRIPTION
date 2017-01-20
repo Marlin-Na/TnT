@@ -2,8 +2,11 @@ Package: TnT
 Title: Tree- and Track- Based Interactive Visualizations
 Version: 0.0.0.9000
 Authors@R: person("Jialin", "Ma", email = "jialin.ma14@xjtlu.edu.cn", role = c("aut", "cre"))
-Description: A R interface to the TnT javascript library (https://github.com/tntvis).
-Depends: R (>= 3.3.2)
+Description: A R interface to the TnT javascript library (https://github.com/
+    tntvis).
+Depends:
+    R (>= 3.3.2)
 License: AGPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 5.0.1
