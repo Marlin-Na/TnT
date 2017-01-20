@@ -4,3 +4,8 @@ dependencies:
    src: htmlwidgets/lib/d3
    script: d3.v3.min.js
    # stylesheet:
+ - name: tnt.genome
+   version: 0.1.6
+   src: htmlwidgets/lib/tnt.genome
+   script: tnt.genome.min.js
+   stylesheet: tnt.genome.css
