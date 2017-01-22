@@ -31,7 +31,7 @@ TnT("
                .height(30)
                .color('#FFCFDD')
                .data(tnt.board.track.data.sync()
-                     .retriever(function() {return [{start : 200, end : 350}]}))
+                     .retriever(function() {return [{start : 200, end : 350}];}))
                .display(tnt.board.track.feature.block()
                         .color('blue')
                         .index(function (d) {return d.start})))
