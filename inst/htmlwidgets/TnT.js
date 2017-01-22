@@ -12,9 +12,10 @@ HTMLWidgets.widget({
 
       renderValue: function(x) {
 
-        // TODO: code to render the widget, e.g.
-        el.innerText = x.message;
-
+        // Code to render the widget
+        var tot = eval(x.tntdef);
+        tot(el);
+        tot.start();
       },
 
       resize: function(width, height) {

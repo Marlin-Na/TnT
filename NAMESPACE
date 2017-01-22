@@ -3,4 +3,3 @@
 export(TnT)
 export(TnTOutput)
 export(renderTnT)
-import(htmlwidgets)
