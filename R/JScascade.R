@@ -135,6 +135,7 @@ print.JS_EVAL <- function (x) {
 #'     jsonlite::toJSON(q)
 quo <- function (string) {
     # Escape the existing quotation marks before adding 
+    # TODO: There is a problem, try not to subsititute existing "\'" with "\\'"?
     s <- gsub("'", "\\'", string, fixed = TRUE)
     sprintf("'%s'", s)
 }
