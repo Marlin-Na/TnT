@@ -3,7 +3,7 @@
 htmlwidgets::JS
 
 #' @export
-print.JS_EVAL <- function (x) {
+print.JS_EVAL <- function (x, ...) {
     cat(x)
     invisible(x)
 }
@@ -27,27 +27,27 @@ print.JS_EVAL <- function (x) {
 #'
 #' @examples
 #' axisTrack <- jc(
-#'     tnt.board.track = "",
+#'     tnt.board.track = NULL,
 #'     height = 20,
-#'     color = quo('white'),
-#'     display = jc(tnt.board.track.feature.axis = "")
+#'     color = "white",
+#'     display = jc(tnt.board.track.feature.axis = NULL)
 #' )
 #' blockTrack <- jc(
-#'     tnt.board.track = "",
+#'     tnt.board.track = NULL,
 #'     height = 30,
-#'     color = quo("#FFCFDD"),
+#'     color = "yellow",
 #'     data = jc(
-#'         tnt.board.track.data.sync = "",
-#'         retriever = "function() {return [{start : 200, end : 350}]}"
+#'         tnt.board.track.data.sync = NULL,
+#'         retriever = JS("function() {return [{start : 200, end : 350}]}")
 #'     ),
 #'     display = jc(
-#'         tnt.board.track.feature.block = "",
-#'         color = quo("blue"),
-#'         index = "function (d) {return d.start}"
+#'         tnt.board.track.feature.block = NULL,
+#'         color = "blue",
+#'         index = JS("function (d) {return d.start}")
 #'     )
 #' )
 #' tntdef <- jc(
-#'     tnt.board.genome = "",
+#'     tnt.board.genome = NULL,
 #'     from = 0,
 #'     to = 500,
 #'     min = 0,
@@ -57,6 +57,7 @@ print.JS_EVAL <- function (x) {
 #' )
 #' tntdef
 #' asJS(tntdef)
+#' TnT(asJS(tntdef))
 JScascade <- function (...) {
     ans <- list(...)
     if (is.null(names(ans)) || any(names(ans) == ""))
@@ -70,14 +71,14 @@ JScascade <- function (...) {
 jc <- function (...) JScascade(...)
 
 #' @export
-print.JScascade <- function(x) {
+print.JScascade <- function(x, ...) {
     calls <- names(x)
     arguments <- vapply(x, FUN.VALUE = character(1),
         function (e) {
-            if (is(e, "JScascade"))
+            if (methods::is(e, "JScascade"))
                 return("<S3: JScascade>")
-            else
-                return(as.character(e))
+            else 
+                return(asJS(e))
         }
     )
     out <- data.frame(JScalls = calls)
