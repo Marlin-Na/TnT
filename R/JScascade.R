@@ -1,3 +1,13 @@
+#' @importFrom htmlwidgets JS
+#' @export
+htmlwidgets::JS
+
+#' @export
+print.JS_EVAL <- function (x) {
+    cat(x)
+    invisible(x)
+}
+
 
 #' Construct a Javascript Function Cascade
 #'
@@ -12,7 +22,6 @@
 #' @return
 #'     The function returns a JScascade S3 object which can be further utilized
 #'     by \code{asJS()} and \code{JScascade()}/\code{jc()} itself.
-#' 
 #' 
 #' @export
 #'
@@ -93,22 +102,27 @@ asJS.JScascade <- function (x) {
     arguments <- vapply(x, asJS, character(1))
     each <- sprintf("%s(%s)", calls, arguments)
     ans <- 
-    ans <- htmlwidgets::JS(
-        paste(each, collapse = "\n."))
+    ans <- JS(paste(each, collapse = "\n."))
     ans
 }
 
+
+#' @export
+asJS.logical <- function (x)
+    JS(if (x) "true" else "false")
+
+#' @export
+asJS.NULL <- function (x)
+    character(1)
+
+#' @export
+asJS.character <- function (x)
+    quo(x)
+
 #' @export
 asJS.default <- function (x) 
-    htmlwidgets::JS(as.character(x))
+    JS(as.character(x))
 
-
-
-#' @export
-print.JS_EVAL <- function (x) {
-    cat(x)
-    invisible(x)
-}
 
 #' Add Quotation Mark to a String
 #' 

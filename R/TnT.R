@@ -33,7 +33,7 @@
 TnT <- function(tntdef, width = NULL, height = NULL, elementId = NULL) {
 
   #stopifnot(is(tntdef,"JS_EVAL"))
-  tntdef <- htmlwidgets::JS(tntdef)
+  tntdef <- JS(tntdef)
 
   # forward options using x
   x <- list(
