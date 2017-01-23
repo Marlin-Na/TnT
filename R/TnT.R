@@ -32,23 +32,23 @@
 #' ")
 TnT <- function(tntdef, width = NULL, height = NULL, elementId = NULL) {
 
-  #stopifnot(is(tntdef,"JS_EVAL"))
-  tntdef <- JS(tntdef)
+    #stopifnot(is(tntdef,"JS_EVAL"))
+    tntdef <- JS(tntdef)
 
-  # forward options using x
-  x <- list(
-    tntdef = tntdef
-  )
+    # forward options using x
+    x <- list(
+        tntdef = tntdef
+    )
 
-  # create widget
-  htmlwidgets::createWidget(
-    name = 'TnT',
-    x,
-    width = width,
-    height = height,
-    package = 'TnT',
-    elementId = elementId
-  )
+    # create widget
+    htmlwidgets::createWidget(
+        name = 'TnT',
+        x,
+        width = width,
+        height = height,
+        package = 'TnT',
+        elementId = elementId
+    )
 }
 
 #' Shiny bindings for TnT
@@ -99,12 +99,12 @@ TnT <- function(tntdef, width = NULL, height = NULL, elementId = NULL) {
 #'     shinyApp(ui = ui, server = server)
 #' }
 TnTOutput <- function(outputId, width = '100%', height = '400px'){
-  htmlwidgets::shinyWidgetOutput(outputId, 'TnT', width, height, package = 'TnT')
+    htmlwidgets::shinyWidgetOutput(outputId, 'TnT', width, height, package = 'TnT')
 }
 
 #' @rdname TnT-shiny
 #' @export
 renderTnT <- function(expr, env = parent.frame(), quoted = FALSE) {
-  if (!quoted) { expr <- substitute(expr) } # force quoted
-  htmlwidgets::shinyRenderWidget(expr, TnTOutput, env, quoted = TRUE)
+    if (!quoted) { expr <- substitute(expr) } # force quoted
+    htmlwidgets::shinyRenderWidget(expr, TnTOutput, env, quoted = TRUE)
 }
