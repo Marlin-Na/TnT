@@ -1,3 +1,6 @@
+#' @importFrom methods is
+NULL
+
 #' @importFrom htmlwidgets JS
 #' @export
 htmlwidgets::JS
@@ -70,12 +73,35 @@ JScascade <- function (...) {
 #' @rdname JScascade
 jc <- function (...) JScascade(...)
 
+
+# Function to combine multiple "JScascade" objects
+#' @export
+c.JScascade <- function(...) {
+    jclist <- lapply(list(...),
+        function (x) {
+            stopifnot(is(x, "JScascade"))
+            unclass(x)
+        }
+    )
+    ans <- do.call(c, jclist)
+    class(ans) <- "JScascade"
+    ans
+}
+
+#' @export
+`[.JScascade` <- function (x, condition) {
+    li <- unclass(x)
+    ans <- li[condition]
+    class(ans) <- "JScascade"
+    ans
+}
+
 #' @export
 print.JScascade <- function(x, ...) {
     calls <- names(x)
     arguments <- vapply(x, FUN.VALUE = character(1),
         function (e) {
-            if (methods::is(e, "JScascade"))
+            if (is(e, "JScascade"))
                 return("<S3: JScascade>")
             else 
                 return(asJS(e))
