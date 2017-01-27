@@ -71,12 +71,7 @@ jc <- function (...) JScascade(...)
 # Function to combine multiple "JScascade" objects
 #' @export
 c.JScascade <- function(...) {
-    jclist <- lapply(list(...),
-        function (x) {
-            stopifnot(is(x, "JScascade"))
-            unclass(x)
-        }
-    )
+    jclist <- lapply(list(...), function (x) unclass(x))
     ans <- do.call(c, jclist)
     class(ans) <- "JScascade"
     ans
