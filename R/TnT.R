@@ -33,7 +33,10 @@
 TnT <- function(tntdef, width = NULL, height = NULL, elementId = NULL) {
 
     #stopifnot(is(tntdef,"JS_EVAL"))
-    tntdef <- JS(tntdef)
+    tntdef <- {
+        if (is(tntdef, "JScascade")) asJS(tntdef)
+        else JS(tntdef)
+    }
 
     # forward options using x
     x <- list(
