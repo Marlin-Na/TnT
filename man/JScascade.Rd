@@ -43,11 +43,12 @@ blockTrack <- jc(
     )
 )
 tntdef <- jc(
-    tnt.board.genome = NULL,
+    tnt.board = NULL,
     from = 0,
     to = 500,
-    min = 0,
+    min = 50,
     max = 1000,
+    width = 500,
     add_track = axisTrack,
     add_track = blockTrack
 )

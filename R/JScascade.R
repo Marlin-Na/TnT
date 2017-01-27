@@ -38,11 +38,12 @@
 #'     )
 #' )
 #' tntdef <- jc(
-#'     tnt.board.genome = NULL,
+#'     tnt.board = NULL,
 #'     from = 0,
 #'     to = 500,
-#'     min = 0,
+#'     min = 50,
 #'     max = 1000,
+#'     width = 500,
 #'     add_track = axisTrack,
 #'     add_track = blockTrack
 #' )
@@ -50,12 +51,17 @@
 #' asJS(tntdef)
 #' TnT(asJS(tntdef))
 JScascade <- function (...) {
-    ans <- list(...)
-    if (is.null(names(ans)) || any(names(ans) == ""))
-        stop ("Names of the arguments must be specified.")
-    class(ans) <- "JScascade"
-    ans
+    lst <- list(...)
+    JCfromlst(lst = lst)
 }
+
+JCfromlst <- function (lst) {
+    if (is.null(names(lst)) || any(names(lst) == ""))
+        stop ("Names of the function calls must be specified.")
+    class(lst) <- "JScascade"
+    lst
+}
+
 
 #' @export
 #' @rdname JScascade
@@ -86,7 +92,7 @@ c.JScascade <- function(...) {
 
 #' @export
 print.JScascade <- function(x, ...) {
-    calls <- names(x)
+    funs <- names(x)
     arguments <- vapply(x, FUN.VALUE = character(1),
         function (e) {
             if (is(e, "JScascade"))
@@ -95,11 +101,18 @@ print.JScascade <- function(x, ...) {
                 return(asJS(e))
         }
     )
-    out <- data.frame(JScalls = calls)
-    out$Arguments <- arguments
-    rownames(out) <- paste("step", seq_along(x))
-    cat("<S3: JScascade>:\n")
-    print(out)
+    main <- {
+        main <- data.frame(js_functions = funs)
+        main$arguments <- arguments
+        rownames(main) <- paste("step", seq_along(x))
+        main
+    }
+    head <- c("Javascript function cascade:\n")
+    tail <- c("You can use", sQuote('asJS'), "to convert it to javascript code\n")
+    cat(head)
+    print(main)
+    cat("---------\n")
+    cat(tail)
     invisible(x)
 }
 
@@ -116,7 +129,6 @@ asJS.JScascade <- function (x) {
     calls <- names(x)
     arguments <- vapply(x, asJS, character(1))
     each <- sprintf("%s(%s)", calls, arguments)
-    ans <- 
     ans <- JS(paste(each, collapse = "\n."))
     ans
 }
@@ -133,6 +145,10 @@ asJS.NULL <- function (x)
 #' @export
 asJS.character <- function (x)
     quo(x)
+
+#' @export
+asJS.numeric <- function (x)
+    JS(as.character(x))
 
 #' @export
 asJS.default <- function (x) 
@@ -165,6 +181,7 @@ asJS.default <- function (x)
 quo <- function (string) {
     # Escape the existing quotation marks before adding 
     # TODO: There is a problem, try not to subsititute existing "\'" with "\\'"?
+    #       Also take a look at "shQuote()".
     s <- gsub("'", "\\'", string, fixed = TRUE)
     sprintf("'%s'", s)
 }
