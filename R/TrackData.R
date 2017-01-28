@@ -27,9 +27,9 @@ selfRetriever <- function (trackData) {
 asTrackData <- function (x, ...) UseMethod("asTrackData")
 
 # This method can be applied to IRanges but not GRanges
-asTrackData.Ranges <- function (x, use.pos = FALSE, additional.cols, ...) {
+asTrackData.Ranges <- function (x, ir_use.pos = FALSE, ir_additional.cols, ...) {
     df <- {
-        if (use.pos) {
+        if (ir_use.pos) {
             stopifnot(all(BiocGenerics::width(x) == 1))
             data.frame(pos = BiocGenerics::start(x))
         }
@@ -37,14 +37,14 @@ asTrackData.Ranges <- function (x, use.pos = FALSE, additional.cols, ...) {
             data.frame(start = BiocGenerics::start(x), end = BiocGenerics::end(x))
     }
 
-    ans <- if (!missing(additional.cols)) cbind(df, additional.cols) else df
+    ans <- if (!missing(ir_additional.cols)) cbind(df, ir_additional.cols) else df
     class(ans) <- c("tntTrackData", "data.frame")
     ans
 }
 
 
-asTrackData.data.frame <- function (x, preserved.cols = c("start","end","pos","val"), ...) {
-    whichcols <- colnames(x) %in% preserved.cols
+asTrackData.data.frame <- function (x, df_preserved.cols = c("start","end","pos","val"), ...) {
+    whichcols <- colnames(x) %in% df_preserved.cols
     ans <- x[, whichcols, drop = FALSE]
     class(ans) <- c("tntTrackData", "data.frame")
     ans
