@@ -11,28 +11,28 @@
 
 
 # @examples
-if (interactive()) {
-    board <- jc_tnt_board(from = 1000, to = 1200, min = -1000, max = 5000, width = 1000)
-    blocktrack <- jc_tnt_track(
-        color = "yellow",
-        label = 'test block track',
-        height = 50,
-        data = jc_board_trackdata_sync(
-            retriever = selfRetriever({
-                asTrackData(data.frame(start = c(1000, 1050), end = c(1100, 1200)))
-            })
-        ),
-        display = jc_board_trackfea_block(color = "green")
-    )
-    loctrack <- jc_tnt_track(height = 0,
-                               display = jc_board_trackfea_location())
-    axistrack <- jc_tnt_track(height = 0,
-                                display = jc_board_trackfea_axis())
-    tntdef <- c(board, jc(add_track = loctrack,
-                          add_track = blocktrack,
-                          add_track = axistrack))
-    TnT(tntdef)
-}
+# if (interactive()) {
+#     board <- jc_tnt_board(from = 1000, to = 1200, min = -1000, max = 5000, width = 1000)
+#     blocktrack <- jc_tnt_track(
+#         color = "yellow",
+#         label = 'test block track',
+#         height = 50,
+#         data = jc_board_trackdata_sync(
+#             retriever = selfRetriever({
+#                 asTrackData(data.frame(start = c(1000, 1050), end = c(1100, 1200)))
+#             })
+#         ),
+#         display = jc_board_trackfea_block(color = "green")
+#     )
+#     loctrack <- jc_tnt_track(height = 0,
+#                                display = jc_board_trackfea_location())
+#     axistrack <- jc_tnt_track(height = 0,
+#                                 display = jc_board_trackfea_axis())
+#     tntdef <- c(board, jc(add_track = loctrack,
+#                           add_track = blocktrack,
+#                           add_track = axistrack))
+#     TnT(tntdef)
+# }
 
 
 ## utils  ----------------------------------------------------------------------

@@ -3,4 +3,6 @@
 .RData
 .Ruserdata
 
-README.html
+inst/doc
+tmp
+gh-pages

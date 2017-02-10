@@ -54,5 +54,6 @@ tntdef <- jc(
 )
 tntdef
 asJS(tntdef)
-TnT(asJS(tntdef))
+if (interactive())
+    TnT(asJS(tntdef))
 }

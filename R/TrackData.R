@@ -1,12 +1,12 @@
 
 
 # @examples
-if (interactive() && requireNamespace("IRanges")) {
-    ir <- IRanges::IRanges(start = c(12,34), end = c(12,34))
-    td <- asTrackData(ir, use.pos = TRUE,
-                      additional.cols = list(val = c(0.5, 0.7)))
-    selfRetriever(td)
-}
+# if (interactive() && requireNamespace("IRanges")) {
+#     ir <- IRanges::IRanges(start = c(12,34), end = c(12,34))
+#     td <- TnT:::asTrackData(ir, use.pos = TRUE,
+#                       additional.cols = list(val = c(0.5, 0.7)))
+#     selfRetriever(td)
+# }
 
 
 

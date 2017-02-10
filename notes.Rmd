@@ -1,56 +1,13 @@
 ---
-title: "TnT"
+title: "Some Technical Notes"
 author: "Jialin Ma"
-date: "January 31, 2017"
-output: 
-  html_document: 
-    keep_md: yes
+date: "February 10, 2017"
+output:
+    rmarkdown::html_document:
+        toc: true
+        toc_float: true
+        theme: flatly
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-
-This is a R package that wraps the tnt javascript library (https://github.com/tntvis).
-It can provide tree- and track-based visulizations, including a simple genome browser.
-You can install it by
-
-```r
-if (!require(devtools)) {
-    install.packages('devtools')
-    require(devtools)
-}
-devtools::install_github("marlin-na/TnT")
-```
-
-
-
-
-
-
-
-
-
-This package is currently in development, but the following snippet of code may
-illustrate the way of using:
-
-```{r}
-library(TnT)
-mydata1 <- data.frame (
-    start = c(42, 69, 233),
-    end = c(54, 99, 250)
-)
-mydata2 <- data.frame(
-    start = c(23, 66, 300),
-    end = c(38, 74, 318)
-)
-tnt_board(from = 14, to = 114, min = -100, max = 500) %>%
-    add_track_block(mydata1, label = "My Track 1") %>%
-    add_track_block(mydata2, label = "My Track 2", color.feature = "green") %>%
-    TnT()
-```
-
 
 
 ## Technical Notes
@@ -129,6 +86,7 @@ and pass it to javascript side.
 For example,
 
 ```{r}
+library(TnT)
 tntdef <-
 "
   tnt.board()
@@ -252,5 +210,4 @@ limited user-side functions. This package further need to wrap other tnt librari
 functions to help easily convert R/bioconductor data into tnt components.
 Also, for visulization of large datasets in shiny app, consider how to serve
 the data on the server-side (like the `DT` package).
-
 

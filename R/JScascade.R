@@ -49,7 +49,8 @@
 #' )
 #' tntdef
 #' asJS(tntdef)
-#' TnT(asJS(tntdef))
+#' if (interactive())
+#'     TnT(asJS(tntdef))
 JScascade <- function (...) {
     JCfromlst(list(...))
 }
