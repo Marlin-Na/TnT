@@ -59,4 +59,3 @@ if (interactive() && require(shiny)) {
     shinyApp(ui = ui, server = server)
 }
 }
-

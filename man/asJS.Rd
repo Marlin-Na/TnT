@@ -15,4 +15,3 @@ It will return a character string of the class "JS_EVAL".
 \description{
 Parse \code{\link{JScascade}} Class as Literal Javascript Code
 }
-

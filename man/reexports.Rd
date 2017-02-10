@@ -2,10 +2,12 @@
 % Please edit documentation in R/misc.R
 \docType{import}
 \name{reexports}
-\alias{JS}
+\alias{reexports}
 \alias{\%>\%}
 \alias{reexports}
+\alias{JS}
 \title{Objects exported from other packages}
+\keyword{internal}
 \description{
 These objects are imported from other packages. Follow the links
 below to see their documentation.
@@ -15,5 +17,4 @@ below to see their documentation.
 
   \item{magrittr}{\code{\link[magrittr]{\%>\%}}}
 }}
-\keyword{internal}
 

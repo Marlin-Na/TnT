@@ -56,4 +56,3 @@ tntdef
 asJS(tntdef)
 TnT(asJS(tntdef))
 }
-
