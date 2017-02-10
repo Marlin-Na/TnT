@@ -51,8 +51,7 @@
 #' asJS(tntdef)
 #' TnT(asJS(tntdef))
 JScascade <- function (...) {
-    lst <- list(...)
-    JCfromlst(lst = lst)
+    JCfromlst(list(...))
 }
 
 JCfromlst <- function (lst) {
