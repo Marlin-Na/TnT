@@ -35,6 +35,7 @@ if (interactive()) {
 }
 
 
+## utils  ----------------------------------------------------------------------
 
 # Note that this function must be used at the beginning inside another function
 # to get non-missing arguments.
@@ -55,15 +56,27 @@ jc_init_with <- function (.list, ...) {
     JCfromlst(append(init, .list))
 }
 
+# Also must be used at the beginning
+jc_init_args_with <- function(...) {
+    arglist <- getArgList(2)
+    jc_init_with(arglist, ...)
+}
+
+`%addclass%` <- function (x, classes) {
+    class(x) <- append(classes, class(x))
+    x
+}
+
+
+
+
+## -----------------------------------------------------------------------------
 
 # Methods that are not implemented:
 #     board.scroll, board.zoom
 #     board.tracks, board.add_track, board.find_track
 jc_tnt_board <- function (from, to, min, max, width, zoom_out, zoom_in, allow_drag = TRUE) {
-    argv <- getArgList()
-    ans <- jc_init_with(argv, tnt.board = NULL)
-    class(ans) <- append(c("board","tnt"), class(ans))
-    ans
+    jc_init_args_with(tnt.board = NULL) %addclass% c("board","tnt")
 }
 
 
@@ -72,10 +85,7 @@ jc_tnt_board <- function (from, to, min, max, width, zoom_out, zoom_in, allow_dr
 #     track.id
 jc_tnt_track <- function (color, height, label, data, display) {
     # TODO: stopifnot(is(data, ""))
-    argv <- getArgList()
-    ans <- jc_init_with(argv, tnt.board.track = NULL)
-    class(ans) <- append(c("track","tnt"), class(ans))
-    ans
+    jc_init_args_with(tnt.board.track = NULL) %addclass% c("track","tnt")
 }
 
 jc_add_track <- function (color, height, label, data, display) {
@@ -93,23 +103,15 @@ jc_add_track <- function (color, height, label, data, display) {
 jc_board_trackdata_sync <- function (retriever) {
     # Argument "retriever" should be a javascript callback function as a 
     # character string of the class "JScascade".
-    argv <- getArgList()
-    ans <- jc_init_with(argv, tnt.board.track.data.sync = NULL)
-    class(ans) <- append(c("track_data", "tnt"), class(ans))
-    ans
+    jc_init_args_with(tnt.board.track.data.sync = NULL) %addclass% c("track_data", "tnt")
 }
 
 jc_board_trackdata_async <- function (retriever) {
-    argv <- getArgList()
-    ans <- jc_init_with(argv, tnt.board.track.data.async = NULL)
-    class(ans) <- append(c("track_data", "tnt"), class(ans))
-    ans
+    jc_init_args_with(tnt.board.track.data.async = NULL) %addclass% c("track_data", "tnt")
 }
 
 jc_board_trackdata_empty <- function () {
-    ans <- JScascade(tnt.board.track.data.empty = NULL)
-    class(ans) <- append(c("track_data", "tnt"), class(ans))
-    ans
+    jc_init_args_with(tnt.board.track.data.empty = NULL) %addclass% c("track_data", "tnt")
 }
 
 
@@ -135,10 +137,7 @@ jc_board_trackdata_empty <- function () {
 # "start" and "end" columns can be converted to such a js array by
 # jsonlite::toJSON()
 jc_board_trackfea_block <- function (color, index) {
-    argv <- getArgList()
-    ans <- jc_init_with(argv, tnt.board.track.feature.block = NULL)
-    class(ans) <- append(c("track_display", "tnt"), class(ans))
-    ans
+    jc_init_args_with(tnt.board.track.feature.block = NULL) %addclass% c("track_display", "tnt")
 }
 
 # This features expects the data have "pos" and "val" values.
@@ -147,35 +146,23 @@ jc_board_trackfea_block <- function (color, index) {
 # the "domain", by default, between 0 and 1.
 # The "domain" argument takes a javascript array, e.g. JS("[0.3, 1.2]")
 jc_board_trackfea_pin <- function (color, index, domain) {
-    argv <- getArgList()
-    ans <- jc_init_with(argv, tnt.board.track.feature.pin = NULL)
-    class(ans) <- append(c("track_display", "tnt"), class(ans))
-    ans
+    jc_init_args_with(tnt.board.track.feature.pin = NULL) %addclass% c("track_display", "tnt")
 }
 
 # This feature also expects the data contain "pos" and "val" values.
 # These points are applied a tension to smooth the connections between the points.
 jc_board_trackfea_line <- function (color, index, domain) {
-    argv <- getArgList()
-    ans <- jc_init_with(argv, tnt.board.track.feature.line = NULL)
-    class(ans) <- append(c("track_display", "tnt"), class(ans))
-    ans
+    jc_init_args_with(tnt.board.track.feature.line = NULL) %addclass% c("track_display", "tnt")
 }
 
 # Coloring the area behind the curve.
 jc_board_trackfea_area <- function (color, index, domain) {
-    argv <- getArgList()
-    ans <- jc_init_with(argv, tnt.board.track.feature.area = NULL)
-    class(ans) <- append(c("track_display", "tnt"), class(ans))
-    ans
+    jc_init_args_with(tnt.board.track.feature.area = NULL) %addclass% c("track_display", "tnt")
 }
 
 # It expects the data contain "pos" values
 jc_board_trackfea_vline <- function (color, index) {
-    argv <- getArgList()
-    ans <- jc_init_with(argv, tnt.board.track.feature.vline = NULL)
-    class(ans) <- append(c("track_display", "tnt"), class(ans))
-    ans
+    jc_init_args_with(tnt.board.track.feature.vline = NULL) %addclass% c("track_display", "tnt")
 }
 
 
@@ -183,16 +170,11 @@ jc_board_trackfea_vline <- function (color, index) {
 
 #
 jc_board_trackfea_location <- function () {
-    ans <- JScascade(tnt.board.track.feature.location = NULL)
-    class(ans) <- append(c("track_display", "tnt"), class(ans))
-    ans
+    jc_init_args_with(tnt.board.track.feature.location = NULL) %addclass% c("track_display", "tnt")
 }
 
 # Orientation should be either "top" or "bottom".
 jc_board_trackfea_axis <- function (orientation) {
-    argv <- getArgList()
-    ans <- jc_init_with(argv, tnt.board.track.feature.axis = NULL)
-    class(ans) <- append(c("track_display", "tnt"), class(ans))
-    ans
+    jc_init_args_with(tnt.board.track.feature.axis = NULL) %addclass% c("track_display", "tnt")
 }
 
