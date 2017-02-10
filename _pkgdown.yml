@@ -1,0 +1,36 @@
+
+articles:
+
+
+navbar:
+  title: ~
+  type: default
+  left:
+  - text: Home
+    href: index.html
+  - text: Articles
+    href: articles/index.html
+  - text: Reference
+    href: reference/index.html
+  - text: Misc
+    menu:
+    - text: "Some Technical Notes"
+      href: notes.html
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/marlin-na/TnT
+
+
+reference:
+  - title: All functions
+    desc: ~
+    contents:
+      - asJS
+      - JScascade
+      - TnT-shiny
+      - TnT
+
+
+templates:
+  params:
+    bootswatch: flatly
