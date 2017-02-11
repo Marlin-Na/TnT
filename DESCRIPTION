@@ -16,7 +16,8 @@ Suggests:
     BiocGenerics,
     IRanges,
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 License: AGPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
