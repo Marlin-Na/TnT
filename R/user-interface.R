@@ -1,11 +1,13 @@
 
 
+#' @export
 elementToDrop <- function () {
     ans <- c("elementToDrop")
     class(ans) <- "elementToDrop"
     ans
 }
 
+#' @export
 dropE <- function (lst) {
     lst[!sapply(lst, is, class2 = "elementToDrop")]
 }

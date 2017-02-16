@@ -55,6 +55,7 @@ JScascade <- function (...) {
     JCfromlst(list(...))
 }
 
+#' @export
 JCfromlst <- function (lst) {
     if (is.null(names(lst)) || any(names(lst) == ""))
         stop ("Names of the function calls must be specified.")

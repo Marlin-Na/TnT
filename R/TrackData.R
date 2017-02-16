@@ -13,6 +13,7 @@
 # It may take an argument of data.frame which contains appropriate columns and
 # then returns a javascript callback function as a character string of class
 # "JS_EVAL".
+#' @export
 selfRetriever <- function (trackData) {
     json <- jsonlite::toJSON(trackData)
     ans <- {
@@ -24,9 +25,11 @@ selfRetriever <- function (trackData) {
 
 # The track data is represented as a data.frame containing essential columns like
 # "start", "end", "pos" and "val". it can be further converted to "json" using jsonlite::toJSON.
+#' @export
 asTrackData <- function (x, ...) UseMethod("asTrackData")
 
 # This method can be applied to IRanges but not GRanges
+#' @export
 asTrackData.Ranges <- function (x, ir_use.pos = FALSE, ir_additional.cols, ...) {
     df <- {
         if (ir_use.pos) {
@@ -43,9 +46,12 @@ asTrackData.Ranges <- function (x, ir_use.pos = FALSE, ir_additional.cols, ...) 
 }
 
 
+#' @export
 asTrackData.data.frame <- function (x, df_preserved.cols = c("start","end","pos","val"), ...) {
     whichcols <- colnames(x) %in% df_preserved.cols
     ans <- x[, whichcols, drop = FALSE]
     class(ans) <- c("tntTrackData", "data.frame")
     ans
 }
+
+
