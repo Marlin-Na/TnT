@@ -57,8 +57,11 @@ JScascade <- function (...) {
 
 #' @export
 JCfromlst <- function (lst) {
+    if (!is.list(lst))
+        #lst <- as.list(lst)
+        stop("The argument is not a list.")
     if (is.null(names(lst)) || any(names(lst) == ""))
-        stop ("Names of the function calls must be specified.")
+        stop("Names of the function calls must be specified.")
     class(lst) <- "JScascade"
     lst
 }
@@ -66,7 +69,7 @@ JCfromlst <- function (lst) {
 
 #' @export
 #' @rdname JScascade
-jc <- function (...) JScascade(...)
+jc <- JScascade
 
 
 # Function to combine multiple "JScascade" objects
@@ -149,6 +152,47 @@ asJS.numeric <- function (x)
 #' @export
 asJS.default <- function (x) 
     JS(as.character(x))
+
+
+
+
+
+#' @export
+asJS.multiArgs <- function (x) {
+    if (is.null(names(x)) || all(names(x) == "")) {
+        if (length(x) == 1)
+            return(asJS(x[[1]]))
+        else {
+            l <- vapply(x, FUN = asJS, FUN.VALUE = character(1))
+            return(JS(paste(l, collapse = ", ")))
+        }
+    }
+    else {
+        warning("The names will be ignored at present.")
+        names(x) <- NULL
+        return(asJS(x))
+    }
+}
+
+
+#' @export
+mafromlst <- function (lst) {
+    #
+    if (!is.list(lst))
+        stop("The argument is not a list.")
+    class(lst) <- "multiArgs"
+    lst
+}
+
+#' @export
+multiArgs <- function (...) {
+    mafromlst(list(...))
+}
+
+#' @export
+ma <- multiArgs
+
+
 
 
 #' Add Quotation Mark to a String
