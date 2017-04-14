@@ -15,25 +15,3 @@ It can be constructed using \code{\link{JScascade}} and \code{\link{asJS}}.}
 \description{
 <Add Description>
 }
-\examples{
-if (interactive())
-TnT("
-  tnt.board.genome()
-    .from(0)
-    .to(500)
-    .min(0)
-    .max(1000)
-    .add_track(tnt.board.track()
-               .height(20)
-               .color('white')
-               .display(tnt.board.track.feature.axis()))
-    .add_track(tnt.board.track()
-               .height(30)
-               .color('#FFCFDD')
-               .data(tnt.board.track.data.sync()
-                     .retriever(function() {return [{start : 200, end : 350}];}))
-               .display(tnt.board.track.feature.block()
-                        .color('blue')
-                        .index(function (d) {return d.start})))
-")
-}
