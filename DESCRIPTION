@@ -10,11 +10,12 @@ Imports:
     methods,
     htmlwidgets,
     jsonlite,
-    magrittr
+    magrittr,
+    IRanges,
+    S4Vectors
 Suggests:
     shiny,
     BiocGenerics,
-    IRanges,
     knitr,
     rmarkdown,
     testthat
