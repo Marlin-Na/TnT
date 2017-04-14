@@ -63,13 +63,24 @@ JavaScript <- function (code) {
 }
 
 #' @export
-JSCascade <- function (...) {
-    new("JSCascade", listData = list(...))
+JSCascade <- function (..., .listData) {
+    if (missing(.listData))
+        lst <- list(...)
+    else
+        lst <- .listData
+    
+    # If the element is NULL, then drop the element from the list
+    todrop <- vapply(lst, is.null, logical(1))
+    ans <- new("JSCascade", listData = lst[!todrop])
+    ans
 }
 
 #' @export
-MultiArgs <- function (...) {
-    new("MultiArgs", listData = list(...))
+MultiArgs <- function (..., .listData) {
+    if (missing(.listData))
+        new("MultiArgs", listData = list(...))
+    else
+        new("MultiArgs", listData = .listData)
 }
 
 #' @export
@@ -78,21 +89,6 @@ js <- JavaScript
 jc <- JSCascade
 #' @export
 ma <- MultiArgs
-
-setMethod("initialize", signature = "JSCascade",
-    function (.Object, listData, ...) {
-      # If the element is NULL, then drop the element from the list
-        todrop <- sapply(listData, is.null)
-        if (any(todrop))
-            ans <- new("JSCascade", listData = listData[!todrop])
-        else
-            ans <- {
-                .Object@listData <- listData
-                .Object
-            }
-        ans
-    }
-)
 
 
 #' @export
@@ -111,17 +107,24 @@ setGeneric("asJC",
 
 setValidity("JSCascade",
     function (object) {
-      # Ensure the names are specified
         lst <- as.list(object)
+      # Ensure there is no "NULL" value
+        isnull <- vapply(lst, is.null, logical(1))
+        if (any(isnull))
+            return("NULL is not allowed in JSCascade")
+      # Ensure the names are specified
         if (is.null(names(lst)) || any(names(lst) == ""))
             return("Names must be specified.")
       # Only allow certain types of element
-        isAllowed <- vapply(lst, class, character(1)) %in% c(
-            "JSCascade", "MultiArgs",
-            "numeric", "integer", "logical", "character"
+        isAllowed <- vapply(lst, inherits, FUN.VALUE = logical(1),
+            what = c("JSCascade", "MultiArgs", "JavaScript",
+                     "numeric", "logical", "character")
         )
         if (!all(isAllowed)) {
-            classes <- sapply(lst[!isAllowed], class) %>% unique
+            classes <- vapply(lst[!isAllowed], FUN.VALUE = character(1),
+                function (element) class(element)[1]
+            )
+            classes <- unique(classes)
             return(paste("Class", classes, "is not allowed."))
         }
         
@@ -131,17 +134,20 @@ setValidity("JSCascade",
 
 setValidity("MultiArgs",
     function (object) {
-      # Only allow position-based JS call
         lst <- as.list(object)
+      # Only allow position-based JS call
         if (!is.null(names(lst)) && any(names(lst) != ""))
             message("The names will be ignored at present.")
       # Only allow certain types of element
-        isAllowed <- sapply(lst, class) %in% c(
-            "JSCascade",
-            "numeric", "logical", "character"
+        isAllowed <- vapply(lst, inherits, FUN.VALUE = logical(1),
+            what = c("JSCascade", "JavaScript",
+                     "numeric", "logical", "character")
         )
         if (!all(isAllowed)) {
-            classes <- sapply(lst[!isAllowed], class) %>% unique
+            classes <- vapply(lst[!isAllowed], FUN.VALUE = character(1),
+                function (element) class(element)[1]
+            )
+            classes <- unique(classes)
             return(paste("Class", classes, "is not allowed."))
         }
         
@@ -161,7 +167,7 @@ setMethod("asJS", signature = "JSCascade",
 
 setMethod("asJC", signature = "list",
     function (object)
-        new("JSCascade", listData = object)
+        JSCascade(.listData = object)
 )
 
 
