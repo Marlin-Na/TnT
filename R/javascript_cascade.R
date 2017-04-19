@@ -118,7 +118,7 @@ setValidity("JSCascade",
       # Only allow certain types of element
         isAllowed <- vapply(lst, inherits, FUN.VALUE = logical(1),
             what = c("JSCascade", "MultiArgs", "JavaScript",
-                     "numeric", "logical", "character")
+                     "integer", "numeric", "logical", "character")
         )
         if (!all(isAllowed)) {
             classes <- vapply(lst[!isAllowed], FUN.VALUE = character(1),
@@ -141,7 +141,7 @@ setValidity("MultiArgs",
       # Only allow certain types of element
         isAllowed <- vapply(lst, inherits, FUN.VALUE = logical(1),
             what = c("JSCascade", "JavaScript",
-                     "numeric", "logical", "character")
+                     "integer", "numeric", "logical", "character")
         )
         if (!all(isAllowed)) {
             classes <- vapply(lst[!isAllowed], FUN.VALUE = character(1),
@@ -210,7 +210,7 @@ setMethod("asJC", signature = "list",
         if (inherits(el, "JSCascade"))  return(.local.JSCascade(el))
         if (inherits(el, "MultiArgs"))  return(.local.MultiArgs(el))
         if (inherits(el, "JavaScript")) return(.local.JavaScript(el))
-        if (is.numeric(el))             return(.local.numeric(el))
+        if (is.numeric(el))             return(.local.numeric(el)) # also works for integer
         if (is.logical(el))             return(.local.logical(el))
         if (is.character(el))           return(.local.character(el))
         stop()
