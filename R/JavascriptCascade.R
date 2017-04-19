@@ -105,6 +105,10 @@ setGeneric("asJC",
 
 ## Validity                 ----------------------------------------------------
 
+# TODO:
+#   Check whether the numeric/character/logical vectors in JC and MA are of length 1,
+#   then update the unit test.
+
 setValidity("JSCascade",
     function (object) {
         lst <- as.list(object)
@@ -191,9 +195,9 @@ setMethod("asJC", signature = "list",
         as.character(el)      # TODO: Should also consider NA, NaN and Inf
     }
     .local.logical <- function (el) {
-        if (el) "true"
+        if (is.na(el)) stop() # TODO: use "none"?
+        else if (el) "true"
         else if (!el) "false"
-        else if (is.na(el)) stop() # TODO: use "none"?
         else stop()
     }
     .local.JavaScript <- function (el) {
