@@ -12,6 +12,8 @@ Imports:
     jsonlite,
     magrittr,
     IRanges,
+    GenomicRanges,
+    GenomeInfoDb,
     S4Vectors
 Suggests:
     shiny,

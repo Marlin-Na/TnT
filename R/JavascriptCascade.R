@@ -47,9 +47,6 @@ if (interactive()) local({
 
 
 
-#' @importClassesFrom S4Vectors SimpleList
-#' @importMethodsFrom IRanges c
-NULL
 
 ## Classes and Generics     ----------------------------------------------------
 
@@ -84,11 +81,16 @@ MultiArgs <- function (..., .listData) {
 }
 
 #' @export
+NoArg <- MultiArgs()
+
+#' @export
 js <- JavaScript
 #' @export
 jc <- JSCascade
 #' @export
 ma <- MultiArgs
+#' @export
+na <- NoArg
 
 
 #' @export
@@ -98,7 +100,7 @@ setGeneric("asJS",
 
 #' @export
 setGeneric("asJC",
-    function (object) standardGeneric("asJC")
+    function (object, ...) standardGeneric("asJC")
 )
 
 
@@ -169,9 +171,11 @@ setMethod("asJS", signature = "JSCascade",
     }
 )
 
-setMethod("asJC", signature = "list",
-    function (object)
+setMethod("asJC", signature = c(object = "list"),
+    function (object, ...) {
+        stopifnot(length(list(...)) == 0) # There should no extra argument for this method
         JSCascade(.listData = object)
+    }
 )
 
 
