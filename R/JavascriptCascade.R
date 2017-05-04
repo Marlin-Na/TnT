@@ -240,8 +240,8 @@ setMethod("asJC", signature = c(object = "list"),
 
 setMethod("show", signature = "JSCascade",
     function (object) {
-        js <- asJS(object)
         cat("JSCascade Object:\n------\n")
+        js <- asJS(object)
         show(js)
         invisible(object)
     }
