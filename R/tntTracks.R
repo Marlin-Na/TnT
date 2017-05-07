@@ -13,7 +13,7 @@ setClass("TrackData", slots = c(Source = "ANY"))
 #
 # An example is shown in the following:
 if (interactive()) local({
-    gr <- GenomicRanges::GRanges("chr12", IRanges(1:4, 40))
+    gr <- GenomicRanges::GRanges("chr12", IRanges::IRanges(1:4, 40))
     gr$value <- c(42)
     df.td <- .asDfTrackData(gr, PosBased = FALSE, SelectSeq = "chr12")
     print(df.td)
@@ -128,7 +128,7 @@ setMethod("asJC", signature = c(object = "PosTrackData"),
 ###  TnT Tracks     ------------------------------------------------------------
 
 
-tntTrack <- setClass(
+setClass(
     "TnTTrack",
     slots = c(
         Spec = "list",
@@ -136,6 +136,9 @@ tntTrack <- setClass(
         Display = "list"
     )
 )
+TnTTrack <- function (Spec, Data, Display) {
+    new("TnTTrack", Spec = Spec, Data = Data, Display = Display)
+}
 
 
 compileTrack <- function (tntTrack, prefSpec = NULL, prefDis = NULL, selectSeq = NULL) {
