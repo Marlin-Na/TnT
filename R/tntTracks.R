@@ -22,7 +22,7 @@ setMethod("asJC", c(object = "NoTrackData"),
 if (interactive()) local({
     gr <- GenomicRanges::GRanges("chr12", IRanges::IRanges(1:4, 40))
     gr$value <- c(42)
-    df.td <- .asDfTrackData(gr, PosBased = FALSE, SelectSeq = "chr12")
+    df.td <- .asDf(gr, PosBased = FALSE, SelectSeq = "chr12")
     print(df.td)
     print(.selfRetriever(df.td))
 })
@@ -57,7 +57,7 @@ PosTrackData <- setClass("PosTrackData", contains = "RangeOrPosTrackData")
     ans <- sprintf("function () {  return ( %s )  }", json)
     js(ans)
 }
-.asDfTrackData <- function (GRangesOrIRanges, PosBased, SelectSeq = NULL) {
+.asDf <- function (GRangesOrIRanges, PosBased, SelectSeq = NULL) {
     x <- GRangesOrIRanges
     
     ir2df <- function (IR, PosBased, AdditionalCols = NULL) {
@@ -106,7 +106,7 @@ setMethod("asJC", signature = c(object = "RangeTrackData"),
           
     function (object, selectSeq) {
         posbased <- FALSE
-        df.data <- .asDfTrackData(object@Source,
+        df.data <- .asDf(object@Source,
                                   PosBased = posbased, SelectSeq = selectSeq)
         .jcSyncData(.selfRetriever(df.data))
     }
@@ -116,7 +116,7 @@ setMethod("asJC", signature = c(object = "PosTrackData"),
           
     function (object, selectSeq) {
         posbased <- TRUE
-        df.data <- .asDfTrackData(object@Source,
+        df.data <- .asDf(object@Source,
                                   PosBased = posbased, SelectSeq = selectSeq)
         .jcSyncData(.selfRetriever(df.data))
     }
