@@ -5,6 +5,13 @@
 
 setClass("TrackData", slots = c(Source = "ANY"))
 
+## 0. Empty Track Data                      --------
+
+NoTrackData <- setClass("NoTrackData", contains = "TrackData")
+setMethod("asJC", c(object = "NoTrackData"),
+    function (object, ...) jc(tnt.board.track.data.empty = NoArg)
+)
+
 
 ## 1. "Range" or "Pos" based track data     --------
 
@@ -19,6 +26,7 @@ if (interactive()) local({
     print(df.td)
     print(.selfRetriever(df.td))
 })
+
 
 
 setClassUnion("GRangesOrIRanges", members = c("GRanges", "IRanges"))
@@ -52,14 +60,14 @@ PosTrackData <- setClass("PosTrackData", contains = "RangeOrPosTrackData")
 .asDfTrackData <- function (GRangesOrIRanges, PosBased, SelectSeq = NULL) {
     x <- GRangesOrIRanges
     
-    ir2df <- function (IRanges, PosBased, AdditionalCols) {
+    ir2df <- function (IR, PosBased, AdditionalCols = NULL) {
         if (PosBased) {
-            stopifnot(all(IRanges::width(x) == 1))
-            ans <- data.frame(.pos = IRanges::start(x))
+            stopifnot(all(IRanges::width(IR) == 1))
+            ans <- data.frame(.pos = IRanges::start(IR))
         }
-        else ans <- data.frame(.start = IRanges::start(x), .end = IRanges::end(x))
+        else ans <- data.frame(.start = IRanges::start(IR), .end = IRanges::end(IR))
         
-        if (!missing(AdditionalCols))
+        if (!is.null(AdditionalCols))
             ans <- as.data.frame(cbind(ans, AdditionalCols))
         ans
     }
@@ -68,8 +76,8 @@ PosTrackData <- setClass("PosTrackData", contains = "RangeOrPosTrackData")
         stopifnot(is.null(SelectSeq))
         ## But note that IRanges normally does not use meta columns, and it lacks
         ## methods (like `$`) to operate on metacolumns.
-        df <- ir2df(IRanges = x, PosBased = PosBased,
-                    AdditionalCols = GenomicRanges::mcols(IRanges))
+        df <- ir2df(IR = x, PosBased = PosBased,
+                    AdditionalCols = GenomicRanges::mcols(x))
     }
     else if (is(x, "GRanges")) {
         gr <- GenomeInfoDb::keepSeqlevels(x, SelectSeq)
@@ -80,7 +88,7 @@ PosTrackData <- setClass("PosTrackData", contains = "RangeOrPosTrackData")
             # seqnames may be unnecessary to be included
             .strand = GenomicRanges::strand(gr)
         )
-        df <- ir2df(IRanges = ir, PosBased = PosBased, AdditionalCols = cbind(othcol, mcol))
+        df <- ir2df(IR = ir, PosBased = PosBased, AdditionalCols = cbind(othcol, mcol))
     }
     else stop()
     
@@ -128,7 +136,7 @@ setMethod("asJC", signature = c(object = "PosTrackData"),
 ###  TnT Tracks     ------------------------------------------------------------
 
 
-setClass(
+TnTTrack <- setClass(
     "TnTTrack",
     slots = c(
         Spec = "list",
@@ -136,9 +144,7 @@ setClass(
         Display = "list"
     )
 )
-TnTTrack <- function (Spec, Data, Display) {
-    new("TnTTrack", Spec = Spec, Data = Data, Display = Display)
-}
+
 
 
 compileTrack <- function (tntTrack, prefSpec = NULL, prefDis = NULL, selectSeq = NULL) {
@@ -165,6 +171,118 @@ compileTrack <- function (tntTrack, prefSpec = NULL, prefDis = NULL, selectSeq =
 ###  Track Construction     ----------------------------------------------------
 
 ## TODO: composite track, will it fit into the TnTTrack class?
+
+## TODO: These functions will be directly exported to create tracks, thus we need
+##       to add more arguments for each type.
+
+## Data-less tracks ---- location track and axis track
+setClass("DataLessTrack", contains = "TnTTrack")
+
+setClass("LocationTrack", contains = "DataLessTrack")
+LocationTrack <- function (height = 30, color = "white") {
+    new("LocationTrack",
+        Spec = list(
+            # TODO:
+            #   1. Set color to NULL? So that the color can be later modified with pref,
+            #      also for AxisTrack.
+            #   2. Is there any need to set label? Also for AxisTrack.
+            tnt.board.track = NoArg,
+            color = color, height = height,
+            label = NULL, id = NULL
+        ),
+        Data = NoTrackData(),
+        Display = list(tnt.board.track.feature.location = NoArg)
+    )
+}
+
+setClass("AxisTrack", contains = "DataLessTrack")
+AxisTrack <- function (orientation = c("top", "bottom"),
+                       height = 30, color = "white") {
+    orientation <- match.arg(orientation)
+    new("AxisTrack",
+        Spec = list(
+            tnt.board.track = NoArg,
+            color = color, height = height,
+            label = NULL, id = NULL
+        ),
+        Data = NoTrackData(),
+        Display = list(
+            tnt.board.track.feature.axis = NoArg,
+            orientation = orientation
+        )
+    )
+}
+
+
+
+## At current stage, we may not need to consider index of the data
+
+## Block track
+setClass("BlockTrack", contains = "TnTTrack")
+BlockTrack <- function (data) {
+    trackdata <- new("RangeTrackData", Source = data)
+    new("BlockTrack",
+        Spec = list(
+            tnt.board.track = NoArg,
+            color = NULL, height = NULL,
+            label = NULL, id = NULL
+        ),
+        Data = trackdata,
+        Display = list(
+            ## TODO: Change the default name convension of "start" and "end"
+            tnt.board.track.feature.block = NoArg,
+            color = NULL
+        )
+    )
+}
+
+
+
+## Pin track
+setClass("PinTrack", contains = "TnTTrack")
+PinTrack <- function (data) {
+    ## TODO:   Note that pin track will require an additional "val" column
+    trackdata <- new("PosTrackData", Source = data)
+    new("PinTrack",
+        Spec = list(
+            tnt.board.track = NoArg,
+            color = NULL, height = NULL,
+            label = NULL, id = NULL
+        ),
+        Data = trackdata,
+        Display = list(
+            ## TODO: Change the default name convension of "pos" and "val"
+            tnt.board.track.feature.pin = NoArg,
+            color = NULL,
+            domain = NULL # TODO: When to set domain? Or just use default value?
+        )
+    )
+}
+
+
+## vline track
+setClass("VlineTrack", contains = "TnTTrack")
+VlineTrack <- function (data) {
+    trackdata <- new("PosTrackData", Source = data)
+    new("VlineTrack",
+        Spec = list(
+            tnt.board.track = NoArg,
+            color = NULL, height = NULL,
+            label = NULL, id = NULL
+        ),
+        Data = trackdata,
+        Display = list(
+            ## TODO: Change the default name convension of "pos"
+            tnt.board.track.feature.vline = NoArg,
+            color = NULL
+        )
+    )
+}
+
+
+
+
+
 
 
 ###  TnT Board      ------------------------------------------------------------
