@@ -106,14 +106,13 @@ setMethod("asJC", signature = c(object = "RangeTrackData"),
 
     function (object, ...) {
         
-        localf <- function (object, selectSeq, ...) {
+        localf <- function (object, selectSeq) {
             posbased <- FALSE
             df.data <- .asDfTrackData(object@Source,
                                       PosBased = posbased, SelectSeq = selectSeq)
             .jcSyncData(.selfRetriever(df.data))
         }
-        
-        checkArgs(localf, ...); localf(object, ...)
+        localf(object, ...)
     }
 )
 
@@ -121,14 +120,13 @@ setMethod("asJC", signature = c(object = "PosTrackData"),
           
     function (object, ...) {
         
-        localf <- function (object, selectSeq, ...) {
+        localf <- function (object, selectSeq) {
             posbased <- TRUE
             df.data <- .asDfTrackData(object@Source,
                                       PosBased = posbased, SelectSeq = selectSeq)
             .jcSyncData(.selfRetriever(df.data))
         }
-        
-        checkArgs(localf, ...); localf(object, ...)
+        localf(object, ...)
     }
 )
 
