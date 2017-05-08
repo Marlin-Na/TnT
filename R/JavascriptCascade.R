@@ -172,10 +172,7 @@ setMethod("asJS", signature = "JSCascade",
 )
 
 setMethod("asJC", signature = c(object = "list"),
-    function (object, ...) {
-        stopifnot(length(list(...)) == 0) # There should no extra argument for this method
-        JSCascade(.listData = object)
-    }
+    function (object) JSCascade(.listData = object)
 )
 
 

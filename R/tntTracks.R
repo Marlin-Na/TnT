@@ -9,7 +9,7 @@ setClass("TrackData", slots = c(Source = "ANY"))
 
 NoTrackData <- setClass("NoTrackData", contains = "TrackData")
 setMethod("asJC", c(object = "NoTrackData"),
-    function (object, ...) jc(tnt.board.track.data.empty = NoArg)
+    function (object) jc(tnt.board.track.data.empty = NoArg)
 )
 
 
@@ -103,30 +103,22 @@ PosTrackData <- setClass("PosTrackData", contains = "RangeOrPosTrackData")
 ### TrackData Convert   --------------------------------------------------------
 
 setMethod("asJC", signature = c(object = "RangeTrackData"),
-
-    function (object, ...) {
-        
-        localf <- function (object, selectSeq) {
-            posbased <- FALSE
-            df.data <- .asDfTrackData(object@Source,
-                                      PosBased = posbased, SelectSeq = selectSeq)
-            .jcSyncData(.selfRetriever(df.data))
-        }
-        localf(object, ...)
+          
+    function (object, selectSeq) {
+        posbased <- FALSE
+        df.data <- .asDfTrackData(object@Source,
+                                  PosBased = posbased, SelectSeq = selectSeq)
+        .jcSyncData(.selfRetriever(df.data))
     }
 )
 
 setMethod("asJC", signature = c(object = "PosTrackData"),
           
-    function (object, ...) {
-        
-        localf <- function (object, selectSeq) {
-            posbased <- TRUE
-            df.data <- .asDfTrackData(object@Source,
-                                      PosBased = posbased, SelectSeq = selectSeq)
-            .jcSyncData(.selfRetriever(df.data))
-        }
-        localf(object, ...)
+    function (object, selectSeq) {
+        posbased <- TRUE
+        df.data <- .asDfTrackData(object@Source,
+                                  PosBased = posbased, SelectSeq = selectSeq)
+        .jcSyncData(.selfRetriever(df.data))
     }
 )
 
