@@ -24,7 +24,7 @@ if (interactive()) local({
     gr$value <- c(42)
     df.td <- .asDf(gr, PosBased = FALSE, SelectSeq = "chr12")
     print(df.td)
-    print(.selfRetriever(df.td))
+    print(JSCallback(df.td))
 })
 
 
@@ -51,11 +51,6 @@ PosTrackData <- setClass("PosTrackData", contains = "RangeOrPosTrackData")
 .jcSyncData <- function (js.retriever) {
     jc(tnt.board.track.data.sync = ma(),
        retriever = js.retriever)
-}
-.selfRetriever <- function (df.trackdata) {
-    json <- jsonlite::toJSON(df.trackdata, dataframe = "rows", pretty = TRUE)
-    ans <- sprintf("function () {  return ( %s )  }", json)
-    js(ans)
 }
 .asDf <- function (GRangesOrIRanges, PosBased, SelectSeq = NULL) {
     x <- GRangesOrIRanges
@@ -108,7 +103,7 @@ setMethod("asJC", signature = c(object = "RangeTrackData"),
         posbased <- FALSE
         df.data <- .asDf(object@Source,
                                   PosBased = posbased, SelectSeq = selectSeq)
-        .jcSyncData(.selfRetriever(df.data))
+        .jcSyncData(JSCallback(df.data))
     }
 )
 
@@ -118,7 +113,7 @@ setMethod("asJC", signature = c(object = "PosTrackData"),
         posbased <- TRUE
         df.data <- .asDf(object@Source,
                                   PosBased = posbased, SelectSeq = selectSeq)
-        .jcSyncData(.selfRetriever(df.data))
+        .jcSyncData(JSCallback(df.data))
     }
 )
 

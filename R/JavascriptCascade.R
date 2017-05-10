@@ -227,6 +227,23 @@ setMethod("asJC", signature = c(object = "list"),
 
 
 
+## Template for JS Callback and Promise     ------------------------------------
+
+#' @export
+JSCallback <- function (result, toJSON = TRUE) {
+    # This function provides a template for constructing
+    # a JS callback as a data retriever
+    
+    if (is(result, "JavaScript"))
+        retstring <- result
+    else if (toJSON)
+        retstring <- jsonlite::toJSON(result, dataframe = "rows", pretty = TRUE)
+    else
+        retstring <- .convertToJSChar(result)
+    
+    jsstring <- sprintf("function () {  return ( %s )  }", retstring)
+    JavaScript(jsstring)
+}
 
 
 
