@@ -5,14 +5,14 @@ Authors@R: person("Jialin", "Ma", email = "marlin-@gmx.cn", role = c("aut", "cre
 Description: A R interface to the TnT javascript library (https://github.com/
     tntvis).
 Depends:
-    R (>= 3.3.2)
+    R (>= 3.3.2),
+    IRanges,
+    GenomicRanges
 Imports:
     methods,
     htmlwidgets,
     jsonlite,
     magrittr,
-    IRanges,
-    GenomicRanges,
     GenomeInfoDb,
     S4Vectors
 Suggests:
