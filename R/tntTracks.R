@@ -34,8 +34,10 @@ setClassUnion("GRangesOrIRanges", members = c("GRanges", "IRanges"))
 
 setClass("RangeOrPosTrackData", contains = "TrackData", slots = c(Source = "GRangesOrIRanges"))
 
-RangeTrackData <- setClass("RangeTrackData", contains = "RangeOrPosTrackData")
-PosTrackData <- setClass("PosTrackData", contains = "RangeOrPosTrackData")
+setClass("RangeTrackData", contains = "RangeOrPosTrackData")
+RangeTrackData <- function (Source) new("RangeTrackData", Source = Source)
+setClass("PosTrackData", contains = "RangeOrPosTrackData")
+PosTrackData <- function (Source) new("PosTrackData", Source = Source)
 
 # TODO: set validity method
 
