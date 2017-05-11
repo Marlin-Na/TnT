@@ -15,7 +15,7 @@ test_that("JSCascade Construction", {
     #    1. Add a validity check when the jc is constructed, OR
     #    2. If it is not a scalar, use `jsonlite::toJSON` to convert the object
     expect_error(show(jc(x = c(1,2,3))))
-    expect_warning(show(jc(x = c(TRUE, FALSE))))
+    expect_error(show(jc(x = c(TRUE, FALSE))))
     expect_error(show(jc(x = c("char1", "char2"))))
     
     call_list <- list(integer = 42L, numeric = .05, logical = TRUE, null = NULL,
@@ -38,7 +38,7 @@ test_that("JSCascade to JS Conversion", {
         expect_identical(js1, js2, ...)
     }
     expect_js_identical(jc(char = "char"),
-                        jc(char = js("'char'")))
+                        jc(char = js("\"char\"")))
     expect_js_identical(jc(num = 12L),
                         jc(num = js("12")))
     expect_js_identical(jc(logical = TRUE),

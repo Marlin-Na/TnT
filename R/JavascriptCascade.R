@@ -178,49 +178,29 @@ setMethod("asJC", signature = c(object = "list"),
 
 
 .convertToJSChar <- function (jc) {
-    .local.JSCascade <- function (el) {
-        jscalls <- names(el)
-        jsargs <- vapply(el, .local, character(1))
-        each <- sprintf("%s(%s)", jscalls, jsargs)
-        paste(each, collapse = "\n.")
-    }
-    .local.MultiArgs <- function (el) {
-        if (length(el) == 1)
-            .local(el)
+    .recurf <- function (el) {
+        if (inherits(el, "JSCascade")) {
+            jscalls <- names(el)
+            jsargs <- vapply(el, .recurf, character(1))
+            each <- sprintf("%s(%s)", jscalls, jsargs)
+            ans <- paste(each, collapse = "\n.")
+            return(ans)
+        }
+        if (inherits(el, "MultiArgs")) {
+            l <- vapply(el, FUN = .recurf, FUN.VALUE = character(1))
+            ans <- paste(l, collapse = ", ")
+            return(ans)
+        }
+        if (inherits(el, "JavaScript"))
+            return(as.character(el))
+        
         else {
-            l <- vapply(el, FUN = .local, FUN.VALUE = character(1))
-            paste(l, collapse = ", ")
+            uboxel <- jsonlite::unbox(el)
+            ans <- jsonlite::toJSON(uboxel)
+            return(ans)
         }
     }
-    .local.numeric <- function (el) {
-        as.character(el)      # TODO: Should also consider NA, NaN and Inf
-    }
-    .local.logical <- function (el) {
-        if (is.na(el)) stop() # TODO: use "none"?
-        else if (el) "true"
-        else if (!el) "false"
-        else stop()
-    }
-    .local.JavaScript <- function (el) {
-        as.character(el)
-    }
-    .local.character <- function (el) {
-        # To add quotation marks to the string and substitute existing “'” with “\'”.
-        # A revelent function is "shQuote()"
-        s <- gsub("'", "\\'", el, fixed = TRUE)
-        sprintf("'%s'", s)
-    }
-    
-    .local <- function (el) {
-        if (inherits(el, "JSCascade"))  return(.local.JSCascade(el))
-        if (inherits(el, "MultiArgs"))  return(.local.MultiArgs(el))
-        if (inherits(el, "JavaScript")) return(.local.JavaScript(el))
-        if (is.numeric(el))             return(.local.numeric(el)) # also works for integer
-        if (is.logical(el))             return(.local.logical(el))
-        if (is.character(el))           return(.local.character(el))
-        stop()
-    }
-    .local(jc)
+    .recurf(jc)
 }
 
 
