@@ -107,9 +107,6 @@ setGeneric("asJC",
 
 ## Validity                 ----------------------------------------------------
 
-# TODO:
-#   Check whether the numeric/character/logical vectors in JC and MA are of length 1,
-#   then update the unit test.
 
 setValidity("JSCascade",
     function (object) {
@@ -195,8 +192,7 @@ setMethod("asJC", signature = c(object = "list"),
             return(as.character(el))
         
         else {
-            uboxel <- jsonlite::unbox(el)
-            ans <- jsonlite::toJSON(uboxel)
+            ans <- jsonlite::toJSON(el, auto_unbox = TRUE)
             return(ans)
         }
     }
