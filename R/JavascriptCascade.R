@@ -213,6 +213,10 @@ JSCallback <- function (result, toJSON = TRUE) {
     if (is(result, "JavaScript"))
         retstring <- result
     else if (toJSON)
+        ## TODO:
+        ## We may want to firstly convert the dataframe by cols, then use
+        ## HTMLWidgets.dataframeToD3() to convert it on JS side.
+        ## Refer: http://www.htmlwidgets.org/develop_advanced.html#htmlwidgets.dataframetod3
         retstring <- jsonlite::toJSON(result, dataframe = "rows", pretty = TRUE)
     else
         retstring <- .convertToJSChar(result)
