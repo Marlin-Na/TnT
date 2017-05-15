@@ -6,16 +6,21 @@ HTMLWidgets.widget({
 
   factory: function(el, width, height) {
 
-    // TODO: define shared variables for this instance
+    // Define shared variables for this instance
+    var tntins = null;
 
     return {
 
       renderValue: function(x) {
 
         // Code to render the widget
-        var tot = eval(x.tntdef);
-        tot(el);
-        tot.start();
+        tntins = eval(x.tntdef);
+        tntins(el);
+        tntins.start();
+
+        // TODO: In the future, we may implement interface to add/update data to
+        //       an existing tnt instance (with shiny), and with proper transition.
+
       },
 
       resize: function(width, height) {
