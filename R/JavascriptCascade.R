@@ -116,8 +116,9 @@ setValidity("JSCascade",
         if (any(isnull))
             return("NULL is not allowed in JSCascade")
       # Ensure the names are specified
-        if (is.null(names(lst)) || any(names(lst) == ""))
-            return("Names must be specified.")
+        if (length(lst) > 0)
+            if (is.null(names(lst)) || any(names(lst) == ""))
+                return("Names must be specified.")
       # Only allow certain types of element
         isAllowed <- vapply(lst, inherits, FUN.VALUE = logical(1),
             what = c("JSCascade", "MultiArgs", "JavaScript",
@@ -170,6 +171,10 @@ setMethod("asJS", signature = "JSCascade",
 
 setMethod("asJC", signature = c(object = "list"),
     function (object) JSCascade(.listData = object)
+)
+
+setMethod("asJC", signature = c(object = "JSCascade"),
+    function (object) object
 )
 
 
