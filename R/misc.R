@@ -9,6 +9,7 @@ NULL
 
 
 
+#' @import GenomicFeatures
 #' @import S4Vectors
 #' @import IRanges
 #' @import GenomicRanges

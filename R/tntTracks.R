@@ -1,278 +1,427 @@
 
 
 
-### TrackData Class     --------------------------------------------------------
+## Template for JS Callback and Promise     ------------------------------------
 
-setClass("TrackData", slots = c(Source = "ANY"))
+#' @export
+JSCallback <- function (result, toJSON = TRUE) {
+    # This function provides a template for constructing
+    # a JS callback as a data retriever
+    
+    if (is(result, "JavaScript"))
+        retstring <- result
+    else if (toJSON)
+        ## TODO:
+        ## We may want to firstly convert the dataframe by cols, then use
+        ## HTMLWidgets.dataframeToD3() to convert it on JS side.
+        ## Refer: http://www.htmlwidgets.org/develop_advanced.html#htmlwidgets.dataframetod3
+        retstring <- jsonlite::toJSON(result, dataframe = "rows", pretty = TRUE)
+    else
+        retstring <- .convertToJSChar(result)
+    
+    jsstring <- sprintf("function () {  return ( %s )  }", retstring)
+    JavaScript(jsstring)
+}
 
-## 0. Empty Track Data                      --------
 
-NoTrackData <- setClass("NoTrackData", contains = "TrackData")
-setMethod("asJC", c(object = "NoTrackData"),
-    function (object) jc(tnt.board.track.data.empty = NoArg)
+
+
+
+
+
+
+###  Track Data      ------------------------------------------------------------
+
+setClass("TrackData")
+
+setClass("NoTrackData",
+         contains = c("NULL", "TrackData"))
+setClass("RangeTrackData",
+         contains = c("GRanges", "TrackData"))
+setClass("PosTrackData",
+         contains = c("RangeTrackData"))
+
+NoTrackData <- function () new("NoTrackData")
+
+RangeTrackData <- function (range, tooltip = mcols(range)) {
+    tooltip <- as.data.frame(tooltip)
+    if (is(range, "IRanges")) {
+        range <- GRanges(seqnames = "UnKnown", ranges = range, strand = "*")
+    }
+    range <- as(range, "GRanges")
+    range$.tooltip <- tooltip
+    new("RangeTrackData", range)
+}
+
+PosTrackData <- function (pos, tooltip = mcols(pos)) {
+    tooltip <- as.data.frame(tooltip)
+    trackdata <- RangeTrackData(range = pos, tooltip = tooltip)
+    trackdata <- as(trackdata, "PosTrackData")
+    validObject(trackdata) # Ensure all the width equals to one
+    trackdata
+}
+
+setValidity("PosTrackData",
+    function (object) {
+        if (all(width(object) == 1)) TRUE
+        else return("Width of PosTrackData should be 1.")
+    }
 )
 
+setGeneric("compileTrackData",
+           function (trackData, ...) standardGeneric("compileTrackData"))
 
-## 1. "Range" or "Pos" based track data     --------
-
-# These types should be able to be converted to a data.frame, then
-# use jsonlite::toJSON to convert them to json string.
-#
-# An example is shown in the following:
-if (interactive()) local({
-    gr <- GenomicRanges::GRanges("chr12", IRanges::IRanges(1:4, 40))
-    gr$value <- c(42)
-    df.td <- .asDf(gr, PosBased = FALSE, SelectSeq = "chr12")
-    print(df.td)
-    print(JSCallback(df.td))
-})
-
-
-
-setClassUnion("GRangesOrIRanges", members = c("GRanges", "IRanges"))
-#setClassUnion("GPosOrIRanges", members = c("GPos", "IRanges"))
-
-setClass("RangeOrPosTrackData", contains = "TrackData", slots = c(Source = "GRangesOrIRanges"))
-
-setClass("RangeTrackData", contains = "RangeOrPosTrackData")
-RangeTrackData <- function (Source) new("RangeTrackData", Source = Source)
-setClass("PosTrackData", contains = "RangeOrPosTrackData")
-PosTrackData <- function (Source) new("PosTrackData", Source = Source)
-
-# TODO: set validity method
-
-
-
-
-.jcAsyncData <- function (js.retriever) {
-    # Async method requires a javascript callback that returns a promise object
-    # which can be useful when retrieving remote data
-    jc(tnt.board.track.data.async = ma(),
-       retriever = js.retriever)
-}
-.jcSyncData <- function (js.retriever) {
-    jc(tnt.board.track.data.sync = ma(),
-       retriever = js.retriever)
-}
-.asDf <- function (GRangesOrIRanges, PosBased, SelectSeq = NULL) {
-    x <- GRangesOrIRanges
-    
-    ir2df <- function (IR, PosBased, AdditionalCols = NULL) {
-        if (PosBased) {
-            stopifnot(all(IRanges::width(IR) == 1))
-            ans <- data.frame(.pos = IRanges::start(IR))
+setMethod("compileTrackData", signature = "data.frame",
+    function (trackData) {
+        removeAsIs <- function (df) {
+            # The nested data frame converted from GRanges/DataFrame will have a
+            # "AsIs" class, which will cause the data frame can not be shown and
+            # can not be converted to JSON correctly.
+            for (i in seq_along(df)) {
+                element <- df[[i]]
+                if (is.data.frame(element)) {
+                    class(element) <- class(element)[class(element) != "AsIs"]
+                    df[[i]] <- removeAsIs(element)
+                }
+            }
+            df
         }
-        else ans <- data.frame(.start = IRanges::start(IR), .end = IRanges::end(IR))
+        df <- removeAsIs(trackData)
         
-        if (!is.null(AdditionalCols))
-            ans <- as.data.frame(cbind(ans, AdditionalCols))
-        ans
+        js.retriever <- JSCallback(df)
+        jc.syncdata <-  jc(tnt.board.track.data.sync = ma(),
+                           retriever = js.retriever)
+        jc.syncdata
     }
-    
-    if (is(x, "IRanges")) {
-        stopifnot(is.null(SelectSeq))
-        ## But note that IRanges normally does not use meta columns, and it lacks
-        ## methods (like `$`) to operate on metacolumns.
-        df <- ir2df(IR = x, PosBased = PosBased,
-                    AdditionalCols = GenomicRanges::mcols(x))
+)
+
+setMethod("compileTrackData", signature = "NoTrackData",
+    function (trackData)
+        jc(tnt.board.track.data.empty = NoArg)
+) 
+
+setMethod("compileTrackData", signature = "RangeTrackData",
+    function (trackData) {
+        ## TODO: Have to select seq
+        stopifnot(length(unique(seqnames(trackData))) == 1)
+        df <- as.data.frame(trackData)[c("start", "end", "strand", ".tooltip")]
+        df <- S4Vectors::rename(df, c(start = "from", end = "to"))
+        compileTrackData(df)
     }
-    else if (is(x, "GRanges")) {
-        gr <- GenomeInfoDb::keepSeqlevels(x, SelectSeq)
-        ir <- GenomicRanges::ranges(gr)
+)
+
+setMethod("compileTrackData", signature = "PosTrackData",
+    function (trackData) {
+        ## TODO: Have to select seq
+        stopifnot(length(unique(seqnames(trackData))) == 1)
+        stopifnot(all(width(trackData) == 1))
         
-        mcol <- GenomicRanges::mcols(gr)
-        othcol <- data.frame(
-            # seqnames may be unnecessary to be included
-            .strand = GenomicRanges::strand(gr)
-        )
-        df <- ir2df(IR = ir, PosBased = PosBased, AdditionalCols = cbind(othcol, mcol))
+        df <- as.data.frame(trackData)[c("start", "strand", ".tooltip")]
+        df <- S4Vectors::rename(df, c(start = "pos"))
+        compileTrackData(df)
     }
-    else stop()
-    
-    df
+)
+
+
+
+setClass("TxDbTrackData",
+         contains = c("TrackData"),
+         slots = c(TxDb = "TxDb", Target = "character", SeqLevel = "character"))
+
+TxDbTrackData <- function (txdb, target = c("tx", "gene")) {
+    target <- match.arg(target)
+    new("TxDbTrackData", TxDb = txdb, Target = target, SeqLevel = character(0))
 }
 
-
-## 2. Others                                --------
-
-
-
-### TrackData Convert   --------------------------------------------------------
-
-setMethod("asJC", signature = c(object = "RangeTrackData"),
-          
-    function (object, selectSeq) {
-        posbased <- FALSE
-        df.data <- .asDf(object@Source,
-                                  PosBased = posbased, SelectSeq = selectSeq)
-        .jcSyncData(JSCallback(df.data))
+setMethod("compileTrackData", signature = "TxDbTrackData",
+    function (trackData) {
+        seqlevel <- trackData@SeqLevel
+        txdb <- trackData@TxDb
+        target <- trackData@Target
+        stopifnot(length(seqlevel) == 1)
+        
+        seqlevels(txdb) <- seqlevel
+        
+        if (target == "gene") {
+            # TODO: use "single.strand.genes.only = FALSE" ?
+            gr.gene <- genes(txdb)
+            # TODO: Note that gene id may not be unique if "single.strand.genes.only = FALSE"
+            df <- as.data.frame(gr.gene)[
+                c("seqnames", "start", "end", "strand", "gene_id")]
+            df$display_label <- with(df, {
+                ifelse(strand == "+", paste("Gene", gene_id, ">"),
+                    ifelse(strand == "-", paste("<", "Gene", gene_id), gene_id)
+                )
+            })
+            df <- S4Vectors::rename(df, c(gene_id = "id"))
+            df
+        }
+        if (target == "tx") {
+            gr.tx <- tr
+        }
+        
+        # We must restore the seqlevel of the txdb since it is a reference class
+        seqlevels(txdb) <- seqlevels0(txdb)
+        
+        compileTrackData(df)
     }
 )
 
-setMethod("asJC", signature = c(object = "PosTrackData"),
-          
-    function (object, selectSeq) {
-        posbased <- TRUE
-        df.data <- .asDf(object@Source,
-                                  PosBased = posbased, SelectSeq = selectSeq)
-        .jcSyncData(JSCallback(df.data))
-    }
-)
+
+# // Genes data
+# var genes = [
+#     {
+#         start: 32336637,
+#         end: 32367637,
+#         display_label: "Gene name 1>",
+#         id: 'Gene1'
+#     },
+#     {
+#         start: 32337637,
+#         end: 32368637,
+#         display_label: "Gene name 2 >",
+#         id: 'Gene2'
+#     },
+#     {
+#         start: 32393637,
+#         end: 32402637,
+#         display_label: "< Gene name 3",
+#         id: 'Gene3'
+#     }
+#     ];
+# var genes_data = tnt.board.track.data.sync()
+# .retriever(function () {
+#     return genes;
+# });
+# var genes_track = tnt.board.track()
+# .height(100)
+# .color("#FFFFFF")
+# .display(tnt.board.track.feature.genome.gene()
+#          .color("#550055")
+# )
+# .data(genes_data);
+# // transcripts data
+# var transcripts = [
+#     {
+#         start: 32336637,
+#         end: 32367637,
+#         display_label: "Gene name 1>",
+#         key: 1,
+#         id: 'Gene1',
+#         exons: [
+#             {
+#                 start: 32337637,
+#                 end: 32338637,
+#                 offset: 32337637 - 32336637,
+#                 coding: false,
+#                 transcript: {
+#                     Parent: 'Gene1'
+#                 }
+#             },
+#             {
+#                 start: 32339637,
+#                 end: 32357637,
+#                 offset: 32339637 - 32336637,
+#                 coding: true,
+#                 transcript: {
+#                     Parent: 'Gene1'
+#                 }
+#             },
+#             {
+#                 start: 32360637,
+#                 end: 32360737,
+#                 offset: 32360637 - 32336637,
+#                 coding: true,
+#                 transcript: {
+#                     Parent: 'Gene1'
+#                 }
+#             },
+#             {
+#                 start: 32363637,
+#                 end: 32367637,
+#                 offset: 32363637 - 32336637,
+#                 coding: false
+#             }
+#             ]
+#     },
+#     {
+#         start: 32346637,
+#         end: 32393637,
+#         display_label: "Overlapping gene",
+#         key: 3,
+#         id: 'OG1',
+#         exons: [
+#             {
+#                 start: 32346637,
+#                 end: 32393637,
+#                 offset: 0,
+#                 coding: true
+#             }
+#             ]
+#     },
+#     {
+#         start: 32393637,
+#         end: 32402637,
+#         display_label: "Gene name 2 >",
+#         key: 2,
+#         id: 'Gene2',
+#         exons: [
+#             {
+#                 start: 32396637,
+#                 end: 32400637,
+#                 // Offset comes from the fact that in Ensembl, exons coordinates are relative to the parent transcript and not the gene
+#                 // So an offset equals to o = exonStart - transcriptStart is applied if necessary (otherwise, set it to 0)
+#                 offset: 32396637 - 32393637,
+#                 coding: true,
+#                 transcript: {
+#                     Parent: 'Gene2',
+#                 }
+#             }
+#             ]
+#     }
+#     ];
 
 
-###  TnT Tracks     ------------------------------------------------------------
+
+### TnT Tracks  ----------------------------------------------------------------
 
 
-TnTTrack <- setClass(
-    "TnTTrack",
-    slots = c(
-        Spec = "list",
-        Data = "TrackData",
-        Display = "list"
-    )
-)
+setClass("TnTTrack", slots = c(Spec = "list", Data = "TrackData", Display = "list"))
 
-
-
-compileTrack <- function (tntTrack, prefSpec = NULL, prefDis = NULL, selectSeq = NULL) {
-    
-    .combinePref <- function (lst, pref) {
-        # Subsititute "NULL" elements with the corresponding values in "pref"
-        # TODO:
-        #   Dispatch different "pref" based on name of the first element of "lst" so that
-        #   different types of track will have corresponding preference (a theme setting).
-        null.lst <- lst[unlist(lapply(lst, is.null))]
-        fit.pref <- pref[names(pref) %in% names(null.lst)]
-        lst[names(fit.pref)] <- fit.pref
-        lst
-    }
-    
-    jc.spec    <- asJC(.combinePref(tntTrack@Spec, prefSpec))
-    jc.display <- jc(display = asJC(.combinePref(tntTrack@Display, prefDis)))
-    jc.data    <- jc(data    = asJC(tntTrack@Data, selectSeq = selectSeq))
-    
+compileTrack <- function (tntTrack) {
+    jc.spec <- asJC(tntTrack@Spec)
+    jc.display <- jc(display = asJC(tntTrack@Display))
+    jc.data <- jc(data = compileTrackData(tntTrack@Data))
     c(jc.spec, jc.display, jc.data)
 }
 
+setClass("GeneTrack", contains = "TnTTrack", slots = c(Data = "TxDbTrackData"))
 
-###  Track Construction     ----------------------------------------------------
-
-## TODO: composite track, will it fit into the TnTTrack class?
-
-## TODO: These functions will be directly exported to create tracks, thus we need
-##       to add more arguments for each type.
-
-## Data-less tracks ---- location track and axis track
-setClass("DataLessTrack", contains = "TnTTrack")
-
-setClass("LocationTrack", contains = "DataLessTrack")
-LocationTrack <- function (height = 30, color = "white") {
-    new("LocationTrack",
-        Spec = list(
-            # TODO:
-            #   1. Set color to NULL? So that the color can be later modified with pref,
-            #      also for AxisTrack.
-            #   2. Is there any need to set label? Also for AxisTrack.
-            tnt.board.track = NoArg,
-            color = color, height = height,
-            label = NULL, id = NULL
-        ),
-        Data = NoTrackData(),
-        Display = list(tnt.board.track.feature.location = NoArg)
-    )
-}
-
-setClass("AxisTrack", contains = "DataLessTrack")
-AxisTrack <- function (orientation = c("top", "bottom"),
-                       height = 30, color = "white") {
-    orientation <- match.arg(orientation)
-    new("AxisTrack",
-        Spec = list(
-            tnt.board.track = NoArg,
-            color = color, height = height,
-            label = NULL, id = NULL
-        ),
-        Data = NoTrackData(),
-        Display = list(
-            tnt.board.track.feature.axis = NoArg,
-            orientation = orientation
-        )
-    )
+GeneTrack <- function (txdb, label = deparse(substitute(txdb)) # TODO
+                       ) {
+    # TODO
 }
 
 
+setClass("BlockTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
 
-## At current stage, we may not need to consider index of the data
+setClass("PinTrack", contains = "TnTTrack", slots = c(Data = "PosTrackData"))
 
-## Block track
-setClass("BlockTrack", contains = "TnTTrack")
-BlockTrack <- function (data) {
-    trackdata <- new("RangeTrackData", Source = data)
-    new("BlockTrack",
-        Spec = list(
-            tnt.board.track = NoArg,
-            color = NULL, height = NULL,
-            label = NULL, id = NULL
-        ),
-        Data = trackdata,
-        Display = list(
-            ## TODO: Change the default name convension of "start" and "end"
-            tnt.board.track.feature.block = NoArg,
-            color = NULL
-        )
+setGeneric("compileTrack", function (tntTrack) standardGeneric("compileTrack"))
+
+BlockTrack <- function (range, label = deparse(substitute(range)),
+                        tooltip = mcols(range), id = NULL,
+                        height = NULL, color = NULL, color.background = NULL) {
+    force(label)
+    data <- RangeTrackData(range = range, tooltip = tooltip)
+    spec <- list(
+        tnt.board.track = ma(),
+        color = color.background,
+        height = height,
+        label = label,
+        id = id
     )
+    display <- list(
+        tnt.board.track.feature.block = ma(),
+        color = color
+        # from = .JSONMap(colname = "from"),
+        # to = .JSONMap(colname = "to")
+    )
+    new("BlockTrack", Spec = spec, Data = data, Display = display)
 }
 
 
-
-## Pin track
-setClass("PinTrack", contains = "TnTTrack")
-PinTrack <- function (data) {
-    ## TODO:   Note that pin track will require an additional "val" column
-    trackdata <- new("PosTrackData", Source = data)
-    new("PinTrack",
-        Spec = list(
-            tnt.board.track = NoArg,
-            color = NULL, height = NULL,
-            label = NULL, id = NULL
-        ),
-        Data = trackdata,
-        Display = list(
-            ## TODO: Change the default name convension of "pos" and "val"
-            tnt.board.track.feature.pin = NoArg,
-            color = NULL,
-            domain = NULL # TODO: When to set domain? Or just use default value?
-        )
+PinTrack <- function (pos, value = mcols(pos)$value, domain = c(min(value), max(value)),
+                      label = deparse(substitute(pos)), tooltip = mcols(pos),
+                      id = NULL, height = NULL, color = NULL,
+                      color.background = NULL) {
+    if (is.null(value))
+        stop("Value (height) at each position not specified.")
+    force(domain)
+    force(label)
+    stopifnot(length(domain) == 2)
+    data <- PosTrackData(pos = pos, tooltip = tooltip)
+    data$val <- value
+    spec <- list(
+        tnt.board.track = ma(),
+        color = color.background,
+        height = height,
+        label = label,
+        id = id
     )
-}
-
-
-## vline track
-setClass("VlineTrack", contains = "TnTTrack")
-VlineTrack <- function (data) {
-    trackdata <- new("PosTrackData", Source = data)
-    new("VlineTrack",
-        Spec = list(
-            tnt.board.track = NoArg,
-            color = NULL, height = NULL,
-            label = NULL, id = NULL
-        ),
-        Data = trackdata,
-        Display = list(
-            ## TODO: Change the default name convension of "pos"
-            tnt.board.track.feature.vline = NoArg,
-            color = NULL
-        )
+    display <- list(
+        tnt.board.track.feature.pin = ma(),
+        domain = domain,
+        color = color
     )
+    new("PinTrack", Spec = spec, Data = data, Display = display)
 }
 
 
 
 
 
+.JSONMap <- function (colname, constant) {
+    stopifnot(any(missing(colname), missing(constant)))
+    if (missing(constant)) {
+        # TODO: use toJSON to perform escape
+        condfilter <- paste(sprintf('["%s"]', colname), collapse = "")
+        string <- sprintf('function (d) { return (d%s); }', condfilter)
+        ans <- JavaScript(string)
+    }
+    else
+        ans <- constant
+    ans
+}
+# Example
+if (interactive()) .JSONMap(colname = c("data", "start"))
 
 
-###  TnT Board      ------------------------------------------------------------
+
+
+
+
+###   TnT Board     ------------------------------------------------------------
+
+#setClassUnion("GRangesOrIRanges", members = c("GRanges", "IRanges"))
+
+
+#setClass("TnTBoard",
+#    slots = c(
+#        PreSetViewRange = "GRangesOrIRanges",
+#        PreSetCoordRange = "GRangesOrIRanges",
+#        # Ideally, the allowed zoom range should depend on the width and maxium coordinate
+#        PreSetZoomAllow = "IRanges",
+#        PreSetZoom = "numeric",
+#        # TODO: How does the width correspond to pixel?
+#        #       In fact, we should not specify the width here,
+#        #       but use the resize method on JS side.
+#        #Width = "integer",
+#        PreSetAllowDrag = "logical",
+#        TrackList = "list"
+#    )
+#)
+#
+#TnTBoard <- function (track.list, prezoom = 1, allow.drag = TRUE) {
+#    
+#}
+
+###   TnT Genome    ------------------------------------------------------------
+
+# setClass("TnTGenome", contains = "TnTBoard",
+#     slots = c(
+#         
+#     )
+# )
+
+
+
+
+
+
+
+
+
 
 
 
