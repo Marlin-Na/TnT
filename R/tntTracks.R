@@ -68,6 +68,7 @@ setValidity("PosTrackData",
     }
 )
 
+
 setGeneric("compileTrackData",
            function (trackData, ...) standardGeneric("compileTrackData"))
 
@@ -127,10 +128,11 @@ setMethod("compileTrackData", signature = "PosTrackData",
 setClass("TxDbTrackData",
          contains = c("TrackData"),
          slots = c(TxDb = "TxDb", Target = "character", SeqLevel = "character"))
+# TODO: valiad whether SeqLevel are valid seqlevels for the TxDb
 
 TxDbTrackData <- function (txdb, target = c("tx", "gene")) {
     target <- match.arg(target)
-    new("TxDbTrackData", TxDb = txdb, Target = target, SeqLevel = character(0))
+    new("TxDbTrackData", TxDb = txdb, Target = target, SeqLevel = seqlevels(txdb))
 }
 
 setMethod("compileTrackData", signature = "TxDbTrackData",
@@ -157,7 +159,8 @@ setMethod("compileTrackData", signature = "TxDbTrackData",
             df
         }
         if (target == "tx") {
-            gr.tx <- tr
+            # TODO
+            stop()
         }
         
         # We must restore the seqlevel of the txdb since it is a reference class
@@ -168,38 +171,6 @@ setMethod("compileTrackData", signature = "TxDbTrackData",
 )
 
 
-# // Genes data
-# var genes = [
-#     {
-#         start: 32336637,
-#         end: 32367637,
-#         display_label: "Gene name 1>",
-#         id: 'Gene1'
-#     },
-#     {
-#         start: 32337637,
-#         end: 32368637,
-#         display_label: "Gene name 2 >",
-#         id: 'Gene2'
-#     },
-#     {
-#         start: 32393637,
-#         end: 32402637,
-#         display_label: "< Gene name 3",
-#         id: 'Gene3'
-#     }
-#     ];
-# var genes_data = tnt.board.track.data.sync()
-# .retriever(function () {
-#     return genes;
-# });
-# var genes_track = tnt.board.track()
-# .height(100)
-# .color("#FFFFFF")
-# .display(tnt.board.track.feature.genome.gene()
-#          .color("#550055")
-# )
-# .data(genes_data);
 # // transcripts data
 # var transcripts = [
 #     {
@@ -295,11 +266,27 @@ compileTrack <- function (tntTrack) {
     c(jc.spec, jc.display, jc.data)
 }
 
-setClass("GeneTrack", contains = "TnTTrack", slots = c(Data = "TxDbTrackData"))
 
-GeneTrack <- function (txdb, label = deparse(substitute(txdb)) # TODO
-                       ) {
-    # TODO
+setClass("ReferenceTrack", contains = "TnTTrack")
+
+setClass("GeneTrack", contains = "ReferenceTrack", slots = c(Data = "TxDbTrackData"))
+
+GeneTrack <- function (txdb, label = deparse(substitute(txdb)), # TODO: tooltip?
+                       id = NULL, height = NULL, color = NULL, color.background = NULL) {
+    force(label)
+    data <- TxDbTrackData(txdb, target = "gene")
+    spec <- list(
+        tnt.board.track = ma(),
+        height = height,
+        color = color.background,
+        label = label,
+        id = id
+    )
+    display <- list(
+        tnt.board.track.feature.genome.gene = ma(),
+        color = color
+    )
+    new("GeneTrack", Data = data, Spec = spec, Display = display)
 }
 
 
