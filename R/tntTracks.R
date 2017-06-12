@@ -34,6 +34,7 @@ JSCallback <- function (result, toJSON = TRUE) {
 
 setClass("TrackData")
 
+
 setClass("NoTrackData",
          contains = c("NULL", "TrackData"))
 setClass("RangeTrackData",
@@ -49,6 +50,9 @@ RangeTrackData <- function (range, tooltip = mcols(range)) {
         range <- GRanges(seqnames = "UnKnown", ranges = range, strand = "*")
     }
     range <- as(range, "GRanges")
+    # Avoid possible duplicated colname
+    while (!is.null(range$tooltip))
+        range$tooltip <- NULL
     range$tooltip <- tooltip
     new("RangeTrackData", range)
 }
@@ -130,19 +134,21 @@ GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
     seqlevels(txdb) <- seqlevel         #+++++++++++++++++++++++++++++++++++++++
     
     # TODO: use "single.strand.genes.only = FALSE" ?
-    gr <- genes(txdb)
+    gr <- GenomicFeatures::genes(txdb)
     # We must restore the seqlevel of the txdb since it is a reference class
     seqlevels(txdb) <- seqlevel.ori     #---------------------------------------
     
     gr$display_label <- {
         strands <- strand(gr)
         ifelse(strands == "+", paste("Gene", gr$gene_id, ">"),
-            ifelse(strands == "-", paste("<", "Gene", gr$gene_id), gr$gene_id))
+            ifelse(strands == "-", paste("<", "Gene", gr$gene_id),
+                paste("Gene", gr$gene_id)))
     }
     gr$id <- {
         # Gene id may not be unique if "single.strand.genes.only = FALSE"
         li.geneid <- split(gr$gene_id, list(seqnames(gr), strand(gr)))
-        unlist(lapply(li.geneid, function (x) make.unique(x)))
+        mod.li.geneid <- lapply(li.geneid, function (x) make.unique(x))
+        unsplit(mod.li.geneid, list(seqnames(gr), strand(gr)))
     }
     # TODO: what about tooltip?
     gr$tooltip <- data.frame(
@@ -213,6 +219,7 @@ setMethod("compileTrackData", signature = "GeneTrackData",
 #        compileTrackData(df)
 #    }
 #)
+
 
 
 # // transcripts data
@@ -303,6 +310,17 @@ setMethod("compileTrackData", signature = "GeneTrackData",
 
 setClass("TnTTrack", slots = c(Spec = "list", Data = "TrackData", Display = "list"))
 
+setMethod("seqinfo", signature = c("TnTTrack"),
+    function (x) seqinfo(x@Data)
+)
+setMethod("seqinfo<-", signature = c(x = "TnTTrack"),
+    function (x, new2old, force, pruning.mode, value) {
+        x@Data <- `seqinfo<-`(x = x@Data, new2old = new2old,
+                              force = force, pruning.mode = pruning.mode, value = value)
+        x
+    }
+)
+
 compileTrack <- function (tntTrack) {
     jc.spec <- asJC(tntTrack@Spec)
     jc.display <- jc(display = asJC(tntTrack@Display))
@@ -367,7 +385,7 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(min(value), max(
                       id = NULL, height = NULL, color = NULL,
                       color.background = NULL) {
     if (is.null(value))
-        stop("Value (height) at each position not specified.")
+        stop("Value (i.e. height) at each position not specified.")
     force(domain)
     force(label)
     stopifnot(length(domain) == 2)
