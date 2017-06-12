@@ -430,30 +430,62 @@ if (interactive()) .JSONMap(colname = c("data", "start"))
 
 
 
+
 ###   TnT Board     ------------------------------------------------------------
 
-#setClassUnion("GRangesOrIRanges", members = c("GRanges", "IRanges"))
+
+setClass("TnTBoard",
+    slots = c(
+        ViewRange = "GRanges",
+        CoordRange = "IRanges",
+        ZoomAllow = "IRanges",
+        PreZoom = "numeric",
+        # TODO: How does the width correspond to pixel?
+        #       In fact, we should not specify the width here,
+        #       but use the resize method on JS side.
+        #Width = "integer",
+        # Drag should always be allowed.
+        #AllowDrag = "logical",
+        TrackList = "list"
+    )
+)
+
+.compileBoardSpec <- function (tntboard) {
+    b <- tntboard
+    stopifnot(
+        # These three slots should be prepared before converted to JS
+        length(b@ViewRange) == 1,
+        length(b@CoordRange) == 1,
+        length(b@ZoomAllow) == 1,
+        
+        length(b@PreZoom) == 1
+    )
+    jc.board.spec <- jc(
+        tnt.board = ma(),
+        from     = start(b@ViewRange),
+        to       = end(b@ViewRange),
+        min      = start(b@CoordRange),
+        max      = end(b@CoordRange),
+        zoom_out = end(b@ZoomAllow),
+        zoom_in  = start(b@ZoomAllow),
+        zoom     = b@PreZoom
+    )
+    jc.board.spec
+}
+# EXAMPLE
+if (interactive()) local({
+    board <- new("TnTBoard")
+    board@ViewRange <- GRanges("chr12", IRanges(99, 1223))
+    board@CoordRange <- IRanges(0, 10000)
+    board@ZoomAllow <- IRanges(10, 10000)
+    board@PreZoom <- 1.5
+    .compileBoardSpec(board)
+})
 
 
-#setClass("TnTBoard",
-#    slots = c(
-#        PreSetViewRange = "GRangesOrIRanges",
-#        PreSetCoordRange = "GRangesOrIRanges",
-#        # Ideally, the allowed zoom range should depend on the width and maxium coordinate
-#        PreSetZoomAllow = "IRanges",
-#        PreSetZoom = "numeric",
-#        # TODO: How does the width correspond to pixel?
-#        #       In fact, we should not specify the width here,
-#        #       but use the resize method on JS side.
-#        #Width = "integer",
-#        PreSetAllowDrag = "logical",
-#        TrackList = "list"
-#    )
-#)
-#
-#TnTBoard <- function (track.list, prezoom = 1, allow.drag = TRUE) {
-#    
-#}
+TnTBoard <- function (tracklist) {
+}
+
 
 ###   TnT Genome    ------------------------------------------------------------
 
