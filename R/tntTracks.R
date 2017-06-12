@@ -49,7 +49,7 @@ RangeTrackData <- function (range, tooltip = mcols(range)) {
         range <- GRanges(seqnames = "UnKnown", ranges = range, strand = "*")
     }
     range <- as(range, "GRanges")
-    range$.tooltip <- tooltip
+    range$tooltip <- tooltip
     new("RangeTrackData", range)
 }
 
@@ -105,7 +105,7 @@ setMethod("compileTrackData", signature = "RangeTrackData",
     function (trackData) {
         ## TODO: Have to select seq
         stopifnot(length(unique(seqnames(trackData))) == 1)
-        df <- as.data.frame(trackData)[c("start", "end", "strand", ".tooltip")]
+        df <- as.data.frame(trackData)[c("start", "end", "strand", "tooltip")]
         df <- S4Vectors::rename(df, c(start = "from", end = "to"))
         compileTrackData(df)
     }
@@ -117,58 +117,102 @@ setMethod("compileTrackData", signature = "PosTrackData",
         stopifnot(length(unique(seqnames(trackData))) == 1)
         stopifnot(all(width(trackData) == 1))
         
-        df <- as.data.frame(trackData)[c("start", "strand", ".tooltip")]
+        df <- as.data.frame(trackData)[c("start", "strand", "tooltip")]
         df <- S4Vectors::rename(df, c(start = "pos"))
         compileTrackData(df)
     }
 )
 
+setClass("GeneTrackData", contains = "RangeTrackData")
 
-
-setClass("TxDbTrackData",
-         contains = c("TrackData"),
-         slots = c(TxDb = "TxDb", Target = "character", SeqLevel = "character"))
-# TODO: valiad whether SeqLevel are valid seqlevels for the TxDb
-
-TxDbTrackData <- function (txdb, target = c("tx", "gene")) {
-    target <- match.arg(target)
-    new("TxDbTrackData", TxDb = txdb, Target = target, SeqLevel = seqlevels(txdb))
+GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
+    seqlevel.ori <- seqlevels(txdb)     # Set and restore the seqlevels
+    seqlevels(txdb) <- seqlevel         #+++++++++++++++++++++++++++++++++++++++
+    
+    # TODO: use "single.strand.genes.only = FALSE" ?
+    gr <- genes(txdb)
+    # We must restore the seqlevel of the txdb since it is a reference class
+    seqlevels(txdb) <- seqlevel.ori     #---------------------------------------
+    
+    gr$display_label <- {
+        strands <- strand(gr)
+        ifelse(strands == "+", paste("Gene", gr$gene_id, ">"),
+            ifelse(strands == "-", paste("<", "Gene", gr$gene_id), gr$gene_id))
+    }
+    gr$id <- {
+        # Gene id may not be unique if "single.strand.genes.only = FALSE"
+        li.geneid <- split(gr$gene_id, list(seqnames(gr), strand(gr)))
+        unlist(lapply(li.geneid, function (x) make.unique(x)))
+    }
+    # TODO: what about tooltip?
+    gr$tooltip <- data.frame(
+        "Location" = as.character(gr),
+        "Gene ID" = gr$gene_id,
+        check.names = FALSE
+    )
+    gr$gene_id <- NULL
+    
+    new("GeneTrackData", gr)
 }
 
-setMethod("compileTrackData", signature = "TxDbTrackData",
+setMethod("compileTrackData", signature = "GeneTrackData",
     function (trackData) {
-        seqlevel <- trackData@SeqLevel
-        txdb <- trackData@TxDb
-        target <- trackData@Target
-        stopifnot(length(seqlevel) == 1)
+        stopifnot(length(unique(seqnames(trackData))) == 1)
         
-        seqlevels(txdb) <- seqlevel
-        
-        if (target == "gene") {
-            # TODO: use "single.strand.genes.only = FALSE" ?
-            gr.gene <- genes(txdb)
-            # TODO: Note that gene id may not be unique if "single.strand.genes.only = FALSE"
-            df <- as.data.frame(gr.gene)[
-                c("seqnames", "start", "end", "strand", "gene_id")]
-            df$display_label <- with(df, {
-                ifelse(strand == "+", paste("Gene", gene_id, ">"),
-                    ifelse(strand == "-", paste("<", "Gene", gene_id), gene_id)
-                )
-            })
-            df <- S4Vectors::rename(df, c(gene_id = "id"))
-            df
-        }
-        if (target == "tx") {
-            # TODO
-            stop()
-        }
-        
-        # We must restore the seqlevel of the txdb since it is a reference class
-        seqlevels(txdb) <- seqlevels0(txdb)
+        df <- as.data.frame(trackData)
+        df[c("seqnames", "width", "strand")] <- NULL
         
         compileTrackData(df)
     }
 )
+
+
+
+
+## I think there is no need for TxDbTrackData, but rather extract the ranges upon construction
+## of Track.
+#setClass("TxDbTrackData",
+#         contains = c("TrackData"),
+#         slots = c(TxDb = "TxDb", Target = "character", SeqLevel = "character"))
+#
+#TxDbTrackData <- function (txdb, target = c("tx", "gene")) {
+#    target <- match.arg(target)
+#    new("TxDbTrackData", TxDb = txdb, Target = target, SeqLevel = seqlevels(txdb))
+#}
+#setMethod("compileTrackData", signature = "TxDbTrackData",
+#    function (trackData) {
+#        seqlevel <- trackData@SeqLevel
+#        txdb <- trackData@TxDb
+#        target <- trackData@Target
+#        stopifnot(length(seqlevel) == 1)
+#        
+#        seqlevels(txdb) <- seqlevel
+#        
+#        if (target == "gene") {
+#            # TODO: use "single.strand.genes.only = FALSE" ?
+#            gr.gene <- genes(txdb)
+#            # TODO: Note that gene id may not be unique if "single.strand.genes.only = FALSE"
+#            df <- as.data.frame(gr.gene)[
+#                c("seqnames", "start", "end", "strand", "gene_id")]
+#            df$display_label <- with(df, {
+#                ifelse(strand == "+", paste("Gene", gene_id, ">"),
+#                    ifelse(strand == "-", paste("<", "Gene", gene_id), gene_id)
+#                )
+#            })
+#            df <- S4Vectors::rename(df, c(gene_id = "id"))
+#            df
+#        }
+#        if (target == "tx") {
+#            # TODO
+#            stop()
+#        }
+#        
+#        # We must restore the seqlevel of the txdb since it is a reference class
+#        seqlevels(txdb) <- seqlevels0(txdb)
+#        
+#        compileTrackData(df)
+#    }
+#)
 
 
 # // transcripts data
@@ -267,14 +311,14 @@ compileTrack <- function (tntTrack) {
 }
 
 
-setClass("ReferenceTrack", contains = "TnTTrack")
 
-setClass("GeneTrack", contains = "ReferenceTrack", slots = c(Data = "TxDbTrackData"))
+setClass("GeneTrack", contains = "TnTTrack", slots = c(Data = "GeneTrackData"))
 
-GeneTrack <- function (txdb, label = deparse(substitute(txdb)), # TODO: tooltip?
+GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
+                       label = deparse(substitute(txdb)), # TODO: tooltip?
                        id = NULL, height = NULL, color = NULL, color.background = NULL) {
     force(label)
-    data <- TxDbTrackData(txdb, target = "gene")
+    data <- GeneTrackDataFromTxDb(txdb = txdb, seqlevel = seqlevel)
     spec <- list(
         tnt.board.track = ma(),
         height = height,
