@@ -24,6 +24,7 @@ JSCallback <- function (result, toJSON = TRUE) {
     JavaScript(jsstring)
 }
 
+#' @export
 .JSONMap <- function (colname, constant) {
     stopifnot(any(missing(colname), missing(constant)))
     if (missing(constant)) {
@@ -56,24 +57,14 @@ setClass("RangeTrackData", contains = c("GRanges", "TrackData"))
 setClass("PosTrackData", contains = c("RangeTrackData"))
 setClass("GeneTrackData", contains = "RangeTrackData")
 
-#### Seqinfo Methods        ========
-setMethod("seqinfo", signature = c("TnTTrack"),
-    function (x) seqinfo(x@Data)
-)
-setMethod("seqinfo<-", signature = c(x = "TnTTrack"),
-    function (x, new2old, force, pruning.mode, value) {
-        x@Data <- `seqinfo<-`(x = x@Data, new2old = new2old,
-                              force = force, pruning.mode = pruning.mode, value = value)
-        x
-    }
-)
-
 
 
 #### TrackData constructors     ========
 
+#' @export
 NoTrackData <- function () new("NoTrackData")
 
+#' @export
 RangeTrackData <- function (range, tooltip = mcols(range)) {
     tooltip <- as.data.frame(tooltip)
     if (is(range, "IRanges")) {
@@ -87,6 +78,7 @@ RangeTrackData <- function (range, tooltip = mcols(range)) {
     new("RangeTrackData", range)
 }
 
+#' @export
 PosTrackData <- function (pos, tooltip = mcols(pos)) {
     tooltip <- as.data.frame(tooltip)
     trackdata <- RangeTrackData(range = pos, tooltip = tooltip)
@@ -95,6 +87,7 @@ PosTrackData <- function (pos, tooltip = mcols(pos)) {
     trackdata
 }
 
+#' @export
 GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
     seqlevel.ori <- seqlevels(txdb)     # Set and restore the seqlevels
     seqlevels(txdb) <- seqlevel         #+++++++++++++++++++++++++++++++++++++++
@@ -136,9 +129,12 @@ setValidity("PosTrackData",
 
 
 #### TrackData Compilation  ========
+
+#' @export
 setGeneric("compileTrackData",
            function (trackData) standardGeneric("compileTrackData"))
 
+#' @export
 setMethod("compileTrackData", signature = "data.frame",
     function (trackData) {
         removeAsIs <- function (df) {
@@ -163,11 +159,13 @@ setMethod("compileTrackData", signature = "data.frame",
     }
 )
 
+#' @export
 setMethod("compileTrackData", signature = "NoTrackData",
     function (trackData)
         jc(tnt.board.track.data.empty = NoArg)
 ) 
 
+#' @export
 setMethod("compileTrackData", signature = "RangeTrackData",
     function (trackData) {
         ## TODO: Have to select seq
@@ -177,6 +175,7 @@ setMethod("compileTrackData", signature = "RangeTrackData",
     }
 )
 
+#' @export
 setMethod("compileTrackData", signature = "PosTrackData",
     function (trackData) {
         ## TODO: Have to select seq
@@ -189,6 +188,7 @@ setMethod("compileTrackData", signature = "PosTrackData",
     }
 )
 
+#' @export
 setMethod("compileTrackData", signature = "GeneTrackData",
     function (trackData) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
@@ -221,6 +221,7 @@ setClass("TrackSpec",
     )
 )
 
+#' @export
 TrackSpec <- function (background = character(0), height = numeric(0),
                        label = character(0), .trackspecfromlist) {
     if (!missing(.trackspecfromlist)) {
@@ -231,6 +232,7 @@ TrackSpec <- function (background = character(0), height = numeric(0),
 }
 
 
+#' @export
 setMethod("as.list", signature = "TrackSpec",
     function (x) {
         li.spec <- list(
@@ -242,6 +244,7 @@ setMethod("as.list", signature = "TrackSpec",
         li.spec
     }
 )
+#' @export
 .compileTrackSpec <- function (trackspec) {
     li.spec <- as.list(trackspec)
     stopifnot(all(lengths(li.spec) == 1))
@@ -256,6 +259,7 @@ setMethod("as.list", signature = "TrackSpec",
 if (interactive()) local({
     .compileTrackSpec(TrackSpec("white", 30, label = "track"))
 })
+#' @export
 .prepareTrackSpec <- function (tntboard) {
     # TODO: Track spec should be consolidated with regard to the setting from board
     
@@ -289,8 +293,23 @@ setClass("BlockTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData")
 setClass("PinTrack", contains = "TnTTrack", slots = c(Data = "PosTrackData"))
 setClass("GeneTrack", contains = "TnTTrack", slots = c(Data = "GeneTrackData"))
 
+#### Seqinfo Methods        ========
+#' @export
+setMethod("seqinfo", signature = c("TnTTrack"),
+    function (x) seqinfo(x@Data)
+)
+#' @export
+setMethod("seqinfo<-", signature = c(x = "TnTTrack"),
+    function (x, new2old, force, pruning.mode, value) {
+        x@Data <- `seqinfo<-`(x = x@Data, new2old = new2old,
+                              force = force, pruning.mode = pruning.mode, value = value)
+        x
+    }
+)
+
 #### Track Constructor      ========
 
+#' @export
 BlockTrack <- function (range, label = deparse(substitute(range)),
                         tooltip = mcols(range), color = NULL, ...) {
     force(label)
@@ -305,6 +324,7 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
     new("BlockTrack", Spec = spec, Data = data, Display = display)
 }
 
+#' @export
 PinTrack <- function (pos, value = mcols(pos)$value, domain = c(min(value), max(value)),
                       label = deparse(substitute(pos)),
                       tooltip = mcols(pos), color = NULL, ...) {
@@ -324,6 +344,7 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(min(value), max(
     new("PinTrack", Spec = spec, Data = data, Display = display)
 }
 
+#' @export
 GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
                        label = deparse(substitute(txdb)), # TODO: tooltip?
                        color = NULL, ...) {
@@ -343,6 +364,7 @@ GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
 # setGeneric("compileTrack",
 #            function (tntTrack) standardGeneric("compileTrack"))
 
+#' @export
 compileTrack <- function (tntTrack) {
     jc.spec <- .compileTrackSpec(tntTrack@Spec)
     jc.display <- jc(display = asJC(tntTrack@Display))
@@ -372,6 +394,7 @@ setClass("TnTBoard",
 )
 
 #### TnT Board Constructor      ========
+#' @export
 TnTBoard <- function (tracklist, viewrange = GRanges(), viewseq) {
     stopifnot(
         all(sapply(tracklist, inherits, what = "TnTTrack"))
@@ -382,6 +405,7 @@ TnTBoard <- function (tracklist, viewrange = GRanges(), viewseq) {
 }
 
 #### TnT Board Compilation      ========
+#' @export
 compileBoard <- function (tntboard) {
     ## Modification to tntboard
     b <- .selectTrackSeq(tntboard)
@@ -394,6 +418,7 @@ compileBoard <- function (tntboard) {
     tntdef
 }
 
+#' @export
 .compileBoardSpec <- function (tntboard) {
     .checkBoardSpec <- function (tntboard) {
         b <- tntboard
@@ -418,6 +443,7 @@ compileBoard <- function (tntboard) {
     jc.board.spec
 }
 
+#' @export
 .selectTrackSeq <- function (tntboard) {
     tracklist0 <- tntboard@TrackList
     viewrange0 <- tntboard@ViewRange
@@ -435,6 +461,7 @@ compileBoard <- function (tntboard) {
     tntboard
 }
 
+#' @export
 .determineCoordRange <- function (tntboard) {
     coordrange0 <- tntboard@CoordRange
     
@@ -461,6 +488,7 @@ compileBoard <- function (tntboard) {
     tntboard
 }
 
+#' @export
 .compileTrackList <- function (tntboard) {
     tracklist <- tntboard@TrackList
     li.jc <- lapply(tracklist, compileTrack)
@@ -470,8 +498,10 @@ compileBoard <- function (tntboard) {
 }
 
 ## Printing     ====
+#' @export
 setMethod("show", signature = c("TnTBoard"),
     function (object) {
+        # TODO: Also have to edit renderTnT and TnTOutput
         tntdef <- compileBoard(object)
         print(TnT(tntdef))
     }
