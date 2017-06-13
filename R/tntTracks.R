@@ -237,7 +237,7 @@ setMethod("compileTrackData", signature = "PosTrackData",
         stopifnot(length(unique(seqnames(trackData))) == 1)
         stopifnot(all(width(trackData) == 1))
         
-        df <- as.data.frame(trackData)[c("start", "strand", "tooltip")]
+        df <- as.data.frame(trackData)[c("start", "strand", "val", "tooltip")]
         df <- S4Vectors::rename(df, c(start = "pos"))
         compileTrackData(df)
     }
@@ -380,7 +380,7 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
 }
 
 #' @export
-PinTrack <- function (pos, value = mcols(pos)$value, domain = c(min(value), max(value)),
+PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
                       label = deparse(substitute(pos)),
                       tooltip = mcols(pos), color = NULL, ...) {
     if (is.null(value))
