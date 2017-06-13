@@ -23,6 +23,20 @@ JSCallback <- function (result, toJSON = TRUE) {
     JavaScript(jsstring)
 }
 
+.JSONMap <- function (colname, constant) {
+    stopifnot(any(missing(colname), missing(constant)))
+    if (missing(constant)) {
+        # TODO: use toJSON to perform escape
+        condfilter <- paste(sprintf('["%s"]', colname), collapse = "")
+        string <- sprintf('function (d) { return (d%s); }', condfilter)
+        ans <- JavaScript(string)
+    }
+    else
+        ans <- constant
+    ans
+}
+# Example
+if (interactive()) .JSONMap(colname = c("data", "start"))
 
 
 
@@ -30,17 +44,32 @@ JSCallback <- function (result, toJSON = TRUE) {
 
 
 
-###  Track Data      ------------------------------------------------------------
+###  Track Data   ##############################################################
 
+
+#### TrackData classes      ========
 setClass("TrackData")
 
+setClass("NoTrackData", contains = c("NULL", "TrackData"))
+setClass("RangeTrackData", contains = c("GRanges", "TrackData"))
+setClass("PosTrackData", contains = c("RangeTrackData"))
+setClass("GeneTrackData", contains = "RangeTrackData")
 
-setClass("NoTrackData",
-         contains = c("NULL", "TrackData"))
-setClass("RangeTrackData",
-         contains = c("GRanges", "TrackData"))
-setClass("PosTrackData",
-         contains = c("RangeTrackData"))
+#### Seqinfo Methods        ========
+setMethod("seqinfo", signature = c("TnTTrack"),
+    function (x) seqinfo(x@Data)
+)
+setMethod("seqinfo<-", signature = c(x = "TnTTrack"),
+    function (x, new2old, force, pruning.mode, value) {
+        x@Data <- `seqinfo<-`(x = x@Data, new2old = new2old,
+                              force = force, pruning.mode = pruning.mode, value = value)
+        x
+    }
+)
+
+
+
+#### TrackData constructors     ========
 
 NoTrackData <- function () new("NoTrackData")
 
@@ -65,6 +94,38 @@ PosTrackData <- function (pos, tooltip = mcols(pos)) {
     trackdata
 }
 
+GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
+    seqlevel.ori <- seqlevels(txdb)     # Set and restore the seqlevels
+    seqlevels(txdb) <- seqlevel         #+++++++++++++++++++++++++++++++++++++++
+    
+    # TODO: use "single.strand.genes.only = FALSE" ?
+    gr <- GenomicFeatures::genes(txdb)
+    # We must restore the seqlevel of the txdb since it is a reference class
+    seqlevels(txdb) <- seqlevel.ori     #---------------------------------------
+    
+    gr$display_label <- {
+        strands <- strand(gr)
+        ifelse(strands == "+", paste("Gene", gr$gene_id, ">"),
+            ifelse(strands == "-", paste("<", "Gene", gr$gene_id),
+                paste("Gene", gr$gene_id)))
+    }
+    gr$id <- {
+        # Gene id may not be unique if "single.strand.genes.only = FALSE"
+        li.geneid <- split(gr$gene_id, list(seqnames(gr), strand(gr)))
+        mod.li.geneid <- lapply(li.geneid, function (x) make.unique(x))
+        unsplit(mod.li.geneid, list(seqnames(gr), strand(gr)))
+    }
+    # TODO: what about tooltip?
+    gr$tooltip <- data.frame(
+        "Location" = as.character(gr),
+        "Gene ID" = gr$gene_id,
+        check.names = FALSE
+    )
+    gr$gene_id <- NULL
+    
+    new("GeneTrackData", gr)
+}
+
 setValidity("PosTrackData",
     function (object) {
         if (all(width(object) == 1)) TRUE
@@ -73,8 +134,9 @@ setValidity("PosTrackData",
 )
 
 
+#### TrackData Compilation  ========
 setGeneric("compileTrackData",
-           function (trackData, ...) standardGeneric("compileTrackData"))
+           function (trackData) standardGeneric("compileTrackData"))
 
 setMethod("compileTrackData", signature = "data.frame",
     function (trackData) {
@@ -126,40 +188,6 @@ setMethod("compileTrackData", signature = "PosTrackData",
     }
 )
 
-setClass("GeneTrackData", contains = "RangeTrackData")
-
-GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
-    seqlevel.ori <- seqlevels(txdb)     # Set and restore the seqlevels
-    seqlevels(txdb) <- seqlevel         #+++++++++++++++++++++++++++++++++++++++
-    
-    # TODO: use "single.strand.genes.only = FALSE" ?
-    gr <- GenomicFeatures::genes(txdb)
-    # We must restore the seqlevel of the txdb since it is a reference class
-    seqlevels(txdb) <- seqlevel.ori     #---------------------------------------
-    
-    gr$display_label <- {
-        strands <- strand(gr)
-        ifelse(strands == "+", paste("Gene", gr$gene_id, ">"),
-            ifelse(strands == "-", paste("<", "Gene", gr$gene_id),
-                paste("Gene", gr$gene_id)))
-    }
-    gr$id <- {
-        # Gene id may not be unique if "single.strand.genes.only = FALSE"
-        li.geneid <- split(gr$gene_id, list(seqnames(gr), strand(gr)))
-        mod.li.geneid <- lapply(li.geneid, function (x) make.unique(x))
-        unsplit(mod.li.geneid, list(seqnames(gr), strand(gr)))
-    }
-    # TODO: what about tooltip?
-    gr$tooltip <- data.frame(
-        "Location" = as.character(gr),
-        "Gene ID" = gr$gene_id,
-        check.names = FALSE
-    )
-    gr$gene_id <- NULL
-    
-    new("GeneTrackData", gr)
-}
-
 setMethod("compileTrackData", signature = "GeneTrackData",
     function (trackData) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
@@ -171,191 +199,16 @@ setMethod("compileTrackData", signature = "GeneTrackData",
     }
 )
 
+###  TnT Tracks   ##############################################################
 
-
-
-## I think there is no need for TxDbTrackData, but rather extract the ranges upon construction
-## of Track.
-#setClass("TxDbTrackData",
-#         contains = c("TrackData"),
-#         slots = c(TxDb = "TxDb", Target = "character", SeqLevel = "character"))
-#
-#TxDbTrackData <- function (txdb, target = c("tx", "gene")) {
-#    target <- match.arg(target)
-#    new("TxDbTrackData", TxDb = txdb, Target = target, SeqLevel = seqlevels(txdb))
-#}
-#setMethod("compileTrackData", signature = "TxDbTrackData",
-#    function (trackData) {
-#        seqlevel <- trackData@SeqLevel
-#        txdb <- trackData@TxDb
-#        target <- trackData@Target
-#        stopifnot(length(seqlevel) == 1)
-#        
-#        seqlevels(txdb) <- seqlevel
-#        
-#        if (target == "gene") {
-#            # TODO: use "single.strand.genes.only = FALSE" ?
-#            gr.gene <- genes(txdb)
-#            # TODO: Note that gene id may not be unique if "single.strand.genes.only = FALSE"
-#            df <- as.data.frame(gr.gene)[
-#                c("seqnames", "start", "end", "strand", "gene_id")]
-#            df$display_label <- with(df, {
-#                ifelse(strand == "+", paste("Gene", gene_id, ">"),
-#                    ifelse(strand == "-", paste("<", "Gene", gene_id), gene_id)
-#                )
-#            })
-#            df <- S4Vectors::rename(df, c(gene_id = "id"))
-#            df
-#        }
-#        if (target == "tx") {
-#            # TODO
-#            stop()
-#        }
-#        
-#        # We must restore the seqlevel of the txdb since it is a reference class
-#        seqlevels(txdb) <- seqlevels0(txdb)
-#        
-#        compileTrackData(df)
-#    }
-#)
-
-
-
-# // transcripts data
-# var transcripts = [
-#     {
-#         start: 32336637,
-#         end: 32367637,
-#         display_label: "Gene name 1>",
-#         key: 1,
-#         id: 'Gene1',
-#         exons: [
-#             {
-#                 start: 32337637,
-#                 end: 32338637,
-#                 offset: 32337637 - 32336637,
-#                 coding: false,
-#                 transcript: {
-#                     Parent: 'Gene1'
-#                 }
-#             },
-#             {
-#                 start: 32339637,
-#                 end: 32357637,
-#                 offset: 32339637 - 32336637,
-#                 coding: true,
-#                 transcript: {
-#                     Parent: 'Gene1'
-#                 }
-#             },
-#             {
-#                 start: 32360637,
-#                 end: 32360737,
-#                 offset: 32360637 - 32336637,
-#                 coding: true,
-#                 transcript: {
-#                     Parent: 'Gene1'
-#                 }
-#             },
-#             {
-#                 start: 32363637,
-#                 end: 32367637,
-#                 offset: 32363637 - 32336637,
-#                 coding: false
-#             }
-#             ]
-#     },
-#     {
-#         start: 32346637,
-#         end: 32393637,
-#         display_label: "Overlapping gene",
-#         key: 3,
-#         id: 'OG1',
-#         exons: [
-#             {
-#                 start: 32346637,
-#                 end: 32393637,
-#                 offset: 0,
-#                 coding: true
-#             }
-#             ]
-#     },
-#     {
-#         start: 32393637,
-#         end: 32402637,
-#         display_label: "Gene name 2 >",
-#         key: 2,
-#         id: 'Gene2',
-#         exons: [
-#             {
-#                 start: 32396637,
-#                 end: 32400637,
-#                 // Offset comes from the fact that in Ensembl, exons coordinates are relative to the parent transcript and not the gene
-#                 // So an offset equals to o = exonStart - transcriptStart is applied if necessary (otherwise, set it to 0)
-#                 offset: 32396637 - 32393637,
-#                 coding: true,
-#                 transcript: {
-#                     Parent: 'Gene2',
-#                 }
-#             }
-#             ]
-#     }
-#     ];
-
-
-
-### TnT Tracks  ----------------------------------------------------------------
-
-
+#### Track classes          ========
 setClass("TnTTrack", slots = c(Spec = "list", Data = "TrackData", Display = "list"))
 
-setMethod("seqinfo", signature = c("TnTTrack"),
-    function (x) seqinfo(x@Data)
-)
-setMethod("seqinfo<-", signature = c(x = "TnTTrack"),
-    function (x, new2old, force, pruning.mode, value) {
-        x@Data <- `seqinfo<-`(x = x@Data, new2old = new2old,
-                              force = force, pruning.mode = pruning.mode, value = value)
-        x
-    }
-)
-
-compileTrack <- function (tntTrack) {
-    jc.spec <- asJC(tntTrack@Spec)
-    jc.display <- jc(display = asJC(tntTrack@Display))
-    jc.data <- jc(data = compileTrackData(tntTrack@Data))
-    c(jc.spec, jc.display, jc.data)
-}
-
-
-
+setClass("BlockTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
+setClass("PinTrack", contains = "TnTTrack", slots = c(Data = "PosTrackData"))
 setClass("GeneTrack", contains = "TnTTrack", slots = c(Data = "GeneTrackData"))
 
-GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
-                       label = deparse(substitute(txdb)), # TODO: tooltip?
-                       id = NULL, height = NULL, color = NULL, color.background = NULL) {
-    force(label)
-    data <- GeneTrackDataFromTxDb(txdb = txdb, seqlevel = seqlevel)
-    spec <- list(
-        tnt.board.track = ma(),
-        height = height,
-        color = color.background,
-        label = label,
-        id = id
-    )
-    display <- list(
-        tnt.board.track.feature.genome.gene = ma(),
-        color = color
-    )
-    new("GeneTrack", Data = data, Spec = spec, Display = display)
-}
-
-
-setClass("BlockTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
-
-setClass("PinTrack", contains = "TnTTrack", slots = c(Data = "PosTrackData"))
-
-setGeneric("compileTrack", function (tntTrack) standardGeneric("compileTrack"))
+#### Track Constructor      ========
 
 BlockTrack <- function (range, label = deparse(substitute(range)),
                         tooltip = mcols(range), id = NULL,
@@ -377,7 +230,6 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
     )
     new("BlockTrack", Spec = spec, Data = data, Display = display)
 }
-
 
 PinTrack <- function (pos, value = mcols(pos)$value, domain = c(min(value), max(value)),
                       label = deparse(substitute(pos)), tooltip = mcols(pos),
@@ -405,34 +257,44 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(min(value), max(
     new("PinTrack", Spec = spec, Data = data, Display = display)
 }
 
-
-
-
-
-.JSONMap <- function (colname, constant) {
-    stopifnot(any(missing(colname), missing(constant)))
-    if (missing(constant)) {
-        # TODO: use toJSON to perform escape
-        condfilter <- paste(sprintf('["%s"]', colname), collapse = "")
-        string <- sprintf('function (d) { return (d%s); }', condfilter)
-        ans <- JavaScript(string)
-    }
-    else
-        ans <- constant
-    ans
+GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
+                       label = deparse(substitute(txdb)), # TODO: tooltip?
+                       id = NULL, height = NULL, color = NULL, color.background = NULL) {
+    force(label)
+    data <- GeneTrackDataFromTxDb(txdb = txdb, seqlevel = seqlevel)
+    spec <- list(
+        tnt.board.track = ma(),
+        height = height,
+        color = color.background,
+        label = label,
+        id = id
+    )
+    display <- list(
+        tnt.board.track.feature.genome.gene = ma(),
+        color = color
+    )
+    new("GeneTrack", Data = data, Spec = spec, Display = display)
 }
-# Example
-if (interactive()) .JSONMap(colname = c("data", "start"))
+
+
+#### Track Compilation      ========
+
+# setGeneric("compileTrack",
+#            function (tntTrack) standardGeneric("compileTrack"))
+
+compileTrack <- function (tntTrack) {
+    jc.spec <- asJC(tntTrack@Spec)
+    jc.display <- jc(display = asJC(tntTrack@Display))
+    jc.data <- jc(data = compileTrackData(tntTrack@Data))
+    c(jc.spec, jc.display, jc.data)
+}
 
 
 
 
+###   TnT Board     ############################################################
 
-
-
-###   TnT Board     ------------------------------------------------------------
-
-
+####  Class Def for TnT Board   ========
 setClass("TnTBoard",
     slots = c(
         ViewRange = "GRanges",
@@ -448,17 +310,39 @@ setClass("TnTBoard",
     )
 )
 
-.checkBoardSpec <- function (tntboard) {
-    b <- tntboard
+#### TnT Board Constructor      ========
+TnTBoard <- function (tracklist, viewrange = GRanges(), viewseq) {
     stopifnot(
-        # These three slots should be prepared before converted to JS
-        length(b@ViewRange) == 1,
-        length(b@CoordRange) == 1,
-        length(b@ZoomAllow) == 1
+        all(sapply(tracklist, inherits, what = "TnTTrack"))
     )
+    b <- new("TnTBoard", ViewRange = viewrange, CoordRange = IRanges(),
+             ZoomAllow = IRanges(), TrackList = tracklist)
     b
 }
+
+#### TnT Board Compilation      ========
+compileBoard <- function (tntboard) {
+    ## Modification to tntboard
+    b <- .selectTrackSeq(tntboard)
+    b <- .determineCoordRange(b)
+    
+    spec <- .compileBoardSpec(b)
+    tklst <- .compileTrackList(b)
+    tntdef <- c(spec, tklst)
+    tntdef
+}
+
 .compileBoardSpec <- function (tntboard) {
+    .checkBoardSpec <- function (tntboard) {
+        b <- tntboard
+        stopifnot(
+            # These three slots should be prepared before converted to JS
+            length(b@ViewRange) == 1,
+            length(b@CoordRange) == 1,
+            length(b@ZoomAllow) == 1
+        )
+        b
+    }
     b <- .checkBoardSpec(tntboard)
     jc.board.spec <- jc(
         tnt.board = ma(),
@@ -471,60 +355,6 @@ setClass("TnTBoard",
     )
     jc.board.spec
 }
-# EXAMPLE
-if (interactive()) local({
-    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
-    board <- new("TnTBoard")
-    board@ViewRange <- GRanges("chr12", IRanges(99, 1223))
-    board@CoordRange <- IRanges(0, 10000)
-    board@ZoomAllow <- IRanges(10, 10000)
-    board@TrackList <- list(
-        GeneTrack(txdb = txdb)
-    )
-    .compileBoardSpec(board)
-})
-
-
-
-.prepareTrackSeqs <- function (tracklist) {
-    # li.seqinfo <- lapply(tracklist, seqinfo)
-    # li.genomes <- lapply(li.seqinfo, genome)
-    # genomes <- {
-    #     genomes <- unique(unlist(li.genomes))
-    #     genomes[!is.na(genomes)]
-    # }
-    # 
-    # if (length(genomes) >= 2) {
-    #     # TODO: do detailed check
-    # }
-    # else if (length(genomes) == 0) {
-    #     # Do nothing?
-    # }
-    # else if (length(genomes) == 1) {
-    #     # Assume all the seqlevels are on the same genome
-    #     tracklist <- lapply(tracklist, g = genomes,
-    #         function (track, g) {
-    #             genome(track) <- g
-    #             track
-    #         }
-    #     )
-    # }
-    # tracklist
-    
-}
-# EXAMPLE
-if (interactive()) local({
-    tracklist <- list(
-        gt = GeneTrack(
-            txdb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
-            seqlevel = "chrY"
-        ),
-        bt = BlockTrack(
-            range = GRanges("chrY", IRanges(seq(1, 10000, by = 1000), width = 30))
-        )
-    )
-    .prepareTrackSeqs(tracklist)
-})
 
 .selectTrackSeq <- function (tntboard) {
     tracklist0 <- tntboard@TrackList
@@ -542,7 +372,6 @@ if (interactive()) local({
     tntboard@TrackList <- tracklist
     tntboard
 }
-
 
 .determineCoordRange <- function (tntboard) {
     coordrange0 <- tntboard@CoordRange
@@ -570,15 +399,6 @@ if (interactive()) local({
     tntboard
 }
 
-TnTBoard <- function (tracklist, viewrange = GRanges(), viewseq) {
-    stopifnot(
-        all(sapply(tracklist, inherits, what = "TnTTrack"))
-    )
-    b <- new("TnTBoard", ViewRange = viewrange, CoordRange = IRanges(),
-             ZoomAllow = IRanges(), TrackList = tracklist)
-    b
-}
-
 .compileTrackList <- function (tntboard) {
     tracklist <- tntboard@TrackList
     li.jc <- lapply(tracklist, compileTrack)
@@ -587,35 +407,7 @@ TnTBoard <- function (tracklist, viewrange = GRanges(), viewseq) {
     jc
 }
 
-
-compileBoard <- function (tntboard) {
-    b <- .selectTrackSeq(tntboard)
-    b <- .determineCoordRange(b)
-    b <- .checkBoardSpec(b)
-    
-    spec <- .compileBoardSpec(b)
-    tklst <- .compileTrackList(b)
-    tntdef <- c(spec, tklst)
-    tntdef
-}
-# EXAMPLE
-if (interactive()) local({
-    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
-    gt <- GeneTrack(txdb)
-    b <- TnTBoard(list(gt), viewrange = GRanges("chr20", IRanges(100,10000)))
-    b %>% compileBoard() %>% TnT
-})
-if (interactive()) local({
-    data("cpgIslands")
-    viewrg <- range(cpgIslands)
-    ct <- BlockTrack(cpgIslands, color.background = "white", color= "blue", height = 30)
-    gt <- GeneTrack(txdb, color.background = "white", color = "red", height = 250)
-    b <- TnTBoard(tracklist = list(gt, ct), viewrange = viewrg)
-    b
-    b <- TnTBoard(tracklist = list(ct), viewrange = viewrg)
-    b
-})
-
+## Printing     ====
 setMethod("show", signature = c("TnTBoard"),
     function (object) {
         tntdef <- compileBoard(object)
@@ -623,33 +415,33 @@ setMethod("show", signature = c("TnTBoard"),
     }
 )
 
+## EXAMPLE      ====
+if (FALSE) local({
+    data("cpgIslands", package = "Gviz")
+    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+    viewrg <- range(cpgIslands)
+    ct <- BlockTrack(cpgIslands, color.background = "white", color= "blue", height = 30)
+    gt <- GeneTrack(txdb, color.background = "white", color = "red", height = 250)
+    b <- TnTBoard(tracklist = list(ct), viewrange = viewrg)
+    b
+    b <- TnTBoard(tracklist = list(gt, ct), viewrange = viewrg)
+    b
+})
 
-###   TnT Genome    ------------------------------------------------------------
+
+
+
+
+
+
+
+###   TnT Genome    ############################################################
 
 # setClass("TnTGenome", contains = "TnTBoard",
 #     slots = c(
 #         
 #     )
 # )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
