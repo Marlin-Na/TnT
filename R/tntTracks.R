@@ -438,7 +438,6 @@ setClass("TnTBoard",
         ViewRange = "GRanges",
         CoordRange = "IRanges",
         ZoomAllow = "IRanges",
-        PreZoom = "numeric",
         # TODO: How does the width correspond to pixel?
         #       In fact, we should not specify the width here,
         #       but use the resize method on JS side.
@@ -455,9 +454,7 @@ setClass("TnTBoard",
         # These three slots should be prepared before converted to JS
         length(b@ViewRange) == 1,
         length(b@CoordRange) == 1,
-        length(b@ZoomAllow) == 1,
-        
-        length(b@PreZoom) == 1
+        length(b@ZoomAllow) == 1
     )
     b
 }
@@ -471,7 +468,6 @@ setClass("TnTBoard",
         max      = end(b@CoordRange),
         zoom_out = end(b@ZoomAllow),
         zoom_in  = start(b@ZoomAllow)
-        #zoom     = b@PreZoom
     )
     jc.board.spec
 }
@@ -482,7 +478,6 @@ if (interactive()) local({
     board@ViewRange <- GRanges("chr12", IRanges(99, 1223))
     board@CoordRange <- IRanges(0, 10000)
     board@ZoomAllow <- IRanges(10, 10000)
-    board@PreZoom <- 1.5
     board@TrackList <- list(
         GeneTrack(txdb = txdb)
     )
@@ -580,7 +575,7 @@ TnTBoard <- function (tracklist, viewrange = GRanges(), viewseq) {
         all(sapply(tracklist, inherits, what = "TnTTrack"))
     )
     b <- new("TnTBoard", ViewRange = viewrange, CoordRange = IRanges(),
-             ZoomAllow = IRanges(), PreZoom = 1.5, TrackList = tracklist)
+             ZoomAllow = IRanges(), TrackList = tracklist)
     b
 }
 
