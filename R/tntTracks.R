@@ -1,6 +1,7 @@
 
 
 
+
 ## Template for JS Callback and Promise     ------------------------------------
 
 #' @export
@@ -201,8 +202,88 @@ setMethod("compileTrackData", signature = "GeneTrackData",
 
 ###  TnT Tracks   ##############################################################
 
+#### Track Spec Class       ========
+#  TrackSpec contains the common track options, namely
+#      o color   background color
+#      o height
+#      o label
+#      o id
+#  Before compilation, these slots need to be consolidated across tracks:
+#      1. If the background color is not specified for one track, use the
+#         default option or from the board option.
+#      ~ 2. Make the id unique across tracks. ~ Forget about id
+setClass("TrackSpec",
+    slots = c(
+        background = "character", # renamed to color upon compilation
+        height = "numeric",
+        label = "character"
+        #id = "character"
+    )
+)
+
+TrackSpec <- function (background = character(0), height = numeric(0),
+                       label = character(0), .trackspecfromlist) {
+    if (!missing(.trackspecfromlist)) {
+        ans <- do.call("TrackSpec", .trackspecfromlist)
+        return(ans)
+    }
+    new("TrackSpec", background = background, height = height, label = label)
+}
+
+
+setMethod("as.list", signature = "TrackSpec",
+    function (x) {
+        li.spec <- list(
+            background = x@background,
+            height     = x@height,
+            label      = x@label
+            #id         = x@id
+        )
+        li.spec
+    }
+)
+.compileTrackSpec <- function (trackspec) {
+    li.spec <- as.list(trackspec)
+    stopifnot(all(lengths(li.spec) == 1))
+    # Rename background to color
+    names(li.spec)[names(li.spec) == "background"] <- "color"
+    # Add header
+    li.spec <- c(list(tnt.board.track = ma()), li.spec)
+    jc.spec <- asJC(li.spec)
+    jc.spec
+}
+# Example
+if (interactive()) local({
+    .compileTrackSpec(TrackSpec("white", 30, label = "track"))
+})
+.prepareTrackSpec <- function (tntboard) {
+    # TODO: Track spec should be consolidated with regard to the setting from board
+    
+    # Fill with default values
+    # TODO: how to set withregard to track type?
+    defaultspec <- list(
+        background = "white",
+        height     = 100
+    )
+    tracklist <- tntboard@TrackList
+    for (i in seq_along(tracklist)) {
+        track <- tracklist[[i]]
+        tspec <- as.list(track@Spec)
+        null.spec <- tspec[lengths(tspec) == 0]
+        if (length(null.spec)) {
+            fit.default <-  defaultspec[names(defaultspec) %in% names(null.spec)]
+            tspec[names(fit.default)] <- fit.default
+            track@Spec <- TrackSpec(.trackspecfromlist = tspec)
+            tracklist[[i]] <- track
+        }
+    }
+    tntboard@TrackList <- tracklist
+    tntboard
+}
+
+
 #### Track classes          ========
-setClass("TnTTrack", slots = c(Spec = "list", Data = "TrackData", Display = "list"))
+setClass("TnTTrack", slots = c(Spec = "TrackSpec", Data = "TrackData", Display = "list"))
 
 setClass("BlockTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
 setClass("PinTrack", contains = "TnTTrack", slots = c(Data = "PosTrackData"))
@@ -211,17 +292,10 @@ setClass("GeneTrack", contains = "TnTTrack", slots = c(Data = "GeneTrackData"))
 #### Track Constructor      ========
 
 BlockTrack <- function (range, label = deparse(substitute(range)),
-                        tooltip = mcols(range), id = NULL,
-                        height = NULL, color = NULL, color.background = NULL) {
+                        tooltip = mcols(range), color = NULL, ...) {
     force(label)
+    spec <- TrackSpec(label = label, ...)
     data <- RangeTrackData(range = range, tooltip = tooltip)
-    spec <- list(
-        tnt.board.track = ma(),
-        color = color.background,
-        height = height,
-        label = label,
-        id = id
-    )
     display <- list(
         tnt.board.track.feature.block = ma(),
         color = color
@@ -232,9 +306,8 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
 }
 
 PinTrack <- function (pos, value = mcols(pos)$value, domain = c(min(value), max(value)),
-                      label = deparse(substitute(pos)), tooltip = mcols(pos),
-                      id = NULL, height = NULL, color = NULL,
-                      color.background = NULL) {
+                      label = deparse(substitute(pos)),
+                      tooltip = mcols(pos), color = NULL, ...) {
     if (is.null(value))
         stop("Value (i.e. height) at each position not specified.")
     force(domain)
@@ -242,13 +315,7 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(min(value), max(
     stopifnot(length(domain) == 2)
     data <- PosTrackData(pos = pos, tooltip = tooltip)
     data$val <- value
-    spec <- list(
-        tnt.board.track = ma(),
-        color = color.background,
-        height = height,
-        label = label,
-        id = id
-    )
+    spec <- TrackSpec(label = label, ...)
     display <- list(
         tnt.board.track.feature.pin = ma(),
         domain = domain,
@@ -259,16 +326,10 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(min(value), max(
 
 GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
                        label = deparse(substitute(txdb)), # TODO: tooltip?
-                       id = NULL, height = NULL, color = NULL, color.background = NULL) {
+                       color = NULL, ...) {
     force(label)
+    spec <- TrackSpec(label = label, ...)
     data <- GeneTrackDataFromTxDb(txdb = txdb, seqlevel = seqlevel)
-    spec <- list(
-        tnt.board.track = ma(),
-        height = height,
-        color = color.background,
-        label = label,
-        id = id
-    )
     display <- list(
         tnt.board.track.feature.genome.gene = ma(),
         color = color
@@ -283,7 +344,7 @@ GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
 #            function (tntTrack) standardGeneric("compileTrack"))
 
 compileTrack <- function (tntTrack) {
-    jc.spec <- asJC(tntTrack@Spec)
+    jc.spec <- .compileTrackSpec(tntTrack@Spec)
     jc.display <- jc(display = asJC(tntTrack@Display))
     jc.data <- jc(data = compileTrackData(tntTrack@Data))
     c(jc.spec, jc.display, jc.data)
@@ -325,6 +386,7 @@ compileBoard <- function (tntboard) {
     ## Modification to tntboard
     b <- .selectTrackSeq(tntboard)
     b <- .determineCoordRange(b)
+    b <- .prepareTrackSpec(b)
     
     spec <- .compileBoardSpec(b)
     tklst <- .compileTrackList(b)
@@ -420,8 +482,8 @@ if (FALSE) local({
     data("cpgIslands", package = "Gviz")
     txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
     viewrg <- range(cpgIslands)
-    ct <- BlockTrack(cpgIslands, color.background = "white", color= "blue", height = 30)
-    gt <- GeneTrack(txdb, color.background = "white", color = "red", height = 250)
+    ct <- BlockTrack(cpgIslands, color= "blue", height = 30)
+    gt <- GeneTrack(txdb, color = "red", height = 250)
     b <- TnTBoard(tracklist = list(ct), viewrange = viewrg)
     b
     b <- TnTBoard(tracklist = list(gt, ct), viewrange = viewrg)
