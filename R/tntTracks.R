@@ -1,5 +1,60 @@
 
 
+# A TnT Track consists of three slots:
+#   o Spec:
+#       Class "TrackSpec" with three slots (i.e. "background", "height", "label").
+#       It describes the common options across tracks (background color, height
+#       and label for each track).
+#
+#   o Data:
+#       Class "TrackData", it is a virtual class with subclasses that have different
+#       methods for conversion to JavaScript. Currently all subclasses also extend
+#       "GRanges" class.
+#
+#   o Display:
+#       A list, describes the display options for different types of track,
+#       e.g. color of the feature, height "domain" of AreaTrack, and in future, will
+#            also include the settings for tooltips
+#
+# TnT Track supports `seqinfo` and `seqinfo<-` method so that before compilation,
+# only track data on the intended chromosome can be kept.
+#
+# A TnT Board is the object that holds a list of tracks and settings for the browser,
+# it contains the following slots:
+#
+#   o ViewRange
+#       Class "GRanges" that specifies the initial viewing range of rendered browser.
+#       According to the its seqlevel, trackdata that on extra chromosomes will be
+#       dropped before converted to JavaScript. It should be suppiled when constructing
+#       the Board.
+#   o CoordRange
+#       Class "IRanges" that defines the left and right coordinate of the board.
+#       It is not suppied when constructing the board.
+#       But before compilation, it is determined by the "seqlength" of "seqinfo"
+#       from ViewRange and also the track list, if not found, use value of
+#       minimal and maximal range of track data list.
+#   o ZoomAllow
+#       Class "IRanges" that describes the minimal and maximal extent of the
+#       board (i.e. the limit when zooming in and out).
+#       Like CoordRange, it is not setted when constructing board.
+#       Before compilation, the maximal extent is set to width of CoordRange, the
+#       minimal extent is set to 10.
+#   o TrackList
+#       List of tracks.
+# 
+# In summary, before compilation, TnT should do the following work:
+#   1. Drop trackdata that are not on the seqlevel (chromosome) of ViewRange.
+#   2. Determine the coordinate range and maximal limit of zooming
+#   3. Check TrackSpec of each track, fill with default values if some of them
+#      are not specified.
+#   Finally, the TnTBoard object can be compiled to a valid definition of TnT instance.
+
+
+
+
+
+
+
 
 
 ## Template for JS Callback and Promise     ------------------------------------
@@ -395,7 +450,7 @@ setClass("TnTBoard",
 
 #### TnT Board Constructor      ========
 #' @export
-TnTBoard <- function (tracklist, viewrange = GRanges(), viewseq) {
+TnTBoard <- function (tracklist, viewrange = GRanges()) {
     stopifnot(
         all(sapply(tracklist, inherits, what = "TnTTrack"))
     )
