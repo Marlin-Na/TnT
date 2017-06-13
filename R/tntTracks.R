@@ -110,7 +110,6 @@ setMethod("compileTrackData", signature = "RangeTrackData",
         ## TODO: Have to select seq
         stopifnot(length(unique(seqnames(trackData))) == 1)
         df <- as.data.frame(trackData)[c("start", "end", "strand", "tooltip")]
-        df <- S4Vectors::rename(df, c(start = "from", end = "to"))
         compileTrackData(df)
     }
 )
@@ -450,7 +449,7 @@ setClass("TnTBoard",
     )
 )
 
-.compileBoardSpec <- function (tntboard) {
+.checkBoardSpec <- function (tntboard) {
     b <- tntboard
     stopifnot(
         # These three slots should be prepared before converted to JS
@@ -460,6 +459,10 @@ setClass("TnTBoard",
         
         length(b@PreZoom) == 1
     )
+    b
+}
+.compileBoardSpec <- function (tntboard) {
+    b <- .checkBoardSpec(tntboard)
     jc.board.spec <- jc(
         tnt.board = ma(),
         from     = start(b@ViewRange),
@@ -467,24 +470,163 @@ setClass("TnTBoard",
         min      = start(b@CoordRange),
         max      = end(b@CoordRange),
         zoom_out = end(b@ZoomAllow),
-        zoom_in  = start(b@ZoomAllow),
-        zoom     = b@PreZoom
+        zoom_in  = start(b@ZoomAllow)
+        #zoom     = b@PreZoom
     )
     jc.board.spec
 }
 # EXAMPLE
 if (interactive()) local({
+    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
     board <- new("TnTBoard")
     board@ViewRange <- GRanges("chr12", IRanges(99, 1223))
     board@CoordRange <- IRanges(0, 10000)
     board@ZoomAllow <- IRanges(10, 10000)
     board@PreZoom <- 1.5
+    board@TrackList <- list(
+        GeneTrack(txdb = txdb)
+    )
     .compileBoardSpec(board)
 })
 
 
-TnTBoard <- function (tracklist) {
+
+.prepareTrackSeqs <- function (tracklist) {
+    # li.seqinfo <- lapply(tracklist, seqinfo)
+    # li.genomes <- lapply(li.seqinfo, genome)
+    # genomes <- {
+    #     genomes <- unique(unlist(li.genomes))
+    #     genomes[!is.na(genomes)]
+    # }
+    # 
+    # if (length(genomes) >= 2) {
+    #     # TODO: do detailed check
+    # }
+    # else if (length(genomes) == 0) {
+    #     # Do nothing?
+    # }
+    # else if (length(genomes) == 1) {
+    #     # Assume all the seqlevels are on the same genome
+    #     tracklist <- lapply(tracklist, g = genomes,
+    #         function (track, g) {
+    #             genome(track) <- g
+    #             track
+    #         }
+    #     )
+    # }
+    # tracklist
+    
 }
+# EXAMPLE
+if (interactive()) local({
+    tracklist <- list(
+        gt = GeneTrack(
+            txdb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
+            seqlevel = "chrY"
+        ),
+        bt = BlockTrack(
+            range = GRanges("chrY", IRanges(seq(1, 10000, by = 1000), width = 30))
+        )
+    )
+    .prepareTrackSeqs(tracklist)
+})
+
+.selectTrackSeq <- function (tntboard) {
+    tracklist0 <- tntboard@TrackList
+    viewrange0 <- tntboard@ViewRange
+    if (length(viewrange0)) {
+        stopifnot(length(viewrange0) == 1)
+        seqlv <- seqlevelsInUse(viewrange0)
+    }
+    else {
+        # TODO: Find a proper view range
+        stop()
+    }
+    tracklist <- lapply(tracklist0, keepSeqlevels,
+                        value = seqlv, pruning.mode = "coarse")
+    tntboard@TrackList <- tracklist
+    tntboard
+}
+
+
+.determineCoordRange <- function (tntboard) {
+    coordrange0 <- tntboard@CoordRange
+    
+    seqlens <- vapply(tntboard@TrackList, seqlengths, integer(1))
+    seqlen <- unique(seqlens[!is.na(seqlens)])
+    
+    if (length(seqlen) >= 2L) {
+        stop()
+    }
+    else if (length(seqlen) == 1L) {
+        coordrange <- IRanges(start = 0L, end = seqlen)
+    }
+    else {
+        li.rgs <- lapply(tntboard@TrackList,
+            function (track) range(track@Data)
+        )
+        rg <- do.call('c', li.rgs)
+        rg <- range(rg)
+        stopifnot(length(rg) == 1)
+        coordrange <- ranges(rg)
+    }
+    tntboard@CoordRange <- coordrange
+    tntboard@ZoomAllow <- IRanges(start = 10, end = width(coordrange))
+    tntboard
+}
+
+TnTBoard <- function (tracklist, viewrange = GRanges(), viewseq) {
+    stopifnot(
+        all(sapply(tracklist, inherits, what = "TnTTrack"))
+    )
+    b <- new("TnTBoard", ViewRange = viewrange, CoordRange = IRanges(),
+             ZoomAllow = IRanges(), PreZoom = 1.5, TrackList = tracklist)
+    b
+}
+
+.compileTrackList <- function (tntboard) {
+    tracklist <- tntboard@TrackList
+    li.jc <- lapply(tracklist, compileTrack)
+    names(li.jc) <- replicate(length(li.jc), "add_track")
+    jc <- asJC(li.jc)
+    jc
+}
+
+
+compileBoard <- function (tntboard) {
+    b <- .selectTrackSeq(tntboard)
+    b <- .determineCoordRange(b)
+    b <- .checkBoardSpec(b)
+    
+    spec <- .compileBoardSpec(b)
+    tklst <- .compileTrackList(b)
+    tntdef <- c(spec, tklst)
+    tntdef
+}
+# EXAMPLE
+if (interactive()) local({
+    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+    gt <- GeneTrack(txdb)
+    b <- TnTBoard(list(gt), viewrange = GRanges("chr20", IRanges(100,10000)))
+    b %>% compileBoard() %>% TnT
+})
+if (interactive()) local({
+    data("cpgIslands")
+    viewrg <- range(cpgIslands)
+    ct <- BlockTrack(cpgIslands, color.background = "white", color= "blue", height = 30)
+    gt <- GeneTrack(txdb, color.background = "white", color = "red", height = 250)
+    b <- TnTBoard(tracklist = list(gt, ct), viewrange = viewrg)
+    b
+    b <- TnTBoard(tracklist = list(ct), viewrange = viewrg)
+    b
+})
+
+setMethod("show", signature = c("TnTBoard"),
+    function (object) {
+        tntdef <- compileBoard(object)
+        print(TnT(tntdef))
+    }
+)
 
 
 ###   TnT Genome    ------------------------------------------------------------
