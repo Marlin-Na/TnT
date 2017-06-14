@@ -1,7 +1,7 @@
 ---
-title: "Some Technical Notes"
+title: "Updated Notes"
 author: "Jialin Ma"
-date: "February 10, 2017"
+date: "June 14, 2017"
 output:
     rmarkdown::html_document:
         toc: true
@@ -10,204 +10,192 @@ output:
 ---
 
 
-## Technical Notes
+In this document, I aim to showcase the current available features of TnT package and
+briefly describe the structure and compilation process of TnT Board and TnT Tracks.
 
-### TnT libraries
 
-TnT is a set of javascript visualization libraries that include a simple genome
-browser, you can see http://tntvis.github.io/tnt.genome/index.html for what it may
-achieve. The aim of this package is to wrap the TnT libraries into R so that we
-can eaisly create interactive track-based visulization in Rmarkdown and shiny apps
-using data from R environment (as the example above).
+# Usage
 
-### htmlwidgets
+## Install
 
-This package is based on the htmlwidgets framework to wrap the TnT library into
-R, you can find some great packages that utilizes htmlwidgets
-at [here](http://www.htmlwidgets.org/showcase_leaflet.html). Packages that are
-based on htmlwidgets can be used in Rmarkdown files and shiny webapps. 
+To install the version of package that builds this document, use:
 
-### TnT api
-
-Basicly, the creation of a tnt component need a definition about the component
-as a javascript function cascade,
-which includes the general properties, track properties, track data, etc. For the
-TnT board library, you can find documentation of the these api at 
-http://tntvis.github.io/tnt.board/api/board/index.html .
-
-For example, the following is the definition of the tnt board at the beginning of
-this page.
-
-```js
-tnt.board()
-.from(14)
-.to(114)
-.min(-100)
-.max(500)
-.allow_drag(true)
-.add_track(tnt.board.track()
-           .color('white')
-           .height(20)
-           .display(tnt.board.track.feature.location()))
-.add_track(tnt.board.track()
-           .height(0)
-           .display(tnt.board.track.feature.axis()
-                    .orientation('top')))
-.add_track(tnt.board.track()
-           .color('white')
-           .height(40)
-           .label('My Track 1')
-           .data(tnt.board.track.data.sync()
-                 .retriever(function () {
-                     return [{"start":42,"end":54},{"start":69,"end":99},{"start":233,"end":250}]
-                 }))
-           .display(tnt.board.track.feature.block()
-                    .color('black')))
-.add_track(tnt.board.track()
-           .color('white')
-           .height(40)
-           .label('My Track 2')
-           .data(tnt.board.track.data.sync()
-                 .retriever(function () {
-                     return [{"start":23,"end":38},{"start":66,"end":74},{"start":300,"end":318}]
-                 }))
-           .display(tnt.board.track.feature.block()
-                    .color('green')))
+```{r, eval=FALSE}
+install_github("marlin-na/TnT", ref = "93cd102e7b970e4d4df0850d2edcac26867d4355")
 ```
-
-### Pass information from R to JS
-
-Based on the fact that definition of tnt components are linked by javascript functions
-with mostly single argument (either numeric, character or another function result),
-I decided to use a somehow "violent" approach to pass information/data from R side
-to javascript side -- to directly generate this character string as javascript code
-and pass it to javascript side.
-
-For example,
 
 ```{r}
-library(TnT)
-tntdef <-
-"
-  tnt.board()
-  .from(14)
-  .to(114)
-  .min(-100)
-  .max(500)
-  .allow_drag(true)
-  .add_track(tnt.board.track()
-             .color('white')
-             .height(20)
-             .display(tnt.board.track.feature.location()))
-  .add_track(tnt.board.track()
-             .height(0)
-             .display(tnt.board.track.feature.axis()
-                      .orientation('top')))
-  .add_track(tnt.board.track()
-             .color('white')
-             .height(40)
-             .label('My Track 1')
-             .data(tnt.board.track.data.sync()
-                   .retriever(function () {
-                       return [{'start':42,'end':54},{'start':69,'end':99},{'start':233,'end':250}]
-                   }))
-             .display(tnt.board.track.feature.block()
-                      .color('black')))
-  .add_track(tnt.board.track()
-             .color('white')
-             .height(40)
-             .label('My Track 2')
-             .data(tnt.board.track.data.sync()
-                   .retriever(function () {
-                       return [{'start':23,'end':38},{'start':66,'end':74},{'start':300,'end':318}]
-                   }))
-             .display(tnt.board.track.feature.block()
-                      .color('green')))
-"
-TnT(tntdef)
+suppressPackageStartupMessages({
+    library(TnT)
+    library(GenomicFeatures)
+})
 ```
 
-In the example above, the character vector `tntdef` is passed from R side to JS side as
-an option of the htmlwidgets framework (by `TnT` function).
-The JS side is handled at [inst/htmlwidgets/TnT.js](inst/htmlwidgets/TnT.js), which
-is simply `eval` and initiated (only three lines of code).
 
+## Sample Data
 
-### Model the api
+### GRanges Data
 
-If based on my approach obove, the goal of this package is to provide functions
-that can generate these javascript code from common R function calls. But first,
-I consider it would be better to model the api on R side. I use a list structure
-to model the api -- name as the js function name, list body as argument of
-the js function, then assign class attribute and provide methods to make it a S3 
-object. I name this class "JScascade".
-
-For example,
+cpgIslands is a dummy GRanges object from Gviz package.
 
 ```{r}
-myjc <- JScascade(
-    tnt.board = NULL,
-    from = 0,
-    to = 500,
-    min = 50,
-    max = 1000,
-    width = 500,
-    add_track = JScascade(
-        tnt.board.track = NULL,
-        height = 20,
-        color = "white",
-        display = JScascade(tnt.board.track.feature.axis = NULL)
-    ),
-    add_track = JScascade(
-        tnt.board.track = NULL,
-        height = 30,
-        color = "yellow",
-        data = JScascade(
-            tnt.board.track.data.sync = NULL,
-            retriever = JS("function() {return [{start : 200, end : 350}]}")
-        ),
-        display = JScascade(
-            tnt.board.track.feature.block = NULL,
-            color = "blue",
-            index = JS("function (d) {return d.start}")
-        )
-    )
-) 
-myjc
+data(cpgIslands, package = "Gviz")
+cpgIslands
 ```
 
-It is essentially a list:
+Here I also supply a custom defined GRanges object with multiple chromosomes.
 
 ```{r}
-str(myjc)
+ir <- IRanges(start = seq(26000000, 30000000, by = 100000), width = 50000)
+myRange <- c(
+    GRanges("chr7", ir),
+    GRanges("chr8", shift(ir, 5000))
+)
+myRange <- myRange[order(start(myRange))]
+myRange
 ```
 
+### Width-one GRanges with Paired Values
 
-A "JScascade" object can be easily converted to javascript code using function `asJS`.
-For example,
+Dummy position-value pairs.
 
 ```{r}
-asJS(myjc)
+myPos <- GRanges("chr7", IRanges(start = sample(26000000:27000000, 100), width = 1))
+myPos$value <- runif(n = length(myPos))
+myPos
 ```
 
-And it can be directly utilized by `TnT` function:
+
+### Genome Annotation
+
+The transcript database for human genome.
 
 ```{r}
-TnT(myjc)
+hg19.txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+hg19.txdb
 ```
 
 
-Other functions in this package are aimmed at this class and provide ways to create/combine
-`JScascade` objects.
+## The Browser Instance
+
+Tracks are initiated by cooresponding functions with data.
+
+```{r}
+# Tracks
+gene_track  <- GeneTrack(hg19.txdb, color = "grey", height = 200)
+pin_track   <- PinTrack(myPos, color = "red", height = 50)
+block_track <- BlockTrack(myRange, color = "brown", height = 50)
+cpg_track   <- BlockTrack(cpgIslands, color = "blue", height = 50)
+```
+
+The TnT Board is constructed with a list of tracks, and a view range to indicate the chromosome and range to view.
+
+```{r}
+board <- TnTBoard(
+    viewrange = GRanges("chr7", IRanges(26000000, 27000000)),
+    
+    list(gene_track, pin_track,
+         cpg_track, block_track)
+)
+# TODO: should be simplied
+TnT(compileBoard(board))
+```
 
 
-### Further
+# Explanation
 
-Currently I have only wrapped the
-[tnt board api](http://tntvis.github.io/tnt.board/api/board/index.html) and provide
-limited user-side functions. This package further need to wrap other tnt libraries
-(tnt genome, tnt tooltip, etc.) and provide more user-side
-functions to help easily convert R/bioconductor data into tnt components.
-Also, for visulization of large datasets in shiny app, consider how to serve
-the data on the server-side (like the `DT` package).
+## Structure of TnT Track
+
+A TnT Track consists of three slots:
+
+```{r}
+showClass("TnTTrack")
+```
+
+- Spec:
+    Class "TrackSpec" with three slots (i.e. "background", "height", "label").
+    It describes the common options across tracks (background color, height
+    and label for each track).
+
+- Data:
+    Class "TrackData", it is a virtual class with subclasses that have different
+    methods for conversion to JavaScript. Currently all subclasses also extend
+    "GRanges" class.
+
+- Display:
+    A list, describes the display options for different types of track,
+    e.g. color of the feature, height "domain" of AreaTrack, and in future, will
+    also include the settings for tooltips
+
+TnT Track supports `seqinfo` and `seqinfo<-` method so that before compilation,
+only track data on the intended chromosome can be kept. For example:
+
+```{r}
+seqlevels(block_track)
+seqlevels(
+    dropSeqlevels(block_track, "chr8", pruning.mode = "coarse")
+)
+```
+
+## Structure of TnT Board
+
+```{r}
+showClass("TnTBoard")
+```
+
+A TnT Board is the object that holds a list of tracks and settings for the browser,
+it contains the following slots:
+
+- ViewRange:
+    Class "GRanges" that specifies the initial viewing range of rendered browser.
+    According to the its seqlevel, trackdata that on extra chromosomes will be
+    dropped before converted to JavaScript. It should be suppiled when constructing
+    the Board.
+    
+- CoordRange:
+    Class "IRanges" that defines the left and right coordinate of the board.
+    It is not suppied when constructing the board.
+    But before compilation, it is determined by the "seqlength" of "seqinfo"
+    from ViewRange and also the track list, if not found, use value of
+    minimal and maximal range of track data list.
+    
+- ZoomAllow:
+    Class "IRanges" that describes the minimal and maximal extent of the
+    board (i.e. the limit when zooming in and out).
+    Like CoordRange, it is not set when constructing board.
+    Before compilation, the maximal extent is set to width of CoordRange, the
+    minimal extent is set to 10.
+    
+- TrackList
+    List of tracks.
+
+## Compilation Process
+
+In summary, before compilation, TnT should do the following work:
+
+1. Drop trackdata that are not on the seqlevel (chromosome) of ViewRange.
+2. Determine the coordinate range and maximal limit of zooming
+3. Check TrackSpec of each track, fill with default values if they are not specified (background color and height of the track).
+
+Finally, the TnTBoard object can be compiled to a valid definition of TnT instance, which is relative
+straightforward.
+
+# TODO
+
+Further, I should refine this framework and extend it with more track types including
+the transcript track, line track, area track, and switch to use tnt.genome.
+
+## Tasks
+
+1. Provide transcript track and provide other types of track.
+2. Display tooltips.
+3. The size/width of the board should to be responsive, by using the resize method for htmlwidget.
+4. Implement TnT Genome class, which should inherit the TnT Board class.
+5. Improve the printing method of TnTBoard, so that it can be directly rendered under shiny and rmarkdown.
+6. Informative show method for tracks and track data.
+
+
+
+
+
 
