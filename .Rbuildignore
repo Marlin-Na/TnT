@@ -3,3 +3,4 @@
 ^notes.Rmd$
 ^notes.html$
 ^build.R$
+^_pkgdown\.yml$
