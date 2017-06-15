@@ -8,13 +8,19 @@ HTMLWidgets.widget({
 
     // Define shared variables for this instance
     var tntins = null;
+    var initial_width = width;
 
     return {
 
       renderValue: function(x) {
 
-        // Code to render the widget
+        // Code to render the widget    ----------------
+        
         tntins = eval(x.tntdef);
+        
+        // Set the initial width
+        tntins.width(initial_width);
+        
         tntins(el);
         tntins.start();
 
@@ -26,6 +32,7 @@ HTMLWidgets.widget({
       resize: function(width, height) {
 
         // TODO: code to re-render the widget with a new size
+        tntins.width(width);
 
       }
 

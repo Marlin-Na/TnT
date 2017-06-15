@@ -15,13 +15,19 @@ TnT <- function(tntdef, width = NULL, height = NULL, elementId = NULL) {
     x <- list(
         tntdef = tntdef
     )
-
+    
+    # Sizing policy
+    sizepolicy <- htmlwidgets::sizingPolicy(
+        browser.fill = TRUE
+    )
+    
     # create widget
     htmlwidgets::createWidget(
         name = 'TnT',
         x,
         width = width,
         height = height,
+        sizingPolicy = sizepolicy,
         package = 'TnT',
         elementId = elementId
     )
