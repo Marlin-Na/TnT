@@ -561,6 +561,12 @@ setMethod("show", signature = c("TnTBoard"),
         print(TnT(tntdef))
     }
 )
+#' @export
+knit_print.TnTBoard <- function (x, ..., options = NULL) {
+    tntdef <- compileBoard(x)
+    widget <- TnT(tntdef)
+    knitr::knit_print(widget, ..., options = NULL)
+}
 
 ## EXAMPLE      ====
 if (FALSE) local({
