@@ -21,7 +21,7 @@ briefly describe the structure and compilation process of TnT Board and TnT Trac
 To install the version of package that builds this document, use:
 
 ```{r, eval=FALSE}
-install_github("marlin-na/TnT", ref = "93cd102e7b970e4d4df0850d2edcac26867d4355")
+install_github("marlin-na/TnT", ref = "2385de5571a85c03c8b006605c177a866bc10afa")
 ```
 
 ```{r}
@@ -29,6 +29,7 @@ suppressPackageStartupMessages({
     library(TnT)
     library(GenomicFeatures)
 })
+set.seed(42)
 ```
 
 
@@ -97,8 +98,7 @@ board <- TnTBoard(
     list(gene_track, pin_track,
          cpg_track, block_track)
 )
-# TODO: should be simplied
-TnT(compileBoard(board))
+board
 ```
 
 
@@ -195,6 +195,11 @@ the transcript track, line track, area track, and switch to use tnt.genome.
 6. Informative show method for tracks and track data.
 
 
+# SessionInfo
+
+```{r}
+sessionInfo()
+```
 
 
 
