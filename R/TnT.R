@@ -18,7 +18,9 @@ TnT <- function(tntdef, width = NULL, height = NULL, elementId = NULL) {
     
     # Sizing policy
     sizepolicy <- htmlwidgets::sizingPolicy(
-        browser.fill = TRUE
+        browser.fill = TRUE,
+        knitr.figure = FALSE,
+        knitr.defaultWidth = "100%"
     )
     
     # create widget
