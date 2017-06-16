@@ -563,9 +563,9 @@ setMethod("show", signature = c("TnTBoard"),
 )
 #' @export
 knit_print.TnTBoard <- function (x, ..., options = NULL) {
-    tntdef <- compileBoard(x)
-    widget <- TnT(tntdef)
-    knitr::knit_print(widget, ..., options = NULL)
+    # Redirect method to htmlwidget
+    x <- TnT(compileBoard(x))
+    knitr::knit_print(x, ..., options = options)
 }
 
 ## EXAMPLE      ====
