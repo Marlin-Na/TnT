@@ -1,6 +1,6 @@
 HTMLWidgets.widget({
 
-  name: 'TnT',
+  name: 'trackWidget',
 
   type: 'output',
 
