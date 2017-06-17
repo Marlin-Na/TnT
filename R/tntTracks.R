@@ -549,14 +549,14 @@ compileBoard <- function (tntboard) {
 setMethod("show", signature = c("TnTBoard"),
     function (object) {
         # TODO: Have to provide renderTnT and TnTOutput
-        widget <- trackWidget(object)
+        widget <- trackWidget(object, elementId = NULL)
         print(widget)
     }
 )
 #' @export
 knit_print.TnTBoard <- function (x, ..., options = NULL) {
     # Redirect method to htmlwidget
-    x <- trackWidget(x)
+    x <- trackWidget(x, elementId = NULL)
     knitr::knit_print(x, ..., options = options)
 }
 

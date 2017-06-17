@@ -1,26 +1,8 @@
 
 
-#' @export
-getHeight <- function (x) {
-    if (inherits(x, "TnTTrack")) {
-        h <- x@Height
-        return(h)
-    }
-    if (inherits(x, "TnTBoard")) {
-        heights.tracklist <- vapply(x@TrackList, getHeight, numeric(1))
-        return(sum(heights.tracklist))
-    }
-    stop()
-}
-
 
 #' @export
-trackWidget <- function (tntdef,
-                         #height = if (inherits(tntdef, "TnTBoard"))
-                         #    getHeight(tntdef) else NULL,
-                         height = NULL,
-                         elementId = NULL) {
-    force(height)
+trackWidget <- function (tntdef, elementId = NULL) {
     # Determine the class of tntdef
     if (inherits(tntdef, "TnTBoard"))
         tntdef <- compileBoard(tntdef) # becomes a JSCascade
@@ -48,9 +30,10 @@ trackWidget <- function (tntdef,
     htmlwidgets::createWidget(
         name = 'trackWidget',
         x,
-        # The width can be automatically resized.
+        # The width of widget can be automatically resized.
         width = NULL,
-        height = height,
+        # The height (of the container) can be automatically set in knitr
+        height = NULL,
         sizingPolicy = sizepolicy,
         package = 'TnT',
         elementId = elementId
