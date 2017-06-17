@@ -1,11 +1,9 @@
 
 
-# A TnT Track consists of three slots:
-#   o Spec:
-#       Class "TrackSpec" with three slots (i.e. "background", "height", "label").
-#       It describes the common options across tracks (background color, height
-#       and label for each track).
-#
+# A TnT Track consists of Five slots:
+#   o Background:       Background color
+#   o Height:           Height of the track
+#   o Label:            Label of the track
 #   o Data:
 #       Class "TrackData", it is a virtual class with subclasses that have different
 #       methods for conversion to JavaScript. Currently all subclasses also extend
@@ -42,11 +40,14 @@
 #   o TrackList
 #       List of tracks.
 # 
-# In summary, before compilation, TnT should do the following work:
+# In summary, before compilation, TnT should do the following work
+# (see function compileBoard):
 #   1. Drop trackdata that are not on the seqlevel (chromosome) of ViewRange.
 #   2. Determine the coordinate range and maximal limit of zooming
-#   3. Check TrackSpec of each track, fill with default values if some of them
-#      are not specified.
+#   3. Consolidate background color:
+#       If background color for any track is set as NULL, then replace it with
+#       default value -- the background color from other tracks Or "white" if none
+#       of them is available.
 #   Finally, the TnTBoard object can be compiled to a valid definition of TnT instance.
 
 
@@ -213,6 +214,10 @@ setMethod("compileTrackData", signature = "data.frame",
         jc.syncdata
     }
 )
+# EXAMPLE
+if (FALSE) local({
+    compileTrackData(head(iris))
+})
 
 #' @export
 setMethod("compileTrackData", signature = "NoTrackData",
@@ -229,6 +234,12 @@ setMethod("compileTrackData", signature = "RangeTrackData",
         compileTrackData(df)
     }
 )
+# EXAMPLE
+if (FALSE) local({
+    data <- RangeTrackData(range = IRanges::IRanges(1:4, 5:8),
+                           tooltip = data.frame(start = 1:4, width = 5))
+    compileTrackData(data)
+})
 
 #' @export
 setMethod("compileTrackData", signature = "PosTrackData",
@@ -256,20 +267,6 @@ setMethod("compileTrackData", signature = "GeneTrackData",
 )
 
 ###  TnT Tracks   ##############################################################
-
-#    #### Track Spec Class       ========
-#    #  TrackSpec contains the common track options, namely
-#    #      o color      background color
-#    #      o height     Class ScalarNumeric from Biobase package
-#    #      o label
-#    #      o id
-#    #  Before compilation, these slots need to be consolidated across tracks:
-#    #      1. If the background color is not specified for one track, use the
-#    #         default option or from the board option.
-#    #      ~ 2. Make the id unique across tracks. ~ Forget about id
-
-
-
 
 #### Track classes          ========
 setClassUnion("ScalarCharacterOrNull", c("ScalarCharacter", "NULL"))
