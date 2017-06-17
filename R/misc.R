@@ -10,10 +10,11 @@ NULL
 
 
 #' @import GenomicFeatures
-#' @import S4Vectors
-#' @import IRanges
 #' @import GenomicRanges
 #' @import GenomeInfoDb
+#' @import IRanges
+#' @import S4Vectors
+#' @import Biobase
 NULL
 
 
