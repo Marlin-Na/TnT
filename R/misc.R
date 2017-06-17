@@ -9,6 +9,7 @@ NULL
 
 
 
+#' @import Biobase
 #' @import GenomicFeatures
 #' @import S4Vectors
 #' @import IRanges
