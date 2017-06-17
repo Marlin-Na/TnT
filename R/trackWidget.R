@@ -3,9 +3,7 @@
 #' @export
 getHeight <- function (x) {
     if (inherits(x, "TnTTrack")) {
-        h <- x@Spec@height
-        # TODOOOOO!!!! make the height slot class of "ScalarNumeric"
-        stopifnot(length(h) == 1)
+        h <- x@Height
         return(h)
     }
     if (inherits(x, "TnTBoard")) {
@@ -18,8 +16,9 @@ getHeight <- function (x) {
 
 #' @export
 trackWidget <- function (tntdef,
-                         height = if (inherits(tntdef, "TnTBoard"))
-                             getHeight(tntdef) else NULL,
+                         #height = if (inherits(tntdef, "TnTBoard"))
+                         #    getHeight(tntdef) else NULL,
+                         height = NULL,
                          elementId = NULL) {
     force(height)
     # Determine the class of tntdef
@@ -41,7 +40,8 @@ trackWidget <- function (tntdef,
     sizepolicy <- htmlwidgets::sizingPolicy(
         browser.fill = TRUE,
         knitr.figure = FALSE,
-        knitr.defaultWidth = "100%"
+        knitr.defaultWidth = "100%",
+        knitr.defaultHeight = "auto"
     )
     
     # create widget

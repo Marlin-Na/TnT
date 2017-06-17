@@ -257,92 +257,31 @@ setMethod("compileTrackData", signature = "GeneTrackData",
 
 ###  TnT Tracks   ##############################################################
 
-#### Track Spec Class       ========
-#  TrackSpec contains the common track options, namely
-#      o color   background color
-#      o height
-#      o label
-#      o id
-#  Before compilation, these slots need to be consolidated across tracks:
-#      1. If the background color is not specified for one track, use the
-#         default option or from the board option.
-#      ~ 2. Make the id unique across tracks. ~ Forget about id
-setClass("TrackSpec",
-    slots = c(
-        background = "character", # renamed to color upon compilation
-        height = "numeric",
-        label = "character"
-        #id = "character"
-    )
-)
-
-#' @export
-TrackSpec <- function (background = character(0), height = numeric(0),
-                       label = character(0), .trackspecfromlist) {
-    if (!missing(.trackspecfromlist)) {
-        ans <- do.call("TrackSpec", .trackspecfromlist)
-        return(ans)
-    }
-    new("TrackSpec", background = background, height = height, label = label)
-}
+#    #### Track Spec Class       ========
+#    #  TrackSpec contains the common track options, namely
+#    #      o color      background color
+#    #      o height     Class ScalarNumeric from Biobase package
+#    #      o label
+#    #      o id
+#    #  Before compilation, these slots need to be consolidated across tracks:
+#    #      1. If the background color is not specified for one track, use the
+#    #         default option or from the board option.
+#    #      ~ 2. Make the id unique across tracks. ~ Forget about id
 
 
-#' @export
-setMethod("as.list", signature = "TrackSpec",
-    function (x) {
-        li.spec <- list(
-            background = x@background,
-            height     = x@height,
-            label      = x@label
-            #id         = x@id
-        )
-        li.spec
-    }
-)
-#' @export
-.compileTrackSpec <- function (trackspec) {
-    li.spec <- as.list(trackspec)
-    stopifnot(all(lengths(li.spec) == 1))
-    # Rename background to color
-    names(li.spec)[names(li.spec) == "background"] <- "color"
-    # Add header
-    li.spec <- c(list(tnt.board.track = ma()), li.spec)
-    jc.spec <- asJC(li.spec)
-    jc.spec
-}
-# Example
-if (interactive()) local({
-    .compileTrackSpec(TrackSpec("white", 30, label = "track"))
-})
-#' @export
-.prepareTrackSpec <- function (tntboard) {
-    # TODO: Track spec should be consolidated with regard to the setting from board
-    
-    # Fill with default values
-    # TODO: how to set withregard to track type?
-    defaultspec <- list(
-        background = "white",
-        height     = 100
-    )
-    tracklist <- tntboard@TrackList
-    for (i in seq_along(tracklist)) {
-        track <- tracklist[[i]]
-        tspec <- as.list(track@Spec)
-        null.spec <- tspec[lengths(tspec) == 0]
-        if (length(null.spec)) {
-            fit.default <-  defaultspec[names(defaultspec) %in% names(null.spec)]
-            tspec[names(fit.default)] <- fit.default
-            track@Spec <- TrackSpec(.trackspecfromlist = tspec)
-            tracklist[[i]] <- track
-        }
-    }
-    tntboard@TrackList <- tracklist
-    tntboard
-}
 
 
 #### Track classes          ========
-setClass("TnTTrack", slots = c(Spec = "TrackSpec", Data = "TrackData", Display = "list"))
+setClassUnion("ScalarCharacterOrNull", c("ScalarCharacter", "NULL"))
+setClass("TnTTrack", slots = c(
+    # TODO: add ID slot?
+    Background = "ScalarCharacterOrNull",
+    Height = "ScalarNumeric",
+    Label = "ScalarCharacterOrNull",
+    
+    Data = "TrackData",
+    Display = "list")
+)
 
 setClass("BlockTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
 setClass("PinTrack", contains = "TnTTrack", slots = c(Data = "PosTrackData"))
@@ -365,10 +304,16 @@ setMethod("seqinfo<-", signature = c(x = "TnTTrack"),
 #### Track Constructor      ========
 
 #' @export
+.mkScalarOrNull <- function (x)
+    if (is.null(x)) NULL else Biobase::mkScalar(x)
+
+#' @export
 BlockTrack <- function (range, label = deparse(substitute(range)),
-                        tooltip = mcols(range), color = NULL, ...) {
-    force(label)
-    spec <- TrackSpec(label = label, ...)
+                        tooltip = mcols(range), color = NULL, background = NULL,
+                        height = 30) {
+    label <- .mkScalarOrNull(label)
+    background <- .mkScalarOrNull(background)
+    height <- Biobase::mkScalar(height)
     data <- RangeTrackData(range = range, tooltip = tooltip)
     display <- list(
         tnt.board.track.feature.block = ma(),
@@ -376,41 +321,47 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
         # from = .JSONMap(colname = "from"),
         # to = .JSONMap(colname = "to")
     )
-    new("BlockTrack", Spec = spec, Data = data, Display = display)
+    new("BlockTrack", Label = label, Background = background, Height = height,
+        Data = data, Display = display)
 }
 
 #' @export
 PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
                       label = deparse(substitute(pos)),
-                      tooltip = mcols(pos), color = NULL, ...) {
+                      tooltip = mcols(pos), color = NULL, background = NULL,
+                      height = 40) {
     if (is.null(value))
         stop("Value (i.e. height) at each position not specified.")
+    label <- .mkScalarOrNull(label)
+    background <- .mkScalarOrNull(background)
+    height <- Biobase::mkScalar(height)
     force(domain)
-    force(label)
     stopifnot(length(domain) == 2)
     data <- PosTrackData(pos = pos, tooltip = tooltip)
     data$val <- value
-    spec <- TrackSpec(label = label, ...)
     display <- list(
         tnt.board.track.feature.pin = ma(),
         domain = domain,
         color = color
     )
-    new("PinTrack", Spec = spec, Data = data, Display = display)
+    new("PinTrack", Label = label, Background = background, Height = height,
+        Data = data, Display = display)
 }
 
 #' @export
 GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
                        label = deparse(substitute(txdb)), # TODO: tooltip?
-                       color = NULL, ...) {
-    force(label)
-    spec <- TrackSpec(label = label, ...)
+                       color = NULL, background = NULL, height = 100) {
+    label <- .mkScalarOrNull(label)
+    background <- .mkScalarOrNull(background)
+    height <- Biobase::mkScalar(height)
     data <- GeneTrackDataFromTxDb(txdb = txdb, seqlevel = seqlevel)
     display <- list(
         tnt.board.track.feature.genome.gene = ma(),
         color = color
     )
-    new("GeneTrack", Data = data, Spec = spec, Display = display)
+    new("GeneTrack", Label = label, Background = background, Height = height,
+        Data = data, Display = display)
 }
 
 
@@ -421,11 +372,30 @@ GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
 
 #' @export
 compileTrack <- function (tntTrack) {
-    jc.spec <- .compileTrackSpec(tntTrack@Spec)
+    li.spec <- list(
+        tnt.board.track = ma(),
+        label  = tntTrack@Label,
+        color  = tntTrack@Background,  # rename to "color"
+        height = tntTrack@Height
+    )
+    
+    jc.spec <- asJC(li.spec)
     jc.display <- jc(display = asJC(tntTrack@Display))
     jc.data <- jc(data = compileTrackData(tntTrack@Data))
     c(jc.spec, jc.display, jc.data)
 }
+
+## Example
+if (FALSE) local({
+    btrack <- BlockTrack(GRanges("chr12", IRanges(21,234)))
+    compileTrack(btrack)
+    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+    gtrack <- GeneTrack(txdb, seqlevel = "chr3")
+    compileTrack(gtrack)
+    ptrack <- PinTrack(GRanges("chr21", IRanges(1:10, width = 1), value = runif(10)))
+    compileTrack(ptrack)
+})
+
 
 
 
@@ -438,10 +408,6 @@ setClass("TnTBoard",
         ViewRange = "GRanges",
         CoordRange = "IRanges",
         ZoomAllow = "IRanges",
-        # TODO: How does the width correspond to pixel?
-        #       In fact, we should not specify the width here,
-        #       but use the resize method on JS side.
-        #Width = "integer",
         # Drag should always be allowed.
         #AllowDrag = "logical",
         TrackList = "list"
@@ -465,12 +431,38 @@ compileBoard <- function (tntboard) {
     ## Modification to tntboard
     b <- .selectTrackSeq(tntboard)
     b <- .determineCoordRange(b)
-    b <- .prepareTrackSpec(b)
+    b <- .consolidateBackground(b)
     
     spec <- .compileBoardSpec(b)
     tklst <- .compileTrackList(b)
     tntdef <- c(spec, tklst)
     tntdef
+}
+
+.consolidateBackground <- function (tntboard) {
+    # By the time of construction of each tnt track, the background color can
+    # be either set to "NULL" or a scalar character.
+    #
+    # Before compilation of tntboard, this function examines these settings in
+    # each track, replace the NULLs with a more suitable value.
+    tracklist <- tntboard@TrackList
+    li.colors <- lapply(tracklist, slot, name = "Background")
+    colors <- unique(unlist(li.colors))
+    
+    if (length(colors) == 0L || length(colors) >= 2L)
+        default <- Biobase::mkScalar("white")
+    else
+        default <- Biobase::mkScalar("colors")
+    
+    tracklist <- lapply(tracklist, replace = default,
+        function (track, replace) {
+            if (is.null(track@Background))
+                track@Background <- replace
+            track
+        }
+    )
+    tntboard@TrackList <- tracklist
+    tntboard
 }
 
 #' @export
@@ -556,15 +548,15 @@ compileBoard <- function (tntboard) {
 #' @export
 setMethod("show", signature = c("TnTBoard"),
     function (object) {
-        # TODO: Also have to edit renderTnT and TnTOutput
-        tntdef <- compileBoard(object)
-        print(TnT(tntdef))
+        # TODO: Have to provide renderTnT and TnTOutput
+        widget <- trackWidget(object)
+        print(widget)
     }
 )
 #' @export
 knit_print.TnTBoard <- function (x, ..., options = NULL) {
     # Redirect method to htmlwidget
-    x <- TnT(compileBoard(x))
+    x <- trackWidget(x)
     knitr::knit_print(x, ..., options = options)
 }
 
