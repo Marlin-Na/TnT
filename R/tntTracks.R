@@ -145,13 +145,13 @@ PosTrackData <- function (pos, tooltip = mcols(pos)) {
 
 #' @export
 GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
-    seqlevel.ori <- seqlevels(txdb)     # Set and restore the seqlevels
-    seqlevels(txdb) <- seqlevel         #+++++++++++++++++++++++++++++++++++++++
+    seqlevel.ori <- seqlevels(txdb)
+    seqlevels(txdb) <- seqlevel         # Set and restore the seqlevels
+    # We must restore the seqlevel of the txdb since it is a reference class
+    on.exit(seqlevels(txdb) <- seqlevel.ori)
     
     # TODO: use "single.strand.genes.only = FALSE" ?
     gr <- GenomicFeatures::genes(txdb)
-    # We must restore the seqlevel of the txdb since it is a reference class
-    seqlevels(txdb) <- seqlevel.ori     #---------------------------------------
     
     gr$display_label <- {
         strands <- strand(gr)
