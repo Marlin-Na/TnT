@@ -222,7 +222,12 @@ TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
     df.exons <- df.exons[c("start", "end", "offset", "coding")]
     
     # Slow in this step
-    ldf.exons <- split(df.exons, factor_txid)
+    if (requireNamespace("data.table"))
+        # Relative faster approach
+        ldf.exons <- data.table:::split.data.table(
+            data.table::as.data.table(df.exons), factor_txid)
+    else
+        ldf.exons <- split(df.exons, factor_txid)
     
     gr.txs$exons <- {
         toassign <- vector("list", length = length(gr.txs))
