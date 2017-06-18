@@ -112,6 +112,7 @@ setClass("NoTrackData", contains = c("NULL", "TrackData"))
 setClass("RangeTrackData", contains = c("GRanges", "TrackData"))
 setClass("PosTrackData", contains = c("RangeTrackData"))
 setClass("GeneTrackData", contains = "RangeTrackData")
+setClass("TxTrackData", contains = "RangeTrackData")
 
 
 
@@ -144,6 +145,13 @@ PosTrackData <- function (pos, tooltip = mcols(pos)) {
 }
 
 #' @export
+strandlabel <- function (labels, strands) {
+    ifelse(strands == "+", paste(labels, ">"),
+        ifelse(strands == "-", paste("<", labels), labels))
+}
+
+
+#' @export
 GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
     seqlevel.ori <- seqlevels(txdb)
     seqlevels(txdb) <- seqlevel         # Set and restore the seqlevels
@@ -153,12 +161,8 @@ GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
     # TODO: use "single.strand.genes.only = FALSE" ?
     gr <- GenomicFeatures::genes(txdb)
     
-    gr$display_label <- {
-        strands <- strand(gr)
-        ifelse(strands == "+", paste("Gene", gr$gene_id, ">"),
-            ifelse(strands == "-", paste("<", "Gene", gr$gene_id),
-                paste("Gene", gr$gene_id)))
-    }
+    gr$display_label <-
+        strandlabel(labels = paste("Gene", gr$gene_id), strands = strand(gr))
     gr$id <- {
         # Gene id may not be unique if "single.strand.genes.only = FALSE"
         li.geneid <- split(gr$gene_id, list(seqnames(gr), strand(gr)))
@@ -174,6 +178,67 @@ GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
     gr$gene_id <- NULL
     
     new("GeneTrackData", gr)
+}
+
+#' @export
+TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
+    ## Set and restore seqlevels of txdb
+    seqlevel.ori <- seqlevels(txdb)
+    seqlevels(txdb) <- seqlevel
+    on.exit(seqlevels(txdb) <- seqlevel.ori)
+    
+    ## Extract features from txdb
+    gr.txs <- transcripts(txdb)
+    gr.cds <- cds(txdb, columns = c("tx_id"))
+    gr.exons <- exons(txdb, columns = c("tx_id"))
+    
+    ## Unlist tx_id column of gr.cds and gr.exons
+    flatGRByTxID <- function (gr) {
+        txid <- gr$tx_id
+        gr$tx_id <- NULL
+        gr <- rep(gr, lengths(txid))
+        gr$tx_id <- unlist(txid)
+        gr
+    }
+    gr.cds <- flatGRByTxID(gr.cds)
+    gr.exons <- flatGRByTxID(gr.exons)
+    
+    ## Area of coding exons will be filled with color, non-coding exons will not,
+    ## so CDS can mask on the parent exons.
+    gr.cds$coding <- TRUE
+    gr.exons$coding <- FALSE
+    
+    ## Combine cds and exons
+    combined.exons <- c(gr.exons, gr.cds)
+    
+    ## Prepare a list of data frame as a meta column of the result
+    df.exons <- as.data.frame(combined.exons)
+    df.exons$tx_start <- {
+        txstart <- setNames(start(gr.txs), as.character(gr.txs$tx_id))
+        txstart[as.character(df.exons$tx_id)]
+    }
+    df.exons$offset <- df.exons$start - df.exons$tx_start
+    factor_txid <- df.exons$tx_id
+    df.exons <- df.exons[c("start", "end", "offset", "coding")]
+    
+    # Slow in this step
+    ldf.exons <- split(df.exons, factor_txid)
+    
+    gr.txs$exons <- {
+        toassign <- vector("list", length = length(gr.txs))
+        names(toassign) <- as.character(gr.txs$tx_id)
+        toassign[names(ldf.exons)] <- ldf.exons
+        toassign
+    }
+    gr.txs$display_label <- strandlabel(gr.txs$tx_name, strand(gr.txs))
+    gr.txs$key <- as.integer(gr.txs$tx_id)
+    gr.txs$id <- as.character(gr.txs$tx_id)
+    gr.txs$tooltip <- data.frame(
+        "Location" = as.character(gr.txs),
+        "Transcript Name" = gr.txs$tx_name,
+        check.names = FALSE
+    )
+    new("TxTrackData", gr.txs)
 }
 
 setValidity("PosTrackData",
@@ -265,6 +330,7 @@ setMethod("compileTrackData", signature = "GeneTrackData",
         compileTrackData(df)
     }
 )
+
 
 ###  TnT Tracks   ##############################################################
 
