@@ -477,7 +477,8 @@ TxTrack <- function (txdb, seqlevel = seqlevels(txdb),
     data <- TxTrackDataFromTxDb(txdb, seqlevel = seqlevel, use.data.table = TRUE)
     display <- list(
         tnt.board.track.feature.genome.transcript = ma(),
-        color = color
+        # TODO: this is not the correct approach
+        color = js(sprintf('function (t) { return "%s" }', color))
     )
     new("TxTrack", Label = label, Background = background, Height = height,
         Data = data, Display = display)
@@ -685,11 +686,11 @@ if (FALSE) local({
     txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
     viewrg <- range(cpgIslands)
     ct <- BlockTrack(cpgIslands, color= "blue", height = 30)
-    gt <- GeneTrack(txdb, color = "red", height = 250)
-    b <- TnTBoard(tracklist = list(ct), viewrange = viewrg)
-    b
-    b <- TnTBoard(tracklist = list(gt, ct), viewrange = viewrg)
-    b
+    gt <- GeneTrack(txdb, color = "grey")
+    txt <- TxTrack(txdb, color = "red", height = 300)
+    TnTBoard(tracklist = list(ct), viewrange = viewrg)
+    TnTBoard(tracklist = list(txt), viewrange = viewrg)
+    TnTBoard(tracklist = list(gt, ct), viewrange = viewrg)
 })
 
 
