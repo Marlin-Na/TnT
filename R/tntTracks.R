@@ -180,8 +180,10 @@ GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
     new("GeneTrackData", gr)
 }
 
+
 #' @export
-TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
+TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
+                                 use.data.table = TRUE) {
     ## Set and restore seqlevels of txdb
     seqlevel.ori <- seqlevels(txdb)
     seqlevels(txdb) <- seqlevel
@@ -222,7 +224,7 @@ TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
     df.exons <- df.exons[c("start", "end", "offset", "coding")]
     
     # Slow in this step
-    if (requireNamespace("data.table"))
+    if (use.data.table && requireNamespace("data.table"))
         # Relative faster approach
         ldf.exons <- data.table:::split.data.table(
             data.table::as.data.table(df.exons), factor_txid)
