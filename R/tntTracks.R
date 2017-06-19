@@ -256,6 +256,7 @@ TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
         "Transcript Name" = gr.txs$tx_name,
         check.names = FALSE
     )
+    gr.txs$gene_id <- NULL
     new("TxTrackData", gr.txs)
 }
 
@@ -348,6 +349,26 @@ setMethod("compileTrackData", signature = "GeneTrackData",
         compileTrackData(df)
     }
 )
+
+#' @export
+setMethod("compileTrackData", signature = "TxTrackData",
+    function (trackData) {
+        stopifnot(length(unique(seqnames(trackData))) == 1)
+        
+        df <- as.data.frame(trackData)
+        df <- df[c("start", "end", "display_label", "key", "id", "exons", "tooltip")]
+        
+        compileTrackData(df)
+    }
+)
+
+# EXAMPLE
+if (FALSE) local({
+    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+    tdata <- TxTrackDataFromTxDb(txdb, "chrUn_gl000221")
+    compileTrackData(tdata)
+})
+
 
 
 ###  TnT Tracks   ##############################################################
