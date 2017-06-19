@@ -388,6 +388,7 @@ setClass("TnTTrack", slots = c(
 setClass("BlockTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
 setClass("PinTrack", contains = "TnTTrack", slots = c(Data = "PosTrackData"))
 setClass("GeneTrack", contains = "TnTTrack", slots = c(Data = "GeneTrackData"))
+setClass("TxTrack", contains = "TnTTrack", slots = c(Data = "TxTrackData"))
 
 #### Seqinfo Methods        ========
 #' @export
@@ -463,6 +464,22 @@ GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
         color = color
     )
     new("GeneTrack", Label = label, Background = background, Height = height,
+        Data = data, Display = display)
+}
+
+#' @export
+TxTrack <- function (txdb, seqlevel = seqlevels(txdb),
+                     label = deparse(substitute(txdb)),
+                     color = NULL, background = NULL, height = 100) {
+    label <- .mkScalarOrNull(label)
+    background <- .mkScalarOrNull(background)
+    height <- Biobase::mkScalar(height)
+    data <- TxTrackDataFromTxDb(txdb, seqlevel = seqlevel, use.data.table = TRUE)
+    display <- list(
+        tnt.board.track.feature.genome.transcript = ma(),
+        color = color
+    )
+    new("TxTrack", Label = label, Background = background, Height = height,
         Data = data, Display = display)
 }
 
