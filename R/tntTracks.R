@@ -208,8 +208,8 @@ TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
     
     ## Area of coding exons will be filled with color, non-coding exons will not,
     ## so CDS can mask on the parent exons.
-    gr.cds$coding <- TRUE
-    gr.exons$coding <- FALSE
+    gr.cds$coding <- if (length(gr.cds)) TRUE else logical(0)
+    gr.exons$coding <- if (length(gr.exons)) FALSE else logical(0)
     
     ## Combine cds and exons
     combined.exons <- c(gr.exons, gr.cds)
