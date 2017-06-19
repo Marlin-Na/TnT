@@ -190,7 +190,8 @@ TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
     on.exit(seqlevels(txdb) <- seqlevel.ori)
     
     ## Extract features from txdb
-    gr.txs <- transcripts(txdb)
+    gr.txs <- transcripts(txdb, columns = c("tx_id", "tx_name", "gene_id"))
+    gr.txs$gene_id <- as.character(gr.txs$gene_id) # contain NA values
     gr.cds <- cds(txdb, columns = c("tx_id"))
     gr.exons <- exons(txdb, columns = c("tx_id"))
     
@@ -243,7 +244,11 @@ TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
         toassign[names(ldf.exons)] <- ldf.exons
         toassign
     }
-    gr.txs$display_label <- strandlabel(gr.txs$tx_name, strand(gr.txs))
+    gr.txs$display_label <- {
+        labels <- ifelse(is.na(gr.txs$gene_id), gr.txs$tx_name,
+                         paste(gr.txs$gene_id, gr.txs$tx_name))
+        strandlabel(labels, strand(gr.txs))
+    }
     gr.txs$key <- as.integer(gr.txs$tx_id)
     gr.txs$id <- as.character(gr.txs$tx_id)
     gr.txs$tooltip <- data.frame(
