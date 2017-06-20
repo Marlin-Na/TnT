@@ -478,7 +478,8 @@ TxTrack <- function (txdb, seqlevel = seqlevels(txdb),
     display <- list(
         tnt.board.track.feature.genome.transcript = ma(),
         # TODO: this is not the correct approach
-        color = js(sprintf('function (t) { return "%s" }', color))
+        color = if (is.null(color)) js('function (t) { return "red" }')
+                else js(sprintf('function (t) { return "%s" }', color))
     )
     new("TxTrack", Label = label, Background = background, Height = height,
         Data = data, Display = display)
