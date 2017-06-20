@@ -35,13 +35,23 @@ if (FALSE) local({
         to = 500,
         min = 50,
         max = 1000,
-        #width = 500,
         add_track = axisTrack,
         add_track = blockTrack
     )
     tntdef
     asJS(tntdef)
-    TnT(tntdef)
+    trackWidget(tntdef)
+    
+    genome <- jc(
+        tnt.board.genome = ma(),
+        species = "human",
+        chr = 10,
+        from = 410000,
+        to = 420000,
+        min_coord = js("new Promise(function (res) {res(-10000)})"),
+        max_coord = js("new Promise(function (res) {res(420000)})")
+    )
+    trackWidget(genome)
 })
 ### EXAMPLE END
 
