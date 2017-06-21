@@ -486,6 +486,57 @@ TxTrack <- function (txdb, seqlevel = seqlevels(txdb),
 }
 
 
+#### Track Tooltip          ========
+
+#' @export
+setGeneric("tooltip", function (x) standardGeneric("tooltip"))
+#' @export
+setGeneric("tooltip<-", function (x, value) standardGeneric("tooltip<-"))
+
+setMethod("tooltip", signature = "TrackData",
+    function (x) {
+        x$tooltip
+    }
+)
+setMethod("tooltip", signature = "TnTTrack",
+    function (x) {
+        tooltip(x@Data)
+    }
+)
+setMethod("tooltip<-", signature = c(x = "TrackData", value = "data.frame"),
+    function (x, value) {
+        x$tooltip <- value
+        x
+    }
+)
+setMethod("tooltip<-", signature = c(x = "TnTTrack", value = "data.frame"),
+    function (x, value) {
+        tooltip(x@Data) <- value
+        x
+    }
+)
+
+# EXAMPLE
+if (FALSE) local({
+    # TODO: to fix this error when deparse produce non-scalar character
+    t <- BlockTrack(GRanges("chr12", IRanges(1:15 * 100, width = 10), label = paste("range", 1:15)))
+    gr <- GRanges("chr12", IRanges(1:15 * 100, width = 10), label = paste("range", 1:15))
+    t <- BlockTrack(gr)
+    t@Data
+    # Warning messages:
+    #     1: In (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE,  :
+    #        row names were found from a short variable and have been discarded
+    #     2: In (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE,  :
+    #        row names were found from a short variable and have been discarded
+    tooltip(t)
+    tooltip(t) <- c(1:15)
+    tooltip(t) <- data.frame(start = start(gr))
+    
+    compileTrack(t)
+    TnTBoard(list(t), viewrange = range(t@Data))
+})
+
+
 #### Track Compilation      ========
 
 # setGeneric("compileTrack",
