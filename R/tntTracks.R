@@ -58,7 +58,7 @@
 
 
 
-## Template for JS Callback and Promise     ------------------------------------
+## Templates for JS Callback and Promise     ------------------------------------
 
 #' @export
 JSCallback <- function (result, toJSON = TRUE) {
@@ -72,7 +72,7 @@ JSCallback <- function (result, toJSON = TRUE) {
         ## We may want to firstly convert the dataframe by cols, then use
         ## HTMLWidgets.dataframeToD3() to convert it on JS side.
         ## Refer: http://www.htmlwidgets.org/develop_advanced.html#htmlwidgets.dataframetod3
-        retstring <- jsonlite::toJSON(result, dataframe = "rows", pretty = TRUE)
+        retstring <- jsonlite::toJSON(result, dataframe = "rows", pretty = 2)
     else
         retstring <- .convertToJSChar(result)
     
@@ -80,21 +80,66 @@ JSCallback <- function (result, toJSON = TRUE) {
     JavaScript(jsstring)
 }
 
+
 #' @export
-.JSONMap <- function (colname, constant) {
-    stopifnot(any(missing(colname), missing(constant)))
-    if (missing(constant)) {
-        # TODO: use toJSON to perform escape
-        condfilter <- paste(sprintf('["%s"]', colname), collapse = "")
-        string <- sprintf('function (d) { return (d%s); }', condfilter)
-        ans <- JavaScript(string)
-    }
-    else
-        ans <- constant
-    ans
+.JSONFilter <- function (colname) {
+    stopifnot(is.character(colname))
+    escapeColname <- sapply(colname, function (s) as.character(toJSON(unbox(s))))
+    condfilter <- paste(sprintf("[%s]", escapeColname), collapse = "")
+    condfilter
 }
 # Example
-if (interactive()) .JSONMap(colname = c("data", "start"))
+if (interactive()) .JSONFilter(colname = c("data", "start"))
+
+
+#' @export
+tooltipCallback <- function (header, labels, colnames) {
+    stopifnot(
+        length(header) == 1,
+        length(labels) == length(colnames)
+    )
+    
+    
+    js.colmap <- {
+        df.colmap <- data.frame(label = labels, colname = colnames)
+        js(as.character(toJSON(df.colmap, pretty = 2)))
+    }
+    
+    js.func <- js(paste(collapse = "\n", c(
+        '                                                     ',
+        ' var getTooltipCall = function (d, header, colmap) { ',
+        '     var rows = [];                                  ',
+        '     for (var i = 0; i < colmap.length; i++) {       ',
+        '         var colname = colmap[i].colname;            ',
+        '         var row = {                                 ',
+        '             "label": colmap[i].label,               ',
+        '             "value": d.tooltip[colname]             ',
+        '         };                                          ',
+        '         rows.push(row);                             ',
+        '     }                                               ',
+        '     return { header: header, rows: rows };          ',
+        ' };                                                  ',
+        '                                                     '
+    )))
+    js.do <- asJS(jc(
+        tnt.tooltip.table = ma(),
+        width = 120,
+        call = ma(
+            js("this"),
+            jc(getTooltipCall = ma(js("d"), header, js.colmap))
+        )
+    ))
+    callback <- sprintf('function (d) {\n  %s \n  %s; \n}',
+                        js.func, js.do)
+    js(callback)
+}
+# EXAMPLE
+if (interactive()) local({
+    tooltipCallback(header = "Tooltip Header",
+                    labels = c("Start", "End", "Description"),
+                    colnames = c(23, 233, "A Block"))
+})
+
 
 
 
@@ -421,8 +466,6 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
     display <- list(
         tnt.board.track.feature.block = ma(),
         color = color
-        # from = .JSONMap(colname = "from"),
-        # to = .JSONMap(colname = "to")
     )
     new("BlockTrack", Label = label, Background = background, Height = height,
         Data = data, Display = display)
