@@ -427,8 +427,9 @@ setClass("TnTTrack", slots = c(
     Label = "ScalarCharacterOrNull",
     
     Data = "TrackData",
-    Display = "list")
-)
+    Display = "list",
+    TooltipSpec = "list"
+))
 
 setClass("BlockTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
 setClass("PinTrack", contains = "TnTTrack", slots = c(Data = "PosTrackData"))
@@ -595,7 +596,12 @@ compileTrack <- function (tntTrack) {
     )
     
     jc.spec <- asJC(li.spec)
-    jc.display <- jc(display = asJC(tntTrack@Display))
+    # Need to append tooltipspec to display
+    jc.display <- jc(
+        display = asJC(
+            c(tntTrack@Display, tntTrack@TooltipSpec)
+        )
+    )
     jc.data <- jc(data = compileTrackData(tntTrack@Data))
     c(jc.spec, jc.display, jc.data)
 }
