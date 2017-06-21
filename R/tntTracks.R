@@ -168,7 +168,11 @@ NoTrackData <- function () new("NoTrackData")
 
 #' @export
 RangeTrackData <- function (range, tooltip = mcols(range)) {
+    # Coercion method can modify colnames, which is not what I want.
+    colns <- colnames(tooltip)
     tooltip <- as.data.frame(tooltip)
+    colnames(tooltip) <- colns
+    
     if (is(range, "IRanges")) {
         range <- GRanges(seqnames = "UnKnown", ranges = range, strand = "*")
     }
@@ -182,7 +186,11 @@ RangeTrackData <- function (range, tooltip = mcols(range)) {
 
 #' @export
 PosTrackData <- function (pos, tooltip = mcols(pos)) {
+    # Coercion method can modify colnames, which is not what I want.
+    colns <- colnames(tooltip)
     tooltip <- as.data.frame(tooltip)
+    colnames(tooltip) <- colns
+    
     trackdata <- RangeTrackData(range = pos, tooltip = tooltip)
     trackdata <- as(trackdata, "PosTrackData")
     validObject(trackdata) # Ensure all the width equals to one
