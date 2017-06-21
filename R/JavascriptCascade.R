@@ -117,6 +117,10 @@ setGeneric("asJC",
 
 ## Validity                 ----------------------------------------------------
 
+setValidity("JavaScript",
+    function (object) if (!identical(length(object), 1L))
+        "Code must be a length-one character vector." else TRUE
+)
 
 setValidity("JSCascade",
     function (object) {
