@@ -42,3 +42,21 @@ test_that("DF with nested DF can not be converted to data.frame", {
     
     expect_error(as.data.frame(DF))
 })
+
+test_that("Error printing GRanges with a meta-column of nested df which has only one column", {
+    suppressPackageStartupMessages(library(GenomicRanges))
+    
+    gr <- GRanges("chr21", IRanges(1:5, width = 1))
+    
+    gr$df <- data.frame(x = 1:5)
+    expect_error(capture.output(show(gr)),
+                 "number of rows of matrices must match")
+    
+    gr$col <- 1:5
+    expect_warning(capture.output(show(gr)),
+                   "row names were found from a short variable and have been discarded")
+    
+    gr$df <- data.frame(x = 1:5, y = 1:5)
+    # Now the printing is correct
+    capture.output(show(gr))
+})
