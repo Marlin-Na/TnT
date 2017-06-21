@@ -168,10 +168,7 @@ NoTrackData <- function () new("NoTrackData")
 
 #' @export
 RangeTrackData <- function (range, tooltip = mcols(range)) {
-    # Coercion method can modify colnames, which is not what I want.
-    colns <- colnames(tooltip)
-    tooltip <- as.data.frame(tooltip)
-    colnames(tooltip) <- colns
+    tooltip <- as.data.frame(tooltip, optional = TRUE)
     
     if (is(range, "IRanges")) {
         range <- GRanges(seqnames = "UnKnown", ranges = range, strand = "*")
@@ -186,10 +183,7 @@ RangeTrackData <- function (range, tooltip = mcols(range)) {
 
 #' @export
 PosTrackData <- function (pos, tooltip = mcols(pos)) {
-    # Coercion method can modify colnames, which is not what I want.
-    colns <- colnames(tooltip)
-    tooltip <- as.data.frame(tooltip)
-    colnames(tooltip) <- colns
+    tooltip <- as.data.frame(tooltip, optional = TRUE)
     
     trackdata <- RangeTrackData(range = pos, tooltip = tooltip)
     trackdata <- as(trackdata, "PosTrackData")
@@ -268,7 +262,7 @@ TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
     combined.exons <- c(gr.exons, gr.cds)
     
     ## Prepare a list of data frame as a meta column of the result
-    df.exons <- as.data.frame(combined.exons)
+    df.exons <- as.data.frame(combined.exons, optional = TRUE)
     df.exons$tx_start <- {
         txstart <- setNames(start(gr.txs), as.character(gr.txs$tx_id))
         txstart[as.character(df.exons$tx_id)]
@@ -367,7 +361,8 @@ setMethod("compileTrackData", signature = "RangeTrackData",
     function (trackData) {
         ## TODO: Have to select seq
         stopifnot(length(unique(seqnames(trackData))) == 1)
-        df <- as.data.frame(trackData)[c("start", "end", "strand", "tooltip")]
+        df <- as.data.frame(trackData, optional = TRUE)[
+            c("start", "end", "strand", "tooltip")]
         compileTrackData(df)
     }
 )
@@ -385,7 +380,8 @@ setMethod("compileTrackData", signature = "PosTrackData",
         stopifnot(length(unique(seqnames(trackData))) == 1)
         stopifnot(all(width(trackData) == 1))
         
-        df <- as.data.frame(trackData)[c("start", "strand", "val", "tooltip")]
+        df <- as.data.frame(trackData, optional = TRUE)[
+            c("start", "strand", "val", "tooltip")]
         df <- S4Vectors::rename(df, c(start = "pos"))
         compileTrackData(df)
     }
@@ -396,7 +392,7 @@ setMethod("compileTrackData", signature = "GeneTrackData",
     function (trackData) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
         
-        df <- as.data.frame(trackData)
+        df <- as.data.frame(trackData, optional = TRUE)
         df[c("seqnames", "width", "strand")] <- NULL
         
         compileTrackData(df)
@@ -408,7 +404,7 @@ setMethod("compileTrackData", signature = "TxTrackData",
     function (trackData) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
         
-        df <- as.data.frame(trackData)
+        df <- as.data.frame(trackData, optional = TRUE)
         df <- df[c("start", "end", "display_label", "key", "id", "exons", "tooltip")]
         
         compileTrackData(df)
