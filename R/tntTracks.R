@@ -586,63 +586,44 @@ if (FALSE) local({
 
 
 #' @export
-updateTooltipSpec <- function (x) {
-    if (inherits(x, "TnTTrack")) {
-        track <- x
-        toolti <- tooltip(track)
-        stopifnot(
-            is.data.frame(toolti),
-            all(sapply(toolti, is.atomic)),
-            !any(duplicated(names(toolti)))
-        )
-        header <- track@Label
-        labels <- colnames <- colnames(toolti)
-        js.callback <- tooltipCallback(
-            header = header, labels = labels, colnames = colnames
-        )
-        track@TooltipSpec <- list(
-            on = ma("click", js.callback)
-        )
-        return(track)
-    }
+.updateTooltipSpec <- function (track) {
+    toolti <- tooltip(track)
+    stopifnot(
+        is.data.frame(toolti),
+        all(sapply(toolti, is.atomic)),
+        !any(duplicated(names(toolti)))
+    )
     
-    if (inherits(x, "TnTBoard")) {
-        board <- x
-        tracklist <- board@TrackList
-        for (i in seq_along(tracklist))
-            tracklist[[i]] <- updateTooltipSpec(tracklist[[i]])
-        board@TrackList <- tracklist
-        return(board)
-    }
-    
-    stop()
+    header <- track@Label
+    labels <- colnames <- colnames(toolti)
+    js.callback <- tooltipCallback(
+        header = header, labels = labels, colnames = colnames)
+    track@TooltipSpec <- list(
+        on = ma("click", js.callback)
+    )
+    track
 }
-
 # EXAMPLE
 if (FALSE) {
-    gr <- GRanges("chr12", IRanges(1:4 * 10, width = 5))
-    toltip <- data.frame(check.names = FALSE,
+    gr <- GRanges("chr12", IRanges(1:4 * 10 + 1, width = 5))
+    mcols(gr) <- data.frame(check.names = FALSE,
         Location = "",
         Chromosome = 12, Start = start(gr), End = end(gr),
         Description = "",
         "What's for?" = "Unknown"
     )
-    mcols(gr) <- toltip
     gr
     track <- BlockTrack(gr)
     track
     tooltip(track)
     track@TooltipSpec
-    track <- updateTooltipSpec(track)
+    track <- .updateTooltipSpec(track)
     track@TooltipSpec %>% asJC
     TnTBoard(list(track), viewrange = GRanges("chr12", IRanges(1, 100)))
     
-    grpin <- GRanges("chr1", IRanges(1:4 * 10, width = 1), value = 1:4)
-    mcols(grpin) <- cbind(mcols(grpin), toltip)
-    pintrack <- PinTrack(grpin)
-    b <- TnTBoard(list(pintrack), viewrange = GRanges("chr1", IRanges(1,100)))
-    b <- updateTooltipSpec(b)
-    b
+    track2 <- BlockTrack(gr)
+    track2@TooltipSpec
+    TnTBoard(list(track2), viewrange = GRanges("chr12", IRanges(1, 100)))
 }
 
 
@@ -653,6 +634,8 @@ if (FALSE) {
 
 #' @export
 compileTrack <- function (tntTrack) {
+    tntTrack <- .updateTooltipSpec(tntTrack)
+    
     li.spec <- list(
         tnt.board.track = ma(),
         label  = tntTrack@Label,
