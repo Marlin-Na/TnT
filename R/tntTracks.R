@@ -585,6 +585,44 @@ if (FALSE) local({
 })
 
 
+#' @export
+.updateTooltipSpec <- function (track) {
+    toolti <- tooltip(track)
+    stopifnot(
+        is.data.frame(toolti),
+        all(sapply(toolti, is.atomic)),
+        !any(duplicated(names(toolti)))
+    )
+    
+    header <- track@Label
+    labels <- colnames <- colnames(toolti)
+    js.callback <- tooltipCallback(
+        header = header, labels = labels, colnames = colnames)
+    track@TooltipSpec <- list(
+        on = ma("click", js.callback)
+    )
+    track
+}
+# EXAMPLE
+if (FALSE) {
+    gr <- GRanges("chr12", IRanges(1:4 * 10 + 1, width = 5))
+    mcols(gr) <- data.frame(check.names = FALSE,
+        Location = "",
+        Chromosome = 12, Start = start(gr), End = end(gr),
+        Description = "",
+        "What's for?" = "Unknown"
+    )
+    gr
+    track <- BlockTrack(gr)
+    track
+    tooltip(track)
+    track@TooltipSpec
+    track <- .updateTooltipSpec(track)
+    track@TooltipSpec %>% asJC
+    TnTBoard(list(track), viewrange = GRanges("chr12", IRanges(1, 100)))
+}
+
+
 #### Track Compilation      ========
 
 # setGeneric("compileTrack",
