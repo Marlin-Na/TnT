@@ -1,41 +1,41 @@
 HTMLWidgets.widget({
 
-  name: 'trackWidget',
+    name: 'trackWidget',
 
-  type: 'output',
+    type: 'output',
 
-  factory: function(el, width, height) {
+    factory: function(el, width, height) {
 
-    // Define shared variables for this instance
-    var tntins = null;
-    var initial_width = width;
+        // Define shared variables for this instance
+        var tntins = null;
+        var initial_width = width;
 
-    return {
+        return {
 
-      renderValue: function(x) {
+            renderValue: function(x) {
 
-        // Code to render the widget    ----------------
+                // Code to render the widget    ----------------
         
-        tntins = eval(x.tntdef);
+                tntins = eval(x.tntdef);
         
-        // Set the initial width
-        tntins.width(initial_width);
+                // Set the initial width
+                tntins.width(initial_width);
         
-        tntins(el);
-        tntins.start();
+                tntins(el);
+                tntins.start();
 
-        // TODO: In the future, we may implement interface to add/update data to
-        //       an existing tnt instance (with shiny), and with proper transition.
+                // TODO: In the future, we may implement interface to add/update data to
+                //       an existing tnt instance (with shiny), and with proper transition.
 
-      },
+            },
 
-      resize: function(width, height) {
+            resize: function(width, height) {
 
-        // TODO: code to re-render the widget with a new size
-        tntins.width(width);
+                // TODO: code to re-render the widget with a new size
+                tntins.width(width);
 
-      }
+            }
 
-    };
-  }
+        };
+    }
 });
