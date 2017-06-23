@@ -367,11 +367,15 @@ setMethod("compileTrackData", signature = "NoTrackData",
 #' @export
 setMethod("compileTrackData", signature = "RangeTrackData",
     function (trackData) {
-        ## TODO: Have to select seq
         stopifnot(length(unique(seqnames(trackData))) == 1)
         df <- as.data.frame(trackData, optional = TRUE)[
             c("start", "end", "strand", "tooltip")]
-        compileTrackData(df)
+        json <- .df2json(df)
+        jc.data <- jc(
+            tnt.board.track.data.sync = ma(),
+            retriever = jc(tnr.range_data_retriever = json)
+        )
+        jc.data
     }
 )
 # EXAMPLE
