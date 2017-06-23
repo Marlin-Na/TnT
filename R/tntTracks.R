@@ -322,22 +322,30 @@ setGeneric("compileTrackData",
            function (trackData) standardGeneric("compileTrackData"))
 
 #' @export
+.removeAsIs <- function (df) {
+    # The nested data frame converted from GRanges/DataFrame will have a
+    # "AsIs" class, which will cause the data frame can not be shown and
+    # can not be converted to JSON correctly.
+    for (i in seq_along(df)) {
+        element <- df[[i]]
+        if (is.data.frame(element)) {
+            class(element) <- class(element)[class(element) != "AsIs"]
+            df[[i]] <- removeAsIs(element)
+        }
+    }
+    df
+}
+
+#' @export
+.df2json <- function (df) {
+    df <- .removeAsIs(df)
+    jsonlite::toJSON(df, dataframe = "rows", pretty = 1)
+}
+
+#' @export
 setMethod("compileTrackData", signature = "data.frame",
     function (trackData) {
-        removeAsIs <- function (df) {
-            # The nested data frame converted from GRanges/DataFrame will have a
-            # "AsIs" class, which will cause the data frame can not be shown and
-            # can not be converted to JSON correctly.
-            for (i in seq_along(df)) {
-                element <- df[[i]]
-                if (is.data.frame(element)) {
-                    class(element) <- class(element)[class(element) != "AsIs"]
-                    df[[i]] <- removeAsIs(element)
-                }
-            }
-            df
-        }
-        df <- removeAsIs(trackData)
+        df <- .removeAsIs(trackData)
         
         js.retriever <- JSCallback(df)
         jc.syncdata <-  jc(tnt.board.track.data.sync = ma(),
