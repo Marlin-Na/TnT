@@ -330,7 +330,7 @@ setGeneric("compileTrackData",
         element <- df[[i]]
         if (is.data.frame(element)) {
             class(element) <- class(element)[class(element) != "AsIs"]
-            df[[i]] <- removeAsIs(element)
+            df[[i]] <- .removeAsIs(element)
         }
     }
     df
