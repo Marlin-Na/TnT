@@ -25,12 +25,13 @@ test_that("JSCascade Construction", {
 })
 
 
+expect_js_identical <- function (jc1, jc2, ...) {
+    js1 <- asJS(jc1)
+    js2 <- asJS(jc2)
+    expect_identical(js1, js2, ...)
+}
+
 test_that("JSCascade to JS Conversion", {
-    expect_js_identical <- function (jc1, jc2, ...) {
-        js1 <- asJS(jc1)
-        js2 <- asJS(jc2)
-        expect_identical(js1, js2, ...)
-    }
     expect_js_identical(jc(char = "char"),
                         jc(char = js("\"char\"")))
     expect_js_identical(jc(num = 12L),
@@ -41,6 +42,25 @@ test_that("JSCascade to JS Conversion", {
                         jc(logical = js("false")))
     expect_js_identical(jc(emptyarg = ma()),
                         jc(emptyarg = js("")))
+})
+
+test_that("Conversion with JSON", {
+    library(jsonlite)
+    json <- toJSON(iris, pretty = TRUE)
+    expect_js_identical(
+        jc(x = json),
+        jc(x = js(unclass(json)))
+    )
+    
+    json <- toJSON("chr", auto_unbox = TRUE)
+    expect_js_identical(
+        jc(x = json),
+        jc(x = "chr")
+    )
+    expect_js_identical(
+        jc(x = json),
+        jc(x = js('"chr"'))
+    )
 })
 
 
