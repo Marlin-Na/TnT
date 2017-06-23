@@ -15,6 +15,7 @@ NULL
 #' @import IRanges
 #' @import S4Vectors
 #' @import Biobase
+#' @import jsonlite
 NULL
 
 
