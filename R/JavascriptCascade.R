@@ -135,7 +135,7 @@ setValidity("JSCascade",
                 return("Names must be specified.")
       # Only allow certain types of element
         isAllowed <- vapply(lst, inherits, FUN.VALUE = logical(1),
-            what = c("JSCascade", "MultiArgs", "JavaScript",
+            what = c("JSCascade", "MultiArgs", "JavaScript", "json",
                      "integer", "numeric", "logical", "character")
         )
         if (!all(isAllowed)) {
@@ -207,7 +207,7 @@ setMethod("asJC", signature = c(object = "JSCascade"),
             ans <- paste(l, collapse = ", ")
             return(ans)
         }
-        if (inherits(el, "JavaScript"))
+        if (inherits(el, c("JavaScript", "json")))
             return(as.character(el))
         
         else {
