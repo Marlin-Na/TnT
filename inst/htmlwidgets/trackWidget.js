@@ -16,23 +16,26 @@ HTMLWidgets.widget({
                 var min = loc.from - 100;
                 var max = loc.to  + 100;
                 var ans = [];
-                for (var i = 0; i < data.length; i++) {
+                for (var i = 0; i < rangeData.length; i++) {
                     var row = rangeData[i];
                     if (row.start <= max && row.end >= min) {
                         ans.push(row);
                     }
                 }
+                //console.log(ans.length);
+                console.log(ans);
                 return ans;
             };
             return ans;
         };
+        
         tnr.pos_data_retriever = function (data) {
             var posData = data;
             var ans = function (loc) {
                 var min = loc.from - 100;
                 var max = loc.to + 100;
                 var ans = [];
-                for (var i = 0; i < data.length; i++) {
+                for (var i = 0; i < posData.length; i++) {
                     var row = posData[i];
                     if (row.start <= max && row.end >= min) {
                         ans.push(row);
