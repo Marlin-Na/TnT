@@ -415,11 +415,14 @@ setMethod("compileTrackData", signature = "GeneTrackData",
 setMethod("compileTrackData", signature = "TxTrackData",
     function (trackData) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
-        
         df <- as.data.frame(trackData, optional = TRUE)
         df <- df[c("start", "end", "display_label", "key", "id", "exons", "tooltip")]
-        
-        compileTrackData(df)
+        json <- .df2json(df)
+        jc.data <- jc(
+            tnt.board.track.data.sync = ma(),
+            retriever = jc(tnr.range_data_retriever = json)
+        )
+        jc.data
     }
 )
 
@@ -656,10 +659,14 @@ compileTrack <- function (tntTrack) {
     )
     
     jc.spec <- asJC(li.spec)
-    # Need to append tooltipspec to display
+    # Need to append tooltipspec to display and add "index" callback
     jc.display <- jc(
         display = asJC(
-            c(tntTrack@Display, tntTrack@TooltipSpec)
+            c(tntTrack@Display,
+              tntTrack@TooltipSpec,
+              # The index slot is actually added on JS side
+              list(index = js("function (d) {return d['.index.'];}"))
+            )
         )
     )
     jc.data <- jc(data = compileTrackData(tntTrack@Data))
