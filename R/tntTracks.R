@@ -60,26 +60,6 @@
 
 ## Templates for JS Callback and Promise     ------------------------------------
 
-#' @export
-JSCallback <- function (result, toJSON = TRUE) {
-    # This function provides a template for constructing
-    # a JS callback as a data retriever
-    
-    if (is(result, "JavaScript"))
-        retstring <- result
-    else if (toJSON)
-        ## TODO:
-        ## We may want to firstly convert the dataframe by cols, then use
-        ## HTMLWidgets.dataframeToD3() to convert it on JS side.
-        ## Refer: http://www.htmlwidgets.org/develop_advanced.html#htmlwidgets.dataframetod3
-        retstring <- jsonlite::toJSON(result, dataframe = "rows", pretty = 2)
-    else
-        retstring <- .convertToJSChar(result)
-    
-    jsstring <- sprintf("function () {  return ( %s )  }", retstring)
-    JavaScript(jsstring)
-}
-
 
 #' @export
 .JSONFilter <- function (colname) {
