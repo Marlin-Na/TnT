@@ -136,7 +136,7 @@ setValidity("JSCascade",
       # Only allow certain types of element
         isAllowed <- vapply(lst, inherits, FUN.VALUE = logical(1),
             what = c("JSCascade", "MultiArgs", "JavaScript", "json",
-                     "integer", "numeric", "logical", "character")
+                     "integer", "numeric", "logical", "character", "data.frame")
         )
         if (!all(isAllowed)) {
             classes <- vapply(lst[!isAllowed], FUN.VALUE = character(1),

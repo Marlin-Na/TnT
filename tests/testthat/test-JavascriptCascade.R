@@ -44,7 +44,7 @@ test_that("JSCascade to JS Conversion", {
                         jc(emptyarg = js("")))
 })
 
-test_that("Conversion with JSON", {
+test_that("Conversion of JSON", {
     library(jsonlite)
     json <- toJSON(iris, pretty = TRUE)
     expect_js_identical(
@@ -60,6 +60,35 @@ test_that("Conversion with JSON", {
     expect_js_identical(
         jc(x = json),
         jc(x = js('"chr"'))
+    )
+})
+
+test_that("Conversion of data frame", {
+    df <- {
+        df <- data.frame(x = 1:3)
+        df$l <- list(a = 1, b = 1:2, c = 1:3)
+        df$d <- data.frame(dx = 1:3, dy = 4:6)
+        df$ldf <- split(data.frame(x = 1:6, group = rep(1:3, 1:3)), rep(1:3, 1:3))
+#            list(d1 = df[, 1:2], d2 = data.frame(x = 3), d3 = df[3, 1:2])
+        df
+    }
+    # In practice, we may need to convert data frame that have columns of:
+    #   1. a nested data frame (e.g. tooltip)
+    #   2. a list of data frame (exons of each transcript)
+    
+    # TODO
+    library(jsonlite)
+    expect_js_identical(
+        jc(data = df['d']),
+        jc(data = toJSON(df['d']))
+    )
+    expect_js_identical(
+        jc(data = df['ldf']),
+        jc(data = toJSON(df['ldf'], auto_unbox = TRUE))
+    )
+    expect_identical(
+        toJSON(df['ldf'], auto_unbox = FALSE),
+        toJSON(df['ldf'], auto_unbox = TRUE)
     )
 })
 
