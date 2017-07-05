@@ -358,23 +358,6 @@ setValidity("PosTrackData",
 setGeneric("compileTrackData",
            function (trackData) standardGeneric("compileTrackData"))
 
-
-#' @export
-setMethod("compileTrackData", signature = "data.frame",
-    function (trackData) {
-        df <- .removeAsIs(trackData)
-        
-        js.retriever <- JSCallback(df)
-        jc.syncdata <-  jc(tnt.board.track.data.sync = ma(),
-                           retriever = js.retriever)
-        jc.syncdata
-    }
-)
-# EXAMPLE
-if (FALSE) local({
-    compileTrackData(head(iris))
-})
-
 #' @export
 setMethod("compileTrackData", signature = "NoTrackData",
     function (trackData)
@@ -387,10 +370,9 @@ setMethod("compileTrackData", signature = "RangeTrackData",
         stopifnot(length(unique(seqnames(trackData))) == 1)
         df <- as.data.frame(trackData, optional = TRUE)[
             c("start", "end", "strand", "tooltip")]
-        json <- .df2json(df)
         jc.data <- jc(
             tnt.board.track.data.sync = ma(),
-            retriever = jc(tnr.range_data_retriever = json)
+            retriever = jc(tnr.range_data_retriever = df)
         )
         jc.data
     }
@@ -434,10 +416,9 @@ setMethod("compileTrackData", signature = "TxTrackData",
         stopifnot(length(unique(seqnames(trackData))) == 1)
         df <- as.data.frame(trackData, optional = TRUE)
         df <- df[c("start", "end", "display_label", "key", "id", "exons", "tooltip")]
-        json <- .df2json(df)
         jc.data <- jc(
             tnt.board.track.data.sync = ma(),
-            retriever = jc(tnr.range_data_retriever = json)
+            retriever = jc(tnr.range_data_retriever = df)
         )
         jc.data
     }

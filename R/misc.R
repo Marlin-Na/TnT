@@ -74,9 +74,3 @@ strandlabel <- function (labels, strands) {
     df
 }
 
-#' @export
-.df2json <- function (df) {
-    df <- .removeAsIs(df)
-    jsonlite::toJSON(df, dataframe = "rows", pretty = 2)
-}
-
