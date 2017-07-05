@@ -135,7 +135,7 @@ setClass("TrackData")
 
 setClass("NoTrackData", contains = c("NULL", "TrackData"))
 setClass("RangeTrackData", contains = c("GRanges", "TrackData"))
-setClass("PosTrackData", contains = c("RangeTrackData"))
+setClass("PosTrackData", contains = "RangeTrackData")
 setClass("GeneTrackData", contains = "RangeTrackData")
 setClass("TxTrackData", contains = "RangeTrackData")
 
@@ -147,16 +147,23 @@ setClass("TxTrackData", contains = "RangeTrackData")
 NoTrackData <- function () new("NoTrackData")
 
 #' @export
-RangeTrackData <- function (range, tooltip = mcols(range)) {
-    tooltip <- as.data.frame(tooltip, optional = TRUE)
+RangeTrackData <- function (range, tooltip = mcols(range), rm.mcols = TRUE) {
+    tooltip <-
+        if (is.null(tooltip))
+            data.frame(matrix( , nrow = length(range), ncol = 0))
+        else 
+            as.data.frame(tooltip, optional = TRUE)
     
-    if (is(range, "IRanges")) {
-        range <- GRanges(seqnames = "UnKnown", ranges = range, strand = "*")
-    }
-    range <- as(range, "GRanges")
-    # Avoid possible duplicated colname
-    while (!is.null(range$tooltip))
-        range$tooltip <- NULL
+    range <-
+        if (is(range, "IRanges"))
+            GRanges(seqnames = "UnKnown", ranges = range, strand = "*")
+        else
+            as(range, "GRanges")
+    
+    if (rm.mcols)
+        mcols(range) <- NULL
+    else
+        while (!is.null(range$tooltip)) range$tooltip <- NULL # Avoid duplicated colname 
     range$tooltip <- tooltip
     new("RangeTrackData", range)
 }
@@ -165,7 +172,7 @@ RangeTrackData <- function (range, tooltip = mcols(range)) {
 PosTrackData <- function (pos, tooltip = mcols(pos)) {
     tooltip <- as.data.frame(tooltip, optional = TRUE)
     
-    trackdata <- RangeTrackData(range = pos, tooltip = tooltip)
+    trackdata <- RangeTrackData(range = pos, tooltip = tooltip, rm.mcols = TRUE)
     trackdata <- as(trackdata, "PosTrackData")
     validObject(trackdata) # Ensure all the width equals to one
     trackdata
@@ -173,10 +180,36 @@ PosTrackData <- function (pos, tooltip = mcols(pos)) {
 
 #' @export
 strandlabel <- function (labels, strands) {
-    ifelse(strands == "+", paste(labels, ">"),
-        ifelse(strands == "-", paste("<", labels), labels))
+    if (length(labels))
+        ifelse(strands == "+", paste(labels, ">"),
+            ifelse(strands == "-", paste("<", labels), labels))
+    else
+        ifelse(strands == "+", ">",
+            ifelse(strands == "-", "<", ""))
 }
 
+#' @export
+GeneTrackData <- function (range, labels = paste("Gene", mcols(range)$gene_id),
+                           ids = make.unique(labels), tooltip = mcols(range)) {
+    force(labels)
+    force(ids)
+    force(tooltip)
+    mcols(range) <- NULL
+    
+    range <- RangeTrackData(range, tooltip, rm.mcols = FALSE)
+    range$display_label <- strandlabel(labels, strand(range))
+    range$id <- ids
+    
+    as(range, "GeneTrackData")
+}
+### EXAMPLE
+if (FALSE) {
+    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+    gene <- genes(txdb, columns = c("gene_id", "tx_id"))
+    GeneTrackData(gene[1:4])
+    ir <- IRanges(1:3, width = 10)
+    GeneTrackData(ir, labels = paste("gene", 1:3))
+}
 
 #' @export
 GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
@@ -187,30 +220,93 @@ GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
     
     # TODO: use "single.strand.genes.only = FALSE" ?
     gr <- GenomicFeatures::genes(txdb)
-    
-    gr$display_label <-
-        strandlabel(labels = paste("Gene", gr$gene_id), strands = strand(gr))
-    gr$id <- {
-        # Gene id may not be unique if "single.strand.genes.only = FALSE"
-        li.geneid <- split(gr$gene_id, list(seqnames(gr), strand(gr)))
-        mod.li.geneid <- lapply(li.geneid, function (x) make.unique(x))
-        unsplit(mod.li.geneid, list(seqnames(gr), strand(gr)))
-    }
-    # TODO: what about tooltip?
-    gr$tooltip <- data.frame(
+    labels <- gr$gene_id
+    tooltip <- data.frame(
+        # TODO: choose proper tooltip
         "Location" = as.character(gr),
         "Gene ID" = gr$gene_id,
         check.names = FALSE
     )
-    gr$gene_id <- NULL
+    GeneTrackData(range = gr, labels = labels, tooltip = tooltip)
+}
+### EXAMPLE
+if (FALSE) {
+    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+    GeneTrackDataFromTxDb(txdb, c("chrX", "chrY"))
+}
+
+#' @export
+TxTrackDataFromGRangesList <- function (grl, tooltip = mcols(grl),
+                                        labels = names(grl)) {
+    force(tooltip)
+    force(labels)
+    stopifnot(nrow(tooltip) == length(grl))
+    stopifnot(length(labels) == length(grl))
+    tx <- range(grl)
+    if (any(lengths(tx) > 1))
+        stop("seqlevels and strands within each group are not consistent")
     
-    new("GeneTrackData", gr)
+    gr.txs <- unlist(tx)
+    mcols(gr.txs) <- NULL
+    
+    gr.txs$tooltip <- as.data.frame(tooltip, optional = TRUE)[
+        seq_along(grl)[lengths(grl) != 0], ]
+    gr.txs$key <- seq_along(grl)[lengths(grl) != 0]
+    gr.txs$id <- as.character(gr.txs$key)
+    gr.txs$display_label <- strandlabel(labels[lengths(grl) != 0], strand(gr.txs))
+    
+    gr.exons <- unlist(grl, use.names = FALSE)
+    keys.gr.exons <- rep(seq_along(grl), lengths(grl))
+    
+    mcols(gr.exons) <- NULL
+    gr.exons$coding <- if (length(gr.exons)) TRUE else logical(0)
+    gr.exons$offset <-
+        start(gr.exons) - start(gr.txs)[match(keys.gr.exons, gr.txs$key)]
+    
+    df.exons <- as.data.frame(gr.exons)[c("start", "end", "offset", "coding")]
+    ldf.exons <- splitdf(df.exons, keys.gr.exons)[as.character(gr.txs$key)]
+    gr.txs$exons <- ldf.exons
+    new("TxTrackData", gr.txs)
+}
+### EXAMPLE
+if (FALSE) {
+    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+    grl <- exonsBy(txdb)[1:3]
+    a <- TxTrackDataFromGRangesList(grl)
+    a[1]$key
+    # When one of the GRanges is empty
+    grl$`1` <- grl$`1`[numeric(0)]
+    b <- TxTrackDataFromGRangesList(grl)
+    b[1]$key
+    compileTrackData(b)
+}
+
+#' @export
+TxTrackData <- function () {
+    
+}
+
+#' @export
+splitdf <- function (df, f) {
+    # We need to speed up this function
+    if (requireNamespace("data.table", quietly = TRUE)) {
+        # relative faster
+        df[["___FACTOR___"]] <- f
+        ldf <- data.table:::split.data.table(
+            data.table::as.data.table(df),
+            by = "___FACTOR___", keep.by = FALSE, flatten = FALSE
+        )
+    }
+    else {
+        warning("Install data.table could speed up the spliting process")
+        ldf <- split(df, f)
+    }
+    ldf
 }
 
 
 #' @export
-TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
-                                 use.data.table = TRUE) {
+TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
     ## Set and restore seqlevels of txdb
     seqlevel.ori <- seqlevels(txdb)
     seqlevels(txdb) <- seqlevel
@@ -249,21 +345,9 @@ TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
     }
     df.exons$offset <- df.exons$start - df.exons$tx_start
     factor_txid <- df.exons$tx_id
-    df.exons <- df.exons[c("start", "end", "offset", "coding", "tx_id")]
+    df.exons <- df.exons[c("start", "end", "offset", "coding")]
     
-    # Slow in this step
-    if (use.data.table && requireNamespace("data.table"))
-        # Relative faster approach
-        ldf.exons <- data.table:::split.data.table(
-            data.table::as.data.table(df.exons),
-            # use "by" not "f" to be relative faster
-            by = "tx_id", keep.by = FALSE, flatten = FALSE
-        )
-    else
-        ldf.exons <- split(
-            df.exons[names(df.exons) != "tx_id"],
-            factor_txid
-        )
+    ldf.exons <- splitdf(df.exons, factor_txid)
     
     gr.txs$exons <- {
         toassign <- vector("list", length = length(gr.txs))
@@ -517,7 +601,7 @@ TxTrack <- function (txdb, seqlevel = seqlevels(txdb),
     label <- .mkScalarOrNull(label)
     background <- .mkScalarOrNull(background)
     height <- Biobase::mkScalar(height)
-    data <- TxTrackDataFromTxDb(txdb, seqlevel = seqlevel, use.data.table = TRUE)
+    data <- TxTrackDataFromTxDb(txdb, seqlevel = seqlevel)
     display <- list(
         tnt.board.track.feature.genome.transcript = ma(),
         # TODO: this is not the correct approach

@@ -21,5 +21,11 @@ NULL
 
 
 
+#' @export
+ul <- function(x)
+    unlist(x, recursive = FALSE, use.names = FALSE)
 
+#' @export
+`ul<-` <- function (x, value)
+    relist(value, x)
 
