@@ -715,9 +715,10 @@ setClass("TnTBoard",
 #### TnT Board Constructor      ========
 #' @export
 TnTBoard <- function (tracklist, viewrange = GRanges()) {
-    stopifnot(
-        all(sapply(tracklist, inherits, what = "TnTTrack"))
-    )
+    if (is(tracklist, "TnTTrack"))
+        tracklist <- list(tracklist)
+    else
+        stopifnot(all(sapply(tracklist, inherits, what = "TnTTrack")))
     b <- new("TnTBoard", ViewRange = viewrange, CoordRange = IRanges(),
              ZoomAllow = IRanges(), TrackList = tracklist)
     b
