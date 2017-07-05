@@ -61,16 +61,6 @@
 ## Templates for JS Callback and Promise     ------------------------------------
 
 
-#' @export
-.JSONFilter <- function (colname) {
-    stopifnot(is.character(colname))
-    escapeColname <- sapply(colname, function (s) as.character(toJSON(unbox(s))))
-    condfilter <- paste(sprintf("[%s]", escapeColname), collapse = "")
-    condfilter
-}
-# Example
-if (interactive()) .JSONFilter(colname = c("data", "start"))
-
 
 #' @export
 tooltipCallback <- function (header, labels, colnames) {
