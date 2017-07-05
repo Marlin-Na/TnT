@@ -1,5 +1,4 @@
 
-
 # A TnT Track consists of Five slots:
 #   o Background:       Background color
 #   o Height:           Height of the track
@@ -397,7 +396,13 @@ setMethod("compileTrackData", signature = "GeneTrackData",
         df <- as.data.frame(trackData, optional = TRUE)
         df[c("seqnames", "width", "strand")] <- NULL
         
-        compileTrackData(df)
+        jc.data <- jc(
+            tnt.board.track.data.sync = ma(),
+            # Unlike RangeTrackData or PosTrackData, here is no need to add index
+            retriever = jc(tnr.range_data_retriever = df)
+        )
+        jc.data
+        
     }
 )
 
@@ -474,7 +479,9 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
     data <- RangeTrackData(range = range, tooltip = tooltip)
     display <- list(
         tnt.board.track.feature.block = ma(),
-        color = color
+        color = color,
+        # The index slot is actually added on JS side
+        index = js("function (d) {return d['.index.'];}")
     )
     new("BlockTrack", Label = label, Background = background, Height = height,
         Data = data, Display = display)
@@ -497,7 +504,8 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
     display <- list(
         tnt.board.track.feature.pin = ma(),
         domain = domain,
-        color = color
+        color = color,
+        index = js("function (d) {return d['.index.'];}")
     )
     new("PinTrack", Label = label, Background = background, Height = height,
         Data = data, Display = display)
@@ -513,10 +521,43 @@ GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
     data <- GeneTrackDataFromTxDb(txdb = txdb, seqlevel = seqlevel)
     display <- list(
         tnt.board.track.feature.genome.gene = ma(),
+        # TODO: color for each range
         color = color
     )
     new("GeneTrack", Label = label, Background = background, Height = height,
         Data = data, Display = display)
+}
+
+#' @export
+FeatureTrack <- function (range, label = deparse(substitute(range)),
+                          tooltip = mcols(range),
+                          names = base::names(range),
+                          color = NULL, background = NULL, height = 200) {
+    force(tooltip)
+    force(names)
+    label <- .mkScalarOrNull(label)
+    background <- .mkScalarOrNull(background)
+    height <- Biobase::mkScalar(height)
+    data <- GeneTrackData(range, labels = names,
+                          ids = seq_along(range), tooltip = tooltip)
+    display <- list(
+        tnt.board.track.feature.genome.gene = ma(),
+        # TODO
+        color = color
+    )
+    new("GeneTrack", Label = label, Background = background, Height = height,
+        Data = data, Display = display)
+}
+##EXAMPLE
+if (FALSE) {
+    library(GenomicFeatures)
+    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+    gr <- genes(txdb)
+    ft <- FeatureTrack(gr)
+    seqlevels(ft, pru = "coarse") <- "chr12"
+    compileTrack(ft)
+    TnTBoard(ft, GRanges("chr12", IRanges(1,10000)))
+    
 }
 
 #' @export
@@ -679,13 +720,11 @@ compileTrack <- function (tntTrack) {
     )
     
     jc.spec <- asJC(li.spec)
-    # Need to append tooltipspec to display and add "index" callback
+    # Need to append tooltipspec to display
     jc.display <- jc(
         display = asJC(
             c(tntTrack@Display,
-              tntTrack@TooltipSpec,
-              # The index slot is actually added on JS side
-              list(index = js("function (d) {return d['.index.'];}"))
+              tntTrack@TooltipSpec
             )
         )
     )
