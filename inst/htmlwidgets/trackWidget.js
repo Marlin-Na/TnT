@@ -8,7 +8,7 @@ HTMLWidgets.widget({
         
         // Some util functions
         var tnr = {};
-        tnr.add_index_slot = function (data) {
+        tnr.add_index = function (data) {
             var d = data;
             for (var i = 0; i < data.length; i++) {
                 d[i][".index."] = i;
@@ -18,11 +18,12 @@ HTMLWidgets.widget({
         
         tnr.range_data_retriever = function (data) {
             // TODO:  We may sort the data here and provide fast search
-            var rangeData = this.add_index_slot(data);
+            var rangeData = data;
+            
             // Return a closure as the data retriever
             var ans = function (loc) {
-                var min = loc.from - 100;
-                var max = loc.to  + 100;
+                var min = loc.from;
+                var max = loc.to;
                 var ans = [];
                 for (var i = 0; i < rangeData.length; i++) {
                     var row = rangeData[i];
@@ -30,8 +31,6 @@ HTMLWidgets.widget({
                         ans.push(row);
                     }
                 }
-                //console.log(ans.length);
-                console.log(ans);
                 return ans;
             };
             return ans;

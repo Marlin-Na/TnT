@@ -362,7 +362,8 @@ setMethod("compileTrackData", signature = "RangeTrackData",
             c("start", "end", "strand", "tooltip")]
         jc.data <- jc(
             tnt.board.track.data.sync = ma(),
-            retriever = jc(tnr.range_data_retriever = df)
+            retriever = jc(tnr.range_data_retriever =
+                               jc(tnr.add_index = df))
         )
         jc.data
     }
@@ -521,7 +522,7 @@ GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
 #' @export
 GroupFeatureTrack <- function (grangelist, label = deparse(substitute(grangelist)),
                                tooltip = mcols(grangelist),
-                               names = names(grangelist),
+                               names = base::names(grangelist),
                                color = NULL, background = NULL, height = 200) {
     force(tooltip)
     force(names)
@@ -538,6 +539,15 @@ GroupFeatureTrack <- function (grangelist, label = deparse(substitute(grangelist
     )
     new("TxTrack", Label = label, Background = background, Height = height,
         Data = data, Display = display)
+}
+# EXAMPLE
+if (FALSE) {
+    library(GenomicFeatures)
+    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+    exby <- exonsBy(txdb)
+    names(exby) <- paste("tx", names(exby))
+    gft <- GroupFeatureTrack(exby)
+    TnTBoard(gft, viewrange = GRanges("chrX", IRanges(1000, 100000)))
 }
 
 #' @export
@@ -878,7 +888,6 @@ if (FALSE) local({
 
 
 
-
 ###   TnT Genome    ############################################################
 
 # setClass("TnTGenome", contains = "TnTBoard",
@@ -888,4 +897,9 @@ if (FALSE) local({
 # )
 
 
+###   View          ############################################################
+
+view <- function (...) {
+    # TODO
+}
 
