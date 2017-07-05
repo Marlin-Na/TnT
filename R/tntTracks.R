@@ -519,9 +519,31 @@ GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
 }
 
 #' @export
+GroupFeatureTrack <- function (grangelist, label = deparse(substitute(grangelist)),
+                               tooltip = mcols(grangelist),
+                               names = names(grangelist),
+                               color = NULL, background = NULL, height = 200) {
+    force(tooltip)
+    force(names)
+    label <- .mkScalarOrNull(label)
+    background <- .mkScalarOrNull(background)
+    height <- Biobase::mkScalar(height)
+    data <- TxTrackDataFromGRangesList(grangelist, tooltip = tooltip,
+                                       labels = names)
+    display <- list(
+        tnt.board.track.feature.genome.transcript = ma(),
+        # TODO: this is not the correct approach
+        color = if (is.null(color)) js('function (t) { return "red" }')
+                else js(sprintf('function (t) { return "%s" }', color))
+    )
+    new("TxTrack", Label = label, Background = background, Height = height,
+        Data = data, Display = display)
+}
+
+#' @export
 TxTrack <- function (txdb, seqlevel = seqlevels(txdb),
                      label = deparse(substitute(txdb)),
-                     color = NULL, background = NULL, height = 100) {
+                     color = NULL, background = NULL, height = 300) {
     label <- .mkScalarOrNull(label)
     background <- .mkScalarOrNull(background)
     height <- Biobase::mkScalar(height)
