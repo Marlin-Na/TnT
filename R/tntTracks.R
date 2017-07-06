@@ -666,7 +666,7 @@ if (FALSE) local({
     toolti <- tooltip(track)
     stopifnot(
         is.data.frame(toolti),
-        all(sapply(toolti, is.atomic)),
+        #all(sapply(toolti, is.atomic)),
         !any(duplicated(names(toolti)))
     )
     
