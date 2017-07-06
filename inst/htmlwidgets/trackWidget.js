@@ -39,12 +39,12 @@ HTMLWidgets.widget({
         tnr.pos_data_retriever = function (data) {
             var posData = data;
             var ans = function (loc) {
-                var min = loc.from - 100;
-                var max = loc.to + 100;
+                var min = loc.from;
+                var max = loc.to;
                 var ans = [];
                 for (var i = 0; i < posData.length; i++) {
                     var row = posData[i];
-                    if (row.start <= max && row.end >= min) {
+                    if (row.pos <= max && row.pos >= min) {
                         ans.push(row);
                     }
                 }
@@ -53,37 +53,33 @@ HTMLWidgets.widget({
             return ans;
         };
         
-
+        
         // Define shared variables for this instance
         var tntins = null;
         var initial_width = width;
-
+        
         return {
-
+            
             renderValue: function(x) {
-
+                
                 // Code to render the widget    ----------------
-        
+                
                 tntins = eval(x.tntdef);
-        
+                
                 // Set the initial width
                 tntins.width(initial_width);
-        
+                
                 tntins(el);
                 tntins.start();
-
+                
                 // TODO: In the future, we may implement interface to add/update data to
                 //       an existing tnt instance (with shiny), and with proper transition.
-
             },
-
+            
             resize: function(width, height) {
-
                 // TODO: code to re-render the widget with a new size
                 tntins.width(width);
-
             }
-
         };
     }
 });

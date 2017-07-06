@@ -211,7 +211,7 @@ setMethod("asJC", signature = c(object = "JSCascade"),
             return(as.character(el))
         
         else {
-            ans <- jsonlite::toJSON(el, auto_unbox = TRUE)
+            ans <- jsonlite::toJSON(el, auto_unbox = TRUE, pretty = 2)
             return(ans)
         }
     }

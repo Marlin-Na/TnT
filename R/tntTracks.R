@@ -125,6 +125,7 @@ setClass("TrackData")
 setClass("NoTrackData", contains = c("NULL", "TrackData"))
 setClass("RangeTrackData", contains = c("GRanges", "TrackData"))
 setClass("PosTrackData", contains = "RangeTrackData")
+setClass("PosValTrackData", contains = "PosTrackData")
 setClass("GeneTrackData", contains = "RangeTrackData")
 setClass("TxTrackData", contains = "RangeTrackData")
 
@@ -340,6 +341,14 @@ setValidity("PosTrackData",
     }
 )
 
+setValidity("PosValTrackData",
+    function (object) {
+        if (is.null(mcols(object)$val))
+            return("Missing 'val' meta-column in PosValTrackData")
+        else TRUE
+    }
+)
+
 
 #### TrackData Compilation  ========
 
@@ -358,7 +367,7 @@ setMethod("compileTrackData", signature = "RangeTrackData",
     function (trackData) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
         df <- as.data.frame(trackData, optional = TRUE)[
-            c("start", "end", "strand", "tooltip")]
+            c("start", "end", "tooltip")]
         jc.data <- jc(
             tnt.board.track.data.sync = ma(),
             retriever = jc(tnr.range_data_retriever =
@@ -377,16 +386,47 @@ if (FALSE) local({
 #' @export
 setMethod("compileTrackData", signature = "PosTrackData",
     function (trackData) {
-        ## TODO: Have to select seq
         stopifnot(length(unique(seqnames(trackData))) == 1)
         stopifnot(all(width(trackData) == 1))
         
         df <- as.data.frame(trackData, optional = TRUE)[
-            c("start", "strand", "val", "tooltip")]
+            c("start", "tooltip")]
         df <- S4Vectors::rename(df, c(start = "pos"))
-        compileTrackData(df)
+        
+        jc.data <- jc(
+            tnt.board.track.data.sync = ma(),
+            retriever = jc(tnr.pos_data_retriever =
+                               jc(tnr.add_index = df))
+        )
+        jc.data
     }
 )
+
+#' @export
+setMethod("compileTrackData", signature = "PosValTrackData",
+    function (trackData) {
+        stopifnot(length(unique(seqnames(trackData))) == 1)
+        stopifnot(all(width(trackData) == 1))
+        
+        df <- as.data.frame(trackData, optional = TRUE)[
+            c("start", "val","tooltip")]
+        df <- S4Vectors::rename(df, c(start = "pos"))
+        
+        jc.data <- jc(
+            tnt.board.track.data.sync = ma(),
+            retriever = jc(tnr.pos_data_retriever =
+                               jc(tnr.add_index = df))
+        )
+        jc.data
+    }
+)
+##EXAMPLE
+if (FALSE) {
+    gpos <- GRanges("chr12", IRanges(seq(1, 100, 3), width = 1))
+    mcols(gpos) <- as.data.frame(gpos)
+    pt <- PosTrackData(gpos)
+    compileTrackData(pt)
+}
 
 #' @export
 setMethod("compileTrackData", signature = "GeneTrackData",
