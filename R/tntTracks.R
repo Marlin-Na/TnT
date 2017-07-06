@@ -349,6 +349,47 @@ setValidity("PosValTrackData",
     }
 )
 
+setValidity("RangeTrackData",
+    function (object) {
+        if (!is.data.frame(object$tooltip))
+            if (is.null(object$tooltip))
+                return("Missing 'tooltip' meta-column in RangeTrackData")
+            else
+                return("The 'tooltip' meta-column should be a data frame")
+        TRUE
+    }
+)
+
+setValidity("GeneTrackData",
+    function (object) {
+        if (is.null(object$display_label))
+            return("Missing 'display_label' meta-column in GeneTrackData")
+        if (is.null(object$id))
+            return("Missing 'id' meta-column in GeneTrackData")
+        TRUE
+    }
+)
+
+setValidity("TxTrackData",
+    function (object) {
+        if (is.null(object$display_label))
+            return("Missing 'display_label' meta-column in TxTrackData")
+        if (is.null(object$id))
+            return("Missing 'id' meta-column in TxTrackData")
+        if (is.null(object$key))
+            return("Missing 'key' meta-column in TxTrackData")
+            
+        # In fact, we should check whether all the elements are data frame
+        if (!is.list(object$exons))
+            if (is.null(object$exons))
+                return("Missing 'exons' meta-column in TxTrackData")
+            else
+                return("The 'exons' meta-column should be a list of data frame")
+        
+        return(TRUE)
+    }
+)
+
 
 #### TrackData Compilation  ========
 
@@ -433,8 +474,8 @@ setMethod("compileTrackData", signature = "GeneTrackData",
     function (trackData) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
         
-        df <- as.data.frame(trackData, optional = TRUE)
-        df[c("seqnames", "width", "strand")] <- NULL
+        df <- as.data.frame(trackData, optional = TRUE)[
+            c("start", "end", "tooltip", "display_label", "id")]
         
         jc.data <- jc(
             tnt.board.track.data.sync = ma(),
