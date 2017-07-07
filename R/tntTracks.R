@@ -160,11 +160,21 @@ RangeTrackData <- function (range, tooltip = mcols(range), rm.mcols = TRUE) {
 
 #' @export
 PosTrackData <- function (pos, tooltip = mcols(pos)) {
-    tooltip <- as.data.frame(tooltip, optional = TRUE)
-    
     trackdata <- RangeTrackData(range = pos, tooltip = tooltip, rm.mcols = TRUE)
     trackdata <- as(trackdata, "PosTrackData")
     validObject(trackdata) # Ensure all the width equals to one
+    trackdata
+}
+
+#' @export
+PosValTrackData <- function (pos, val, tooltip = mcols(pos)) {
+    mcols(pos) <- NULL
+    
+    trackdata <- RangeTrackData(range = pos, tooltip = tooltip, rm.mcols = TRUE)
+    trackdata$val <- val
+    
+    trackdata <- as(trackdata, "PosValTrackData")
+    validObject(trackdata)
     trackdata
 }
 
@@ -177,11 +187,13 @@ GeneTrackData <- function (range, labels = paste("Gene", mcols(range)$gene_id),
     force(tooltip)
     mcols(range) <- NULL
     
-    range <- RangeTrackData(range, tooltip, rm.mcols = FALSE)
+    range <- RangeTrackData(range, tooltip, rm.mcols = TRUE)
     range$display_label <- strandlabel(labels, strand(range))
     range$id <- ids
     
-    as(range, "GeneTrackData")
+    range <- as(range, "GeneTrackData")
+    validObject(range)
+    range
 }
 ### EXAMPLE
 if (FALSE) {
@@ -262,10 +274,6 @@ if (FALSE) {
     compileTrackData(b)
 }
 
-#' @export
-TxTrackData <- function () {
-    
-}
 
 
 #' @export
@@ -463,9 +471,12 @@ setMethod("compileTrackData", signature = "PosValTrackData",
 )
 ##EXAMPLE
 if (FALSE) {
-    gpos <- GRanges("chr12", IRanges(seq(1, 100, 3), width = 1))
+    gpos <- GRanges("chr12", IRanges(seq(1, 10, 3), width = 1))
     mcols(gpos) <- as.data.frame(gpos)
     pt <- PosTrackData(gpos)
+    compileTrackData(pt)
+    pt <- PosValTrackData(gpos)
+    pt <- PosValTrackData(gpos, val = start(gpos))
     compileTrackData(pt)
 }
 
@@ -526,7 +537,7 @@ setClass("TnTTrack", slots = c(
 ))
 
 setClass("BlockTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
-setClass("PinTrack", contains = "TnTTrack", slots = c(Data = "PosTrackData"))
+setClass("PinTrack", contains = "TnTTrack", slots = c(Data = "PosValTrackData"))
 setClass("GeneTrack", contains = "TnTTrack", slots = c(Data = "GeneTrackData"))
 setClass("TxTrack", contains = "TnTTrack", slots = c(Data = "TxTrackData"))
 
@@ -580,8 +591,7 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
     height <- Biobase::mkScalar(height)
     force(domain)
     stopifnot(length(domain) == 2)
-    data <- PosTrackData(pos = pos, tooltip = tooltip)
-    data$val <- value
+    data <- PosValTrackData(pos = pos, val = value, tooltip = tooltip)
     display <- list(
         tnt.board.track.feature.pin = ma(),
         domain = domain,
