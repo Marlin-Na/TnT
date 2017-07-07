@@ -137,7 +137,7 @@ setClass("TxTrackData", contains = "RangeTrackData")
 NoTrackData <- function () new("NoTrackData")
 
 #' @export
-RangeTrackData <- function (range, tooltip = mcols(range), rm.mcols = TRUE) {
+RangeTrackData <- function (range, tooltip = mcols(range)) {
     tooltip <-
         if (is.null(tooltip))
             data.frame(matrix( , nrow = length(range), ncol = 0))
@@ -150,17 +150,14 @@ RangeTrackData <- function (range, tooltip = mcols(range), rm.mcols = TRUE) {
         else
             as(range, "GRanges")
     
-    if (rm.mcols)
-        mcols(range) <- NULL
-    else
-        while (!is.null(range$tooltip)) range$tooltip <- NULL # Avoid duplicated colname 
+    mcols(range) <- NULL
     range$tooltip <- tooltip
     new("RangeTrackData", range)
 }
 
 #' @export
 PosTrackData <- function (pos, tooltip = mcols(pos)) {
-    trackdata <- RangeTrackData(range = pos, tooltip = tooltip, rm.mcols = TRUE)
+    trackdata <- RangeTrackData(range = pos, tooltip = tooltip)
     trackdata <- as(trackdata, "PosTrackData")
     validObject(trackdata) # Ensure all the width equals to one
     trackdata
@@ -170,7 +167,7 @@ PosTrackData <- function (pos, tooltip = mcols(pos)) {
 PosValTrackData <- function (pos, val, tooltip = mcols(pos)) {
     mcols(pos) <- NULL
     
-    trackdata <- RangeTrackData(range = pos, tooltip = tooltip, rm.mcols = TRUE)
+    trackdata <- RangeTrackData(range = pos, tooltip = tooltip)
     trackdata$val <- val
     
     trackdata <- as(trackdata, "PosValTrackData")
@@ -187,7 +184,7 @@ GeneTrackData <- function (range, labels = paste("Gene", mcols(range)$gene_id),
     force(tooltip)
     mcols(range) <- NULL
     
-    range <- RangeTrackData(range, tooltip, rm.mcols = TRUE)
+    range <- RangeTrackData(range, tooltip)
     range$display_label <- strandlabel(labels, strand(range))
     range$id <- ids
     
