@@ -50,6 +50,48 @@ trackWidget('
 
 <br/> <br/>
 
+## Create a TnT Board with JSCascade Util Functions
+
+```{r}
+axisTrack <- jc(
+    tnt.board.track = ma(),
+    height = 20,
+    color = "white",
+    display = jc(tnt.board.track.feature.axis = ma())
+)
+blockTrack <- jc(
+    tnt.board.track = ma(),
+    height = 30,
+    color = "green",
+    data = jc(
+        tnt.board.track.data.sync = ma(),
+        retriever = js("function() {
+            return [
+                {start: 200, end: 350},
+                {start: 550, end: 770}
+            ];
+        }")
+    ),
+    display = jc(
+        tnt.board.track.feature.block = ma(),
+        color = "red",
+        index = js("function (d) {return d.start}")
+    )
+)
+tntdef <- jc(
+    tnt.board = ma(),
+    from = 0,
+    to = 500,
+    min = 0,
+    max = 1000,
+    add_track = axisTrack,
+    add_track = blockTrack
+)
+trackWidget(tntdef)
+```
+
+
+<br/> <br/>
 
 ## Session Info
 
