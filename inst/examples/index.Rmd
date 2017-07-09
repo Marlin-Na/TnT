@@ -8,6 +8,7 @@ This page contains examples of visualization created with TnT package.
     - [Block Track](tracktype-BlockTrack.html)
     - [Pin Track](tracktype-PinTrack.html)
     - [Gene Track](tracktype-GeneTrack.html)
+    - [Tx Track](tracktype-TxTrack.html)
 
 - Low level utils
     - [trackWidget](trackWidget.html)
