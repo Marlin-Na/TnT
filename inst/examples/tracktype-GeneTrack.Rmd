@@ -1,0 +1,34 @@
+---
+title: "Gene Track"
+---
+
+The gene track can be constructed from a TxDb object.
+
+```{r}
+suppressPackageStartupMessages({
+    library(TnT)
+    library(GenomicFeatures)
+    library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+})
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+```
+
+
+## Basic Example
+
+
+```{r}
+gene <- genes(txdb)
+gtrack <- GeneTrack(txdb, label = "Human Genome")
+TnTBoard(gtrack, gene[gene$gene_id == "2000"] * 0.1)
+```
+
+
+<br/> <br/>
+
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
