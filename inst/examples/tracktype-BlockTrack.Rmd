@@ -1,0 +1,40 @@
+---
+title: "Block Track"
+---
+
+A block track can be created from a GRanges or IRanges object, showing the coverage
+of a Range-like object.
+
+```{r}
+suppressPackageStartupMessages({
+    library(TnT)
+    library(GenomicFeatures)
+})
+set.seed(42)
+```
+
+
+## Basic Example
+
+Construct a IRanges object and a GRanges object.
+
+```{r}
+ir <- IRanges(start = c(69, 420, 6942), width = c(10, 100, 1000))
+gr <- GRanges("chr12", ir)
+```
+
+To construct the track and create the visualization.
+
+```{r}
+btrack <- BlockTrack(gr, tooltip = as.data.frame(gr), label = "My GRanges", color = "grey")
+TnTBoard(btrack, range(gr))
+```
+
+<br/> <br/>
+
+
+## Session Info
+
+```{r}
+sessionInfo()
+```

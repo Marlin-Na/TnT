@@ -4,6 +4,10 @@ title: "TnT Examples"
 
 This page contains examples of visualization created with TnT package.
 
+- Different Track Types
+    - [Block Track](tracktype-BlockTrack.html)
+    - [Pin Track](tracktype-PinTrack.html)
 
 - Low level utils
     - [trackWidget](trackWidget.html)
+
