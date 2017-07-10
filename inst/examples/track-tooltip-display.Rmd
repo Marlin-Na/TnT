@@ -1,0 +1,102 @@
+---
+title: "Tooltip Display in Tracks"
+---
+
+
+A transcript track can be constructed from a TxDb object.
+
+Tooltip can be specified by supplying a data frame when constructing the track
+and it can be modified after the track is constructed.
+
+```{r}
+suppressPackageStartupMessages({
+    library(TnT)
+    library(GenomicFeatures)
+    library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+    library(org.Hs.eg.db)
+})
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+```
+
+
+## Basic Example using BlockTrack
+
+Click on the block to see the tooltip.
+
+```{r}
+myIRanges <- IRanges(c(10, 100, 1000), width = c(30, 50, 500))
+mytooltip <- as.data.frame(myIRanges)
+myTrack <- BlockTrack(myIRanges, tooltip = mytooltip)
+#TnTBoard(myTrack, IRanges(1, 2000))
+TnTBoard(myTrack, GRanges("UnKnown", IRanges(1, 2000)))
+```
+
+<br/> <br/>
+
+## Modify The Tooltip of a Constructed Track
+
+First, construct a gene track from the TxDb object.
+
+```{r}
+geneTrack <- GeneTrack(txdb, height = 300)
+```
+
+We can extract and replace the tooltip with `tooltip` and `tooltip<-`.
+In this case, we use the organism database to find the corresponding gene names of
+every gene, then add them to the tooltip.
+
+```{r}
+head(df.tooltip <- tooltip(geneTrack))
+
+genename <- AnnotationDbi::select(org.Hs.eg.db, as.character(df.tooltip$`Gene ID`),
+                      columns = "SYMBOL", keytype = "ENTREZID")
+df.tooltip$`Gene Name` <- genename$SYMBOL[match(df.tooltip$`Gene ID`, genename$ENTREZID)]
+tooltip(geneTrack) <- df.tooltip
+head(tooltip(geneTrack))
+```
+
+Click to see the tooltip.
+
+```{r}
+TnTBoard(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
+```
+
+<br/> <br/>
+
+## Use a List Column in The Supplied Data Frame
+
+Some times we may want to include multiple elements in a cell of a tooltip table.
+For example, here we include the gene ontology terms of every gene in the
+tooltip:
+
+```{r}
+head(df.tooltip)
+columns(org.Hs.eg.db)
+go <- AnnotationDbi::select(org.Hs.eg.db, keys = as.character(df.tooltip$`Gene ID`),
+                            columns = "GO", keytype = "ENTREZID")
+go <- go[match(df.tooltip$`Gene ID`, go$ENTREZID), ]
+df.tooltip$GO <- split(go$GO, go$ENTREZID)
+df.tooltip$Evidence <- split(go$EVIDENCE, go$ENTREZID)
+df.tooltip$Ontology <- split(go$ONTOLOGY, go$ENTREZID)
+tooltip(geneTrack) <- df.tooltip
+TnTBoard(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
+```
+
+<br/> <br/>
+
+
+## Use Sub-headers in Tooltip
+
+```{r}
+```
+
+<br/> <br/>
+
+
+
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
