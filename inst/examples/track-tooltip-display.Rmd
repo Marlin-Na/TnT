@@ -8,6 +8,10 @@ A transcript track can be constructed from a TxDb object.
 Tooltip can be specified by supplying a data frame when constructing the track
 and it can be modified after the track is constructed.
 
+By default, when constructing a track from GRanges/IRanges, the tooltip is converted
+from the "meta-columns" of GRanges/IRanges, i.e. `mcols(d)`.
+
+
 ```{r}
 suppressPackageStartupMessages({
     library(TnT)
@@ -74,10 +78,9 @@ head(df.tooltip)
 columns(org.Hs.eg.db)
 go <- AnnotationDbi::select(org.Hs.eg.db, keys = as.character(df.tooltip$`Gene ID`),
                             columns = "GO", keytype = "ENTREZID")
-go <- go[match(df.tooltip$`Gene ID`, go$ENTREZID), ]
-df.tooltip$GO <- split(go$GO, go$ENTREZID)
-df.tooltip$Evidence <- split(go$EVIDENCE, go$ENTREZID)
-df.tooltip$Ontology <- split(go$ONTOLOGY, go$ENTREZID)
+df.tooltip$GO <- split(go$GO, go$ENTREZID)[as.character(df.tooltip$`Gene ID`)]
+df.tooltip$Evidence <- split(go$EVIDENCE, go$ENTREZID)[as.character(df.tooltip$`Gene ID`)]
+df.tooltip$Ontology <- split(go$ONTOLOGY, go$ENTREZID)[as.character(df.tooltip$`Gene ID`)]
 tooltip(geneTrack) <- df.tooltip
 TnTBoard(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
 ```
@@ -87,12 +90,26 @@ TnTBoard(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
 
 ## Use Sub-headers in Tooltip
 
+Columns that have empty columns will be regarded as subsection titles, for example:
+
 ```{r}
+head(df.tooltip)
+df.tooltip <- cbind(
+    data.frame(`Identity` = ""),
+    df.tooltip[c("Gene ID", "Location", "Gene Name")],
+    data.frame(`GO Profile` = "", check.names = FALSE),
+    df.tooltip[c("GO", "Evidence", "Ontology")]
+)
+```
+
+Click to see.
+
+```{r}
+tooltip(geneTrack) <- df.tooltip
+TnTBoard(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
 ```
 
 <br/> <br/>
-
-
 
 
 ## Session Info
@@ -100,3 +117,4 @@ TnTBoard(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
 ```{r}
 sessionInfo()
 ```
+
