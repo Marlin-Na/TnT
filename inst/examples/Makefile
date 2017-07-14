@@ -7,4 +7,7 @@ help:
 build:
 	Rscript -e "rmarkdown::render_site()"
 
-.PHONY: help build
+serve:
+	cd _site; python3 -m http.server 1313
+
+.PHONY: help build serve
