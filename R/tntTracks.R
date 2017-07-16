@@ -522,10 +522,11 @@ if (FALSE) local({
 
 #### Track classes          ========
 setClassUnion("ScalarCharacterOrNull", c("ScalarCharacter", "NULL"))
+setClassUnion("ScalarNumericOrNull", c("ScalarNumeric", "NULL"))
 setClass("TnTTrack", slots = c(
     # TODO: add ID slot?
     Background = "ScalarCharacterOrNull",
-    Height = "ScalarNumeric",
+    Height = "ScalarNumericOrNull",
     Label = "ScalarCharacterOrNull",
     
     Data = "TrackData",
@@ -564,7 +565,7 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
                         height = 30) {
     label <- .mkScalarOrNull(label)
     background <- .mkScalarOrNull(background)
-    height <- Biobase::mkScalar(height)
+    height <- .mkScalarOrNull(height)
     data <- RangeTrackData(range = range, tooltip = tooltip)
     display <- list(
         tnt.board.track.feature.block = ma(),
@@ -585,7 +586,7 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
         stop("Value (i.e. height) at each position not specified.")
     label <- .mkScalarOrNull(label)
     background <- .mkScalarOrNull(background)
-    height <- Biobase::mkScalar(height)
+    height <- .mkScalarOrNull(height)
     force(domain)
     stopifnot(length(domain) == 2)
     data <- PosValTrackData(pos = pos, val = value, tooltip = tooltip)
@@ -605,7 +606,7 @@ GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
                        color = NULL, background = NULL, height = 100) {
     label <- .mkScalarOrNull(label)
     background <- .mkScalarOrNull(background)
-    height <- Biobase::mkScalar(height)
+    height <- .mkScalarOrNull(height)
     data <- GeneTrackDataFromTxDb(txdb = txdb, seqlevel = seqlevel)
     display <- list(
         tnt.board.track.feature.genome.gene = ma(),
@@ -625,7 +626,7 @@ FeatureTrack <- function (range, label = deparse(substitute(range)),
     force(names)
     label <- .mkScalarOrNull(label)
     background <- .mkScalarOrNull(background)
-    height <- Biobase::mkScalar(height)
+    height <- .mkScalarOrNull(height)
     data <- GeneTrackData(range, labels = names,
                           ids = seq_along(range), tooltip = tooltip)
     display <- list(
@@ -657,7 +658,7 @@ GroupFeatureTrack <- function (grangelist, label = deparse(substitute(grangelist
     force(names)
     label <- .mkScalarOrNull(label)
     background <- .mkScalarOrNull(background)
-    height <- Biobase::mkScalar(height)
+    height <- .mkScalarOrNull(height)
     data <- TxTrackDataFromGRangesList(grangelist, tooltip = tooltip,
                                        labels = names)
     display <- list(
@@ -685,7 +686,7 @@ TxTrack <- function (txdb, seqlevel = seqlevels(txdb),
                      color = NULL, background = NULL, height = 300) {
     label <- .mkScalarOrNull(label)
     background <- .mkScalarOrNull(background)
-    height <- Biobase::mkScalar(height)
+    height <- .mkScalarOrNull(height)
     data <- TxTrackDataFromTxDb(txdb, seqlevel = seqlevel)
     display <- list(
         tnt.board.track.feature.genome.transcript = ma(),
@@ -888,7 +889,7 @@ compileBoard <- function (tntboard) {
     if (length(colors) == 0L || length(colors) >= 2L)
         default <- Biobase::mkScalar("white")
     else
-        default <- Biobase::mkScalar("colors")
+        default <- Biobase::mkScalar(colors)
     
     tracklist <- lapply(tracklist, replace = default,
         function (track, replace) {
