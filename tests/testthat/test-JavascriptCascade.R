@@ -80,11 +80,11 @@ test_that("Conversion of data frame", {
     library(jsonlite)
     expect_js_identical(
         jc(data = df['d']),
-        jc(data = toJSON(df['d']))
+        jc(data = toJSON(df['d'], pretty = 2))
     )
     expect_js_identical(
         jc(data = df['ldf']),
-        jc(data = toJSON(df['ldf'], auto_unbox = TRUE))
+        jc(data = toJSON(df['ldf'], auto_unbox = TRUE, pretty = 2))
     )
     expect_identical(
         toJSON(df['ldf'], auto_unbox = FALSE),

@@ -211,7 +211,8 @@ setMethod("asJC", signature = c(object = "JSCascade"),
             return(as.character(el))
         
         else {
-            ans <- jsonlite::toJSON(el, auto_unbox = TRUE, pretty = 2)
+            ans <- jsonlite::toJSON(el, auto_unbox = TRUE,
+                                    pretty = if (inherits(el, "data.frame")) 2 else FALSE)
             return(ans)
         }
     }
