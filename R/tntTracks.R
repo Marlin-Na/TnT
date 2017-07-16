@@ -553,6 +553,55 @@ setMethod("seqinfo<-", signature = c(x = "TnTTrack"),
     }
 )
 
+#### TrackData Accessor          ========
+
+#' @export
+trackData <- function (track) {
+    track@Data
+}
+
+#' @export
+`trackData<-` <- function (track, value) {
+    track@Data <- value
+    validObject(track)
+    track
+}
+
+
+#### TrackSpec Accessor     ========
+
+#' @export
+trackSpec <- function (track) {
+    tspec <- list(
+        background = unclass(track@Background),
+        height = unclass(track@Height),
+        label = unclass(track@Label)
+    )
+    tspec
+}
+
+#' @export
+`trackSpec<-` <- function (track, value) {
+    value <- as.list(value)
+    
+    known.spec <- c("background", "height", "label")
+    if (!all(names(value) %in% c("background", "height", "label"))) {
+        notin <- names(value)[! names(value) %in% known.spec]
+        notin <- paste(notin, collapse = ", ")
+        warning(notin, " is/are not available track options")
+    }
+    
+    tspec <- trackSpec(track)
+    tspec[names(value)] <- value
+    
+    track@Background <- .mkScalarOrNull(as.character(tspec[["background"]]))
+    track@Height <- .mkScalarOrNull(as.numeric(tspec[["height"]]))
+    track@Label <- .mkScalarOrNull(as.character(tspec[["label"]]))
+        
+    track
+}
+
+
 #### Track Constructor      ========
 
 #' @export
