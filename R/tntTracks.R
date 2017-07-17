@@ -586,9 +586,10 @@ trackSpec <- function (track) {
     value <- as.list(value)
     
     known.spec <- c("background", "height", "label")
-    if (!all(names(value) %in% c("background", "height", "label"))) {
+    if (!all(names(value) %in% known.spec)) {
         notin <- names(value)[! names(value) %in% known.spec]
-        lapply(notin, function (o) warning(o, " is not an available track option"))
+        for (i in seq_along(notin))
+            warning(notin[[i]], " is not an available track option")
     }
     
     tspec <- trackSpec(track)
