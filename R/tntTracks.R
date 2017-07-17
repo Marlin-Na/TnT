@@ -522,7 +522,7 @@ if (FALSE) local({
 
 #### Track classes          ========
 setClassUnion("ScalarCharacterOrNull", c("ScalarCharacter", "NULL"))
-setClassUnion("ScalarNumericOrNull", c("ScalarNumeric", "NULL"))
+setClassUnion("ScalarNumericOrNull", c("ScalarNumeric", "ScalarInteger", "NULL"))
 setClass("TnTTrack", slots = c(
     # TODO: add ID slot?
     Background = "ScalarCharacterOrNull",
@@ -594,9 +594,9 @@ trackSpec <- function (track) {
     tspec <- trackSpec(track)
     tspec[names(value)] <- value
     
-    track@Background <- .mkScalarOrNull(as.character(tspec[["background"]]))
-    track@Height <- .mkScalarOrNull(as.numeric(tspec[["height"]]))
-    track@Label <- .mkScalarOrNull(as.character(tspec[["label"]]))
+    track@Background <- .mkScalarOrNull(tspec[["background"]])
+    track@Height <- .mkScalarOrNull(tspec[["height"]])
+    track@Label <- .mkScalarOrNull(tspec[["label"]])
         
     track
 }
