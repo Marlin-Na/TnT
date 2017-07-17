@@ -572,10 +572,11 @@ trackData <- function (track) {
 
 #' @export
 trackSpec <- function (track) {
+    .getV <- function (x) slot(x, ".Data")
     tspec <- list(
-        background = unclass(track@Background),
-        height = unclass(track@Height),
-        label = unclass(track@Label)
+        background = .getV(track@Background),
+        height = .getV(track@Height),
+        label = .getV(track@Label)
     )
     tspec
 }
