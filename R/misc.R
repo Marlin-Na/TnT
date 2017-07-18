@@ -16,6 +16,7 @@ NULL
 #' @import S4Vectors
 #' @import Biobase
 #' @import jsonlite
+#' @importFrom gplots col2hex
 NULL
 
 

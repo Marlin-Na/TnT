@@ -573,6 +573,10 @@ trackData <- function (track) {
 #### TrackSpec Accessor     ========
 
 #' @export
+.mkScalarOrNull <- function (x)
+    if (is.null(x)) x else Biobase::mkScalar(x)
+
+#' @export
 trackSpec <- function (track, which = c("background", "height", "label")) {
     if (length(which) == 1)
         switch(which,
