@@ -571,34 +571,34 @@ trackData <- function (track) {
 #### TrackSpec Accessor     ========
 
 #' @export
-trackSpec <- function (track) {
-    .getV <- function (x) slot(x, ".Data")
-    tspec <- list(
-        background = .getV(track@Background),
-        height = .getV(track@Height),
-        label = .getV(track@Label)
-    )
-    tspec
+trackSpec <- function (track, which = c("background", "height", "label")) {
+    if (length(which) == 1)
+        switch(which,
+            background = track@Background@.Data,
+            height = track@Height@.Data,
+            label = track@Label@.Data,
+            stop(which, "is not an available track option")
+        )
+    else
+        `names<-`(lapply(which, trackSpec, track = track), which)
 }
 
 #' @export
-`trackSpec<-` <- function (track, value) {
-    value <- as.list(value)
-    
-    known.spec <- c("background", "height", "label")
-    if (!all(names(value) %in% known.spec)) {
-        notin <- names(value)[! names(value) %in% known.spec]
-        for (i in seq_along(notin))
-            warning(notin[[i]], " is not an available track option")
+`trackSpec<-` <- function (track, which = c("background", "height", "label"), value) {
+    if (length(which) == 1) {
+        switch(which,
+            background = track@Background <- .mkScalarOrNull(value),
+            height     = track@Height <- .mkScalarOrNull(value),
+            label      = track@Label <- .mkScalarOrNull(value),
+            warning(which, "is not an available track option")
+        )
+        return(track)
     }
     
-    tspec <- trackSpec(track)
-    tspec[names(value)] <- value
+    stopifnot(length(which) == length(value))
     
-    track@Background <- .mkScalarOrNull(tspec[["background"]])
-    track@Height <- .mkScalarOrNull(tspec[["height"]])
-    track@Label <- .mkScalarOrNull(tspec[["label"]])
-        
+    for (i in seq_along(which))
+        trackSpec(track, which = which[i]) <- value[i]
     track
 }
 
