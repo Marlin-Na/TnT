@@ -542,13 +542,13 @@ setClass("TxTrack", contains = "TnTTrack", slots = c(Data = "TxTrackData"))
 #### Seqinfo Methods        ========
 #' @export
 setMethod("seqinfo", signature = c("TnTTrack"),
-    function (x) seqinfo(x@Data)
+    function (x) seqinfo(trackData(x))
 )
 #' @export
 setMethod("seqinfo<-", signature = c(x = "TnTTrack"),
     function (x, new2old, force, pruning.mode, value) {
-        x@Data <- `seqinfo<-`(x = x@Data, new2old = new2old,
-                              force = force, pruning.mode = pruning.mode, value = value)
+        trackData(x) <- `seqinfo<-`(x = trackData(x), new2old = new2old,
+                                    force = force, pruning.mode = pruning.mode, value = value)
         x
     }
 )
@@ -598,7 +598,7 @@ trackSpec <- function (track, which = c("background", "height", "label")) {
     stopifnot(length(which) == length(value))
     
     for (i in seq_along(which))
-        trackSpec(track, which = which[i]) <- value[i]
+        trackSpec(track, which = which[[i]]) <- value[[i]]
     track
 }
 
@@ -763,7 +763,7 @@ setMethod("tooltip", signature = "TrackData",
 )
 setMethod("tooltip", signature = "TnTTrack",
     function (x) {
-        tooltip(x@Data)
+        tooltip(trackData(x))
     }
 )
 setMethod("tooltip<-", signature = c(x = "TrackData", value = "data.frame"),
@@ -774,7 +774,7 @@ setMethod("tooltip<-", signature = c(x = "TrackData", value = "data.frame"),
 )
 setMethod("tooltip<-", signature = c(x = "TnTTrack", value = "data.frame"),
     function (x, value) {
-        tooltip(x@Data) <- value
+        tooltip(trackData(x)) <- value
         x
     }
 )
@@ -785,7 +785,7 @@ if (FALSE) local({
     t <- BlockTrack(GRanges("chr12", IRanges(1:15 * 100, width = 10), label = paste("range", 1:15)))
     gr <- GRanges("chr12", IRanges(1:15 * 100, width = 10), label = paste("range", 1:15))
     t <- BlockTrack(gr)
-    t@Data
+    trackData(t)
     # Warning messages:
     #     1: In (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE,  :
     #        row names were found from a short variable and have been discarded
@@ -796,7 +796,7 @@ if (FALSE) local({
     tooltip(t) <- data.frame(start = start(gr))
     
     compileTrack(t)
-    TnTBoard(list(t), viewrange = range(t@Data))
+    TnTBoard(list(t), viewrange = range(trackData(t)))
 })
 
 
@@ -867,7 +867,7 @@ compileTrack <- function (tntTrack) {
             )
         )
     )
-    jc.data <- jc(data = compileTrackData(tntTrack@Data))
+    jc.data <- jc(data = compileTrackData(trackData(tntTrack)))
     c(jc.spec, jc.display, jc.data)
 }
 
@@ -933,7 +933,7 @@ compileBoard <- function (tntboard) {
     # Before compilation of tntboard, this function examines these settings in
     # each track, replace the NULLs with a more suitable value.
     tracklist <- tntboard@TrackList
-    li.colors <- lapply(tracklist, slot, name = "Background")
+    li.colors <- lapply(tracklist, function (t) t@Background@.Data)
     colors <- unique(unlist(li.colors))
     
     if (length(colors) == 0L || length(colors) >= 2L)
@@ -1010,7 +1010,7 @@ compileBoard <- function (tntboard) {
     }
     else {
         li.rgs <- lapply(tntboard@TrackList,
-            function (track) range(track@Data)
+            function (track) range(trackData(track))
         )
         rg <- do.call('c', li.rgs)
         rg <- range(rg)
