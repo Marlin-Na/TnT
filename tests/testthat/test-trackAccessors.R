@@ -17,35 +17,24 @@ test_that("trackSpec: accessor and setter", {
     
     expect_identical(class(trackSpec(track)$background), "NULL")
     
-    # Set Background
-    trackSpec(track)$background <- "my background"
-    expect_identical(trackSpec(track)$background, "my background")
-    
-    trackSpec(track) <- list(background = "second background")
-    expect_identical(trackSpec(track)$background, "second background")
+    # Set single option
+    trackSpec(track, "background") <- "my background"
+    expect_identical(trackSpec(track, "background"), "my background")
     
     # Set multiple options
-    trackSpec(track) <- list(label = "test label", background = "black", height = 34L)
-    expect_identical(trackSpec(track)$label, "test label")
-    expect_identical(trackSpec(track)$background, "black")
+    trackSpec(track, c("label", "height")) <- list("my label", 42)
+    ts <- trackSpec(track)
+    expect_identical(ts[["height"]], 42)
+    expect_identical(ts[["label"]], "my label")
     
-    expect_identical(trackSpec(track)$height, 34L)
-    
-    trackSpec(track)$height <- 34
-    expect_identical(trackSpec(track)$height, 34)
+    # Or
+    trackSpec(track)$background <- "yellow"
+    expect_identical(trackSpec(track, "background"), "yellow")
     
     # Warning
-    expect_warning_notopt <- function (expr) {
-        expect_warning(expr, regexp = "not an available track option")
-    }
-    expect_warning_notopt(
-        trackSpec(track)$something <- 34
+    expect_warning(regexp = "not an available track option",
+        trackSpec(track, c("backg", "label")) <- list("red", "test label")
     )
-    expect_warning_notopt(
-        trackSpec(track) <- list(something = "joewf", background = "yellow")
-    )
-    expect_identical(trackSpec(track)$background, "yellow")
-    
     
     expect_error(trackSpec(track)$background <- 3) # class not compatible
     expect_error(trackSpec(track)$height <- "324")

@@ -590,7 +590,7 @@ trackSpec <- function (track, which = c("background", "height", "label")) {
             background = track@Background <- .mkScalarOrNull(value),
             height     = track@Height <- .mkScalarOrNull(value),
             label      = track@Label <- .mkScalarOrNull(value),
-            warning(which, "is not an available track option")
+            warning(which, " is not an available track option")
         )
         return(track)
     }
