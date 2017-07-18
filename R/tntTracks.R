@@ -523,6 +523,7 @@ if (FALSE) local({
 #### Track classes          ========
 setClassUnion("ScalarCharacterOrNull", c("ScalarCharacter", "NULL"))
 setClassUnion("ScalarNumericOrNull", c("ScalarNumeric", "ScalarInteger", "NULL"))
+
 setClass("TnTTrack", slots = c(
     # TODO: add ID slot?
     Background = "ScalarCharacterOrNull",
@@ -530,8 +531,7 @@ setClass("TnTTrack", slots = c(
     Label = "ScalarCharacterOrNull",
     
     Data = "TrackData",
-    Display = "list",
-    TooltipSpec = "list"
+    Display = "list"
 ))
 
 setClass("RangeTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
@@ -802,87 +802,7 @@ if (FALSE) local({
 })
 
 
-#' @export
-.updateTooltipSpec <- function (track) {
-    toolti <- tooltip(track)
-    stopifnot(
-        is.data.frame(toolti),
-        #all(sapply(toolti, is.atomic)),
-        !any(duplicated(names(toolti)))
-    )
-    
-    header <- track@Label
-    labels <- colnames <- colnames(toolti)
-    js.callback <- tooltipCallback(
-        header = header, labels = labels, colnames = colnames)
-    track@TooltipSpec <- list(
-        on = ma("click", js.callback)
-    )
-    track
-}
-# EXAMPLE
-if (FALSE) {
-    gr <- GRanges("chr12", IRanges(1:4 * 10 + 1, width = 5))
-    mcols(gr) <- data.frame(check.names = FALSE,
-        Location = "",
-        Chromosome = 12, Start = start(gr), End = end(gr),
-        Description = "",
-        "What's for?" = "Unknown"
-    )
-    gr
-    track <- BlockTrack(gr)
-    track
-    tooltip(track)
-    track@TooltipSpec
-    track <- .updateTooltipSpec(track)
-    track@TooltipSpec %>% asJC
-    TnTBoard(list(track), viewrange = GRanges("chr12", IRanges(1, 100)))
-    
-    track2 <- BlockTrack(gr)
-    track2@TooltipSpec
-    TnTBoard(list(track2), viewrange = GRanges("chr12", IRanges(1, 100)))
-}
 
-
-#### Track Compilation      ========
-
-# setGeneric("compileTrack",
-#            function (tntTrack) standardGeneric("compileTrack"))
-
-#' @export
-compileTrack <- function (tntTrack) {
-    tntTrack <- .updateTooltipSpec(tntTrack)
-    
-    li.spec <- list(
-        tnt.board.track = ma(),
-        label  = tntTrack@Label,
-        color  = tntTrack@Background,  # rename to "color"
-        height = tntTrack@Height
-    )
-    
-    jc.spec <- asJC(li.spec)
-    # Need to append tooltipspec to display
-    jc.display <- jc(
-        display = asJC(
-            c(tntTrack@Display,
-              tntTrack@TooltipSpec
-            )
-        )
-    )
-    jc.data <- jc(data = compileTrackData(trackData(tntTrack)))
-    c(jc.spec, jc.display, jc.data)
-}
-
-## Example
-if (FALSE) local({
-    btrack <- BlockTrack(GRanges("chr12", IRanges(21,234)))
-    compileTrack(btrack)
-    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
-    gtrack <- GeneTrack(txdb, seqlevel = "chr3")
-    compileTrack(gtrack)
-    ptrack <- PinTrack(GRanges("chr21", IRanges(1:10, width = 1), value = runif(10)))
-    compileTrack(ptrack)
-})
 
 
 

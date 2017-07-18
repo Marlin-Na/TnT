@@ -29,3 +29,9 @@ RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 URL: https://github.com/Marlin-Na/TnT
 BugReports: https://github.com/Marlin-Na/TnT/issues
+Collate: 
+    'JavascriptCascade.R'
+    'misc.R'
+    'tntTracks.R'
+    'tntTracks-compilation.R'
+    'trackWidget.R'
