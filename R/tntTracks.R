@@ -534,10 +534,12 @@ setClass("TnTTrack", slots = c(
     TooltipSpec = "list"
 ))
 
-setClass("BlockTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
-setClass("PinTrack", contains = "TnTTrack", slots = c(Data = "PosValTrackData"))
-setClass("GeneTrack", contains = "TnTTrack", slots = c(Data = "GeneTrackData"))
-setClass("TxTrack", contains = "TnTTrack", slots = c(Data = "TxTrackData"))
+setClass("RangeTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
+
+setClass("BlockTrack", contains = "RangeTrack", slots = c(Data = "RangeTrackData"))
+setClass("PinTrack", contains = "RangeTrack", slots = c(Data = "PosValTrackData"))
+setClass("GeneTrack", contains = "RangeTrack", slots = c(Data = "GeneTrackData"))
+setClass("TxTrack", contains = "RangeTrack", slots = c(Data = "TxTrackData"))
 
 #### Seqinfo Methods        ========
 #' @export
