@@ -86,3 +86,7 @@ if (FALSE) local({
     ptrack <- PinTrack(GRanges("chr21", IRanges(1:10, width = 1), value = runif(10)))
     compileTrack(ptrack)
 })
+
+
+
+
