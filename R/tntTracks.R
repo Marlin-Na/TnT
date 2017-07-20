@@ -663,7 +663,31 @@ if (FALSE) local({
 
 
 
+###   Show Method   ############################################################
 
+setMethod("show", signature = "TnTTrack",
+    function (object) {
+        tracktype <- class(object)
+        cat("A", tracktype, "\n")
+    }
+)
+
+setMethod("show", signature = "RangeTrack",
+    function (object) {
+        background <- trackSpec(object, "background")
+        height     <- trackSpec(object, "height")
+        label      <- trackSpec(object, "label")
+        callNextMethod()
+        cat("| Label:\t", label, "\n", sep="")
+        cat("| Background:\t", background, "\n", sep="")
+        cat("| Height:\t", height, "\n", sep="")
+        cat("| Data:\t")
+        dout <- capture.output(show(trackData(object)))
+        dout[-1] <- paste0("|  ", dout[-1])
+        dout <- paste(dout, collapse = "\n")
+        cat(dout)
+    }
+)
 
 
 
