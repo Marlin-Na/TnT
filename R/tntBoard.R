@@ -21,13 +21,16 @@ setClass("TnTBoard",
 
 
 #' @export
-TnTBoard <- function (tracklist, viewrange = GRanges()) {
+TnTBoard <- function (tracklist, view.range = GRanges(),
+                      coord.range = IRanges(), zoom.allow = IRanges()) {
+    
     if (is(tracklist, "TnTTrack"))
         tracklist <- list(tracklist)
     else
         stopifnot(all(sapply(tracklist, inherits, what = "TnTTrack")))
-    b <- new("TnTBoard", ViewRange = viewrange, CoordRange = IRanges(),
-             ZoomAllow = IRanges(), TrackList = tracklist)
+    
+    b <- new("TnTBoard", ViewRange = view.range, CoordRange = coord.range,
+             ZoomAllow = zoom.allow, TrackList = tracklist)
     b
 }
 
