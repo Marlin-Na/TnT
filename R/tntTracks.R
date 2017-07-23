@@ -62,51 +62,48 @@
 
 
 #' @export
-tooltipCallback <- function (header, labels, colnames) {
-    stopifnot(
-        length(header) == 1,
-        length(labels) == length(colnames)
-    )
+tooltipCallback <- function (header, entries) {
+    stopifnot(length(header) == 1)
+    
+    jc(tnr.tooltip_callback = ma(header, entries))
     
     
-    js.colmap <- {
-        df.colmap <- data.frame(label = labels, colname = colnames)
-        js(as.character(toJSON(df.colmap, pretty = 2)))
-    }
-    
-    js.func <- js(paste(collapse = "\n", c(
-        '                                                     ',
-        ' var getTooltipCall = function (d, header, colmap) { ',
-        '     var rows = [];                                  ',
-        '     for (var i = 0; i < colmap.length; i++) {       ',
-        '         var colname = colmap[i].colname;            ',
-        '         var row = {                                 ',
-        '             "label": colmap[i].label,               ',
-        '             "value": d.tooltip[colname]             ',
-        '         };                                          ',
-        '         rows.push(row);                             ',
-        '     }                                               ',
-        '     return { header: header, rows: rows };          ',
-        ' };                                                  ',
-        '                                                     '
-    )))
-    js.do <- asJS(jc(
-        tnt.tooltip.table = ma(),
-        width = 120,
-        call = ma(
-            js("this"),
-            jc(getTooltipCall = ma(js("d"), header, js.colmap))
-        )
-    ))
-    callback <- sprintf('function (d) {\n  %s \n  %s; \n}',
-                        js.func, js.do)
-    js(callback)
+    #js.colmap <- {
+    #    df.colmap <- data.frame(label = labels, colname = colnames)
+    #    js(as.character(toJSON(df.colmap, pretty = 2)))
+    #}
+    #
+    #js.func <- js(paste(collapse = "\n", c(
+    #    '                                                     ',
+    #    ' var getTooltipCall = function (d, header, colmap) { ',
+    #    '     var rows = [];                                  ',
+    #    '     for (var i = 0; i < colmap.length; i++) {       ',
+    #    '         var colname = colmap[i].colname;            ',
+    #    '         var row = {                                 ',
+    #    '             "label": colmap[i].label,               ',
+    #    '             "value": d.tooltip[colname]             ',
+    #    '         };                                          ',
+    #    '         rows.push(row);                             ',
+    #    '     }                                               ',
+    #    '     return { header: header, rows: rows };          ',
+    #    ' };                                                  ',
+    #    '                                                     '
+    #)))
+    #js.do <- asJS(jc(
+    #    tnt.tooltip.table = ma(),
+    #    width = 120,
+    #    call = ma(
+    #        js("this"),
+    #        jc(getTooltipCall = ma(js("d"), header, js.colmap))
+    #    )
+    #))
+    #callback <- sprintf('function (d) {\n  %s \n  %s; \n}',
+    #                    js.func, js.do)
+    #js(callback)
 }
 # EXAMPLE
 if (interactive()) local({
-    tooltipCallback(header = "Tooltip Header",
-                    labels = c("Start", "End", "Description"),
-                    colnames = c(23, 233, "A Block"))
+    tooltipCallback(header = "Tooltip Header", entries = c("Start", "End", "Description"))
 })
 
 

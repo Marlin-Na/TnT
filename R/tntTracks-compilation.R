@@ -23,8 +23,7 @@ setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
         )
         toolti.header <- trackSpec(track, "label")
         toolti.colnames <- colnames(toolti)
-        js.callback <- tooltipCallback(header = toolti.header, labels = toolti.colnames,
-                                       colnames = toolti.colnames)
+        js.callback <- tooltipCallback(header = toolti.header, entries = toolti.colnames)
         toolti.spec <- list(on = ma("click", js.callback))
         # Append to "Display"
         track@Display <- c(track@Display, toolti.spec)

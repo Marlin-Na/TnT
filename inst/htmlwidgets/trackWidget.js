@@ -8,6 +8,32 @@ HTMLWidgets.widget({
         
         // Some util functions
         var tnr = {};
+        
+        tnr.tooltip_callback = function (header, entries) {
+            
+            var header  = header;
+            var entries = entries;
+            
+            var ans = function (d) {
+                var tooltip_rows = [];
+                for (var i = 0; i < entries.length; i++) {
+                    var tooltip_row = {
+                        "label": entries[i],
+                        "value": d.tooltip[entries[i]]
+                    };
+                    tooltip_rows.push(tooltip_row);
+                }
+                
+                tnt.tooltip.table()
+                    .width(120)
+                    .call(this, {
+                        header: header,
+                        rows: tooltip_rows
+                    });
+            };
+            return ans;
+        };
+        
         tnr.add_index = function (data) {
             var d = data;
             for (var i = 0; i < data.length; i++) {
