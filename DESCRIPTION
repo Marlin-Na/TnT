@@ -35,5 +35,6 @@ Collate:
     'tntTracks.R'
     'tntBoard.R'
     'tntTracks-compilation.R'
+    'tntTracks-compositeTrack.R'
     'tntTracks-constructors.R'
     'trackWidget.R'
