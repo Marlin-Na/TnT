@@ -109,7 +109,7 @@ wakeupBoard <- function (tntboard) {
     stopifnot(length(viewrg) == 1)
     
     # Use seqlevel from the view range
-    seqlv <- seqlevels(viewrg)
+    seqlv <- seqlevelsInUse(viewrg)
     
     agg.seqinfo <- {
         li.t <- tracklist(tntboard)
