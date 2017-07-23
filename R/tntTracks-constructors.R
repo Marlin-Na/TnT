@@ -4,7 +4,7 @@
 
 
 #' @export
-new_track <- function (class, background, height, label, data, display) {
+new_track <- function (class, data, display = list(), background = NULL, height = NULL, label = NULL) {
     t <- new(Class = class, Data = data, Display = display)
     trackSpec(t, "background") <- background
     trackSpec(t, "height") <- height
