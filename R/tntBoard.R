@@ -34,6 +34,29 @@ TnTBoard <- function (tracklist, view.range = GRanges(),
     b
 }
 
+## EXAMPLE
+if (FALSE) {
+    library(GenomicFeatures)
+    gr <- GRanges("chr12", IRanges(1:4, width = 2))
+    t <- BlockTrack(gr)
+    b <- TnTBoard(t)
+    tracklist(b)
+}
+
+
+#### Accessors                  ========
+
+#' @export
+tracklist <- function (tntboard) {
+    tntboard@TrackList
+}
+
+#' @export
+`tracklist<-` <- function (tntboard, value) {
+    tntboard@TrackList <- value
+    tntboard
+}
+
 
 
 
@@ -41,10 +64,7 @@ TnTBoard <- function (tracklist, view.range = GRanges(),
 
 #' @export
 compileBoard <- function (tntboard) {
-    ## Modification to tntboard
-    b <- .selectTrackSeq(tntboard)
-    b <- .determineCoordRange(b)
-    b <- .consolidateBackground(b)
+    b <- wakeupBoard(tntboard)
     
     spec <- .compileBoardSpec(b)
     tklst <- .compileTrackList(b)
@@ -52,29 +72,154 @@ compileBoard <- function (tntboard) {
     tntdef
 }
 
-.consolidateBackground <- function (tntboard) {
-    # By the time of construction of each tnt track, the background color can
-    # be either set to "NULL" or a scalar character.
-    #
-    # Before compilation of tntboard, this function examines these settings in
-    # each track, replace the NULLs with a more suitable value.
-    tracklist <- tntboard@TrackList
-    li.colors <- lapply(tracklist, function (t) t@Background@.Data)
-    colors <- unique(unlist(li.colors))
+
+#' @export
+wakeupBoard <- function (tntboard) {
+    if (inherits(tntboard, "TnTGenome"))
+        stop() # TODO
     
-    if (length(colors) == 0L || length(colors) >= 2L)
-        default <- Biobase::mkScalar("white")
-    else
-        default <- Biobase::mkScalar(colors)
+    tntboard <- .selectView(tntboard)
+    tntboard <- .filterSeq(tntboard)
+    tntboard <- .selectCoord(tntboard)
+    tntboard <- .selectZoom(tntboard)
     
-    tracklist <- lapply(tracklist, replace = default,
-        function (track, replace) {
-            if (is.null(track@Background))
-                track@Background <- replace
-            track
+    tntboard
+}
+
+
+#' @export
+.filterSeq <- function (tntboard, use.seq = seqlevelsInUse(tntboard@ViewRange)) {
+    stopifnot(length(use.seq) == 1)
+    
+    li.t <- tracklist(tntboard)
+    li.t <- lapply(li.t, keepSeqlevels, value = use.seq, pruning.mode = "coarse")
+    
+    tntboard@TrackList <- li.t
+    tntboard
+}
+
+#' @export
+.selectCoord <- function (tntboard) {
+    if (length(tntboard@CoordRange) == 1)
+        return(tntboard)
+    if (length(tntboard@CoordRange) > 1)
+        stop()
+    
+    viewrg <- tntboard@ViewRange
+    stopifnot(length(viewrg) == 1)
+    
+    # Use seqlevel from the view range
+    seqlv <- seqlevels(viewrg)
+    
+    agg.seqinfo <- {
+        li.t <- tracklist(tntboard)
+        li.seqinfo <- lapply(li.t, seqinfo)
+        do.call(merge, li.seqinfo)
+    }
+    
+    seqlen <- {
+        if (!seqlv %in% seqlevels(agg.seqinfo))
+            stop("Seqlevel of the view range can not be found in the track list")
+        seqlengths(agg.seqinfo)[as.character(seqlv)]
+    }
+    
+    if (!is.na(seqlen)) {
+        tntboard@CoordRange <- IRanges(0, seqlen + 1)
+        return(tntboard)
+    }
+    
+    # Then seqlength is not known
+    coord <- {
+        li.t <- tracklist(tntboard)
+        if (all(sapply(li.t, inherits, what = "RangeTrack"))) {
+            # TODO: include the cases that not all of the tracks are RangeTrack
+            ## Aggregate from track data
+            li.rgs <- lapply(li.t,
+                function (track) range(trackData(track))
+            )
+            rg <- do.call('c', li.rgs)
+            rg <- range(rg)
+            rg <- keepSeqlevels(rg, seqlv, pruning.mode = "coarse")
+            stopifnot(length(rg) == 1) # TODO: However, there will be cases that all the tracks are empty
+            coord <- ranges(rg) * .7
         }
-    )
-    tntboard@TrackList <- tracklist
+        # TODO: other cases?
+        else {
+            ## Use the view range
+            coord <- ranges(tntboard@ViewRange) * .7
+        }
+        coord
+    }
+    
+    msg <- sprintf("Seqlenth is unknown, automatically set coordinate range to %s-%s",
+                   start(coord), end(coord))
+    message(msg)
+    
+    tntboard@CoordRange <- coord
+    tntboard
+}
+
+#' @export
+.selectView <- function (tntboard) {
+    viewrange0 <- tntboard@ViewRange
+    if (length(viewrange0) == 1)
+        return(tntboard) # Already specified
+    if (length(viewrange0) > 1)
+        stop()
+    
+    # ViewRange is not set
+    tracklist0 <- tracklist(tntboard)
+    
+    li.tseqs <- lapply(tracklist0, seqlevelsInUse)
+    li.tseqs <- li.tseqs[lengths(li.tseqs) != 0]
+    
+    if (length(li.tseqs) == 0) {
+        # No "InUse" seqlevels
+        li.tseqs <- lapply(tracklist0, seqlevels)
+        li.tseqs <- li.tseqs[lengths(li.tseqs) != 0]
+    }
+    
+    if (length(li.tseqs) == 0)
+        # All seqlevels are empty...
+        commonseqs <- character()
+    else
+        commonseqs <- Reduce(intersect, li.tseqs)
+    
+    if (length(commonseqs) == 0)
+        stop("No common seqlevel is found in the track list.")
+    
+    if (length(commonseqs) == 1)
+        sel.seq <- commonseqs
+    else
+        sel.seq <- commonseqs[1]
+    
+    viewrg <- {
+        # TODO
+        GRanges(sel.seq, IRanges(1, 1000))
+    }
+    
+    tntboard@ViewRange <- viewrg
+    
+    message <- sprintf("View range is not specified, automatically selecting %s to %s on seqlevel %s",
+                   start(viewrg), end(viewrg), seqlevels(viewrg))
+    message(message)
+    
+    tntboard
+}
+
+#' @export
+.selectZoom <- function (tntboard) {
+    zoomalo <- tntboard@ZoomAllow
+    if (length(zoomalo) == 1)
+        return(tntboard)
+    if (length(zoomalo) > 1)
+        stop()
+    
+    # Then ZoomAllow is not set
+    coord <- tntboard@CoordRange
+    stopifnot(length(coord) == 1)
+    
+    tntboard@ZoomAllow <- IRanges(10, width(coord) + 1)
     tntboard
 }
 
@@ -102,52 +247,7 @@ compileBoard <- function (tntboard) {
     )
     jc.board.spec
 }
-
-#' @export
-.selectTrackSeq <- function (tntboard) {
-    tracklist0 <- tntboard@TrackList
-    viewrange0 <- tntboard@ViewRange
-    if (length(viewrange0)) {
-        stopifnot(length(viewrange0) == 1)
-        seqlv <- seqlevelsInUse(viewrange0)
-    }
-    else {
-        # TODO: Find a proper view range
-        stop()
-    }
-    tracklist <- lapply(tracklist0, keepSeqlevels,
-                        value = seqlv, pruning.mode = "coarse")
-    tntboard@TrackList <- tracklist
-    tntboard
-}
-
-#' @export
-.determineCoordRange <- function (tntboard) {
-    coordrange0 <- tntboard@CoordRange
     
-    seqlens <- vapply(tntboard@TrackList, seqlengths, integer(1))
-    seqlen <- unique(seqlens[!is.na(seqlens)])
-    
-    if (length(seqlen) >= 2L) {
-        stop()
-    }
-    else if (length(seqlen) == 1L) {
-        coordrange <- IRanges(start = 0L, end = seqlen)
-    }
-    else {
-        li.rgs <- lapply(tntboard@TrackList,
-            function (track) range(trackData(track))
-        )
-        rg <- do.call('c', li.rgs)
-        rg <- range(rg)
-        stopifnot(length(rg) == 1)
-        coordrange <- ranges(rg)
-    }
-    tntboard@CoordRange <- coordrange
-    tntboard@ZoomAllow <- IRanges(start = 10, end = width(coordrange))
-    tntboard
-}
-
 #' @export
 .compileTrackList <- function (tntboard) {
     tracklist <- tntboard@TrackList
@@ -156,6 +256,36 @@ compileBoard <- function (tntboard) {
     jc <- asJC(li.jc)
     jc
 }
+
+
+# .consolidateBackground <- function (tntboard) {
+#     # By the time of construction of each tnt track, the background color can
+#     # be either set to "NULL" or a scalar character.
+#     #
+#     # Before compilation of tntboard, this function examines these settings in
+#     # each track, replace the NULLs with a more suitable value.
+#     tracklist <- tntboard@TrackList
+#     li.colors <- lapply(tracklist, function (t) t@Background@.Data)
+#     colors <- unique(unlist(li.colors))
+#     
+#     if (length(colors) == 0L || length(colors) >= 2L)
+#         default <- Biobase::mkScalar("white")
+#     else
+#         default <- Biobase::mkScalar(colors)
+#     
+#     tracklist <- lapply(tracklist, replace = default,
+#         function (track, replace) {
+#             if (is.null(track@Background))
+#                 track@Background <- replace
+#             track
+#         }
+#     )
+#     tntboard@TrackList <- tracklist
+#     tntboard
+# }
+
+
+
 
 ## Printing     ====
 #' @export
