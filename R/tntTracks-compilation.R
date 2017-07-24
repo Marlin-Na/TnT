@@ -9,13 +9,15 @@
 
 
 #' @export
-.wakeupRangeTrack <- function (track, feaname, extra = list()) {
+.initDisplay <- function (track, feaname, extra = list()) {
+    # For RangeTrack
     
     di.init <- setNames(list(ma()), feaname)
     di.color <- list(color = js("function (d) {return d.color;}"))
     di.index <- list(index = js("function (d) {return d.key;}"))
     di.extra <- extra
     ## For certain types of track
+    ## TODO: we should use method dispatch instead
     di.domain <- list(domain = if (inherits(track, "DomainValTrack")) track@Domain
                                else NULL)
     di.tooltip <- {
@@ -37,6 +39,17 @@
     track
 }
 
+#' @export
+.convertCol <- function (track) {
+    # TODO: if all the colors are identical,
+    #       we may modify the color callback to reduce the size of file
+    col <- trackData(track)$color
+    if (length(col) == 0)
+        return(track)
+    col <- gplots::col2hex(col)
+    trackData(track)$color <- col
+    track
+}
 
 
 #' @export
@@ -52,7 +65,9 @@ setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
             PinTrack = "tnt.board.track.feature.pin",
             stop()
         )
-        .wakeupRangeTrack(track, feaname = feaname)
+        track <- .initDisplay(track, feaname = feaname)
+        track <- .convertCol(track)
+        track
     }
 )
 # EXAMPLE

@@ -12,16 +12,6 @@ new_track <- function (class, data, display = list(), background = NULL, height 
     t
 }
 
-.parseCol <- function (col) {
-    len <- length(col)
-    # TODO: set colors for every range?
-    if (len > 1L)
-        stop("Length of color > 1")
-    
-    if (len) gplots::col2hex(col)
-    else     col
-}
-
 #' @export
 BlockTrack <- function (range, label = deparse(substitute(range)),
                         tooltip = mcols(range), color = "blue", background = NULL,
