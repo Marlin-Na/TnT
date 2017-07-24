@@ -64,42 +64,7 @@
 #' @export
 tooltipCallback <- function (header, entries) {
     stopifnot(length(header) == 1)
-    
     jc(tnr.tooltip_callback = ma(header, entries))
-    
-    
-    #js.colmap <- {
-    #    df.colmap <- data.frame(label = labels, colname = colnames)
-    #    js(as.character(toJSON(df.colmap, pretty = 2)))
-    #}
-    #
-    #js.func <- js(paste(collapse = "\n", c(
-    #    '                                                     ',
-    #    ' var getTooltipCall = function (d, header, colmap) { ',
-    #    '     var rows = [];                                  ',
-    #    '     for (var i = 0; i < colmap.length; i++) {       ',
-    #    '         var colname = colmap[i].colname;            ',
-    #    '         var row = {                                 ',
-    #    '             "label": colmap[i].label,               ',
-    #    '             "value": d.tooltip[colname]             ',
-    #    '         };                                          ',
-    #    '         rows.push(row);                             ',
-    #    '     }                                               ',
-    #    '     return { header: header, rows: rows };          ',
-    #    ' };                                                  ',
-    #    '                                                     '
-    #)))
-    #js.do <- asJS(jc(
-    #    tnt.tooltip.table = ma(),
-    #    width = 120,
-    #    call = ma(
-    #        js("this"),
-    #        jc(getTooltipCall = ma(js("d"), header, js.colmap))
-    #    )
-    #))
-    #callback <- sprintf('function (d) {\n  %s \n  %s; \n}',
-    #                    js.func, js.do)
-    #js(callback)
 }
 # EXAMPLE
 if (interactive()) local({
@@ -134,37 +99,41 @@ setClass("TxTrackData", contains = "RangeTrackData")
 NoTrackData <- function () new("NoTrackData")
 
 #' @export
-RangeTrackData <- function (range, tooltip = mcols(range)) {
-    tooltip <-
-        if (is.null(tooltip))
-            data.frame(matrix( , nrow = length(range), ncol = 0))
-        else 
-            as.data.frame(tooltip, optional = TRUE)
-    
+RangeTrackData <- function (range, color = "black", tooltip = mcols(range), key = seq_along(range)) {
     range <-
         if (is(range, "IRanges"))
             GRanges(seqnames = "UnKnown", ranges = range, strand = "*")
         else
             as(range, "GRanges")
     
+    color <- if (length(range)) color else character(0)
+    
+    tooltip <-
+        if (is.null(tooltip))
+            data.frame(matrix( , nrow = length(range), ncol = 0))
+        else 
+            as.data.frame(tooltip, optional = TRUE)
+    
     mcols(range) <- NULL
     range$tooltip <- tooltip
+    range$color <- color
+    range$key <- key
     new("RangeTrackData", range)
 }
 
 #' @export
-PosTrackData <- function (pos, tooltip = mcols(pos)) {
-    trackdata <- RangeTrackData(range = pos, tooltip = tooltip)
+PosTrackData <- function (pos, color = "black", tooltip = mcols(pos)) {
+    trackdata <- RangeTrackData(range = pos, color = color, tooltip = tooltip)
     trackdata <- as(trackdata, "PosTrackData")
     validObject(trackdata) # Ensure all the width equals to one
     trackdata
 }
 
 #' @export
-PosValTrackData <- function (pos, val, tooltip = mcols(pos)) {
+PosValTrackData <- function (pos, val, color = "black", tooltip = mcols(pos)) {
     mcols(pos) <- NULL
     
-    trackdata <- RangeTrackData(range = pos, tooltip = tooltip)
+    trackdata <- RangeTrackData(range = pos, color = color, tooltip = tooltip)
     trackdata$val <- val
     
     trackdata <- as(trackdata, "PosValTrackData")
@@ -175,13 +144,14 @@ PosValTrackData <- function (pos, val, tooltip = mcols(pos)) {
 
 #' @export
 GeneTrackData <- function (range, labels = paste("Gene", mcols(range)$gene_id),
-                           ids = make.unique(labels), tooltip = mcols(range)) {
+                           ids = make.unique(labels), color = "black", tooltip = mcols(range)) {
     force(labels)
     force(ids)
     force(tooltip)
+    
     mcols(range) <- NULL
     
-    range <- RangeTrackData(range, tooltip)
+    range <- RangeTrackData(range, color, tooltip)
     range$display_label <- strandlabel(labels, strand(range))
     range$id <- ids
     
@@ -199,7 +169,7 @@ if (FALSE) {
 }
 
 #' @export
-GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
+GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "black") {
     seqlevel.ori <- seqlevels(txdb)
     seqlevels(txdb) <- seqlevel         # Set and restore the seqlevels
     # We must restore the seqlevel of the txdb since it is a reference class
@@ -214,7 +184,14 @@ GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
         "Gene ID" = gr$gene_id,
         check.names = FALSE
     )
-    GeneTrackData(range = gr, labels = labels, tooltip = tooltip)
+    
+    if (length(color) > 1) {
+        color <- color[[1]]
+        msg <- sprintf("GeneTrackDataFromTxDb does not support multiple color values, use %s", color)
+        warning(msg)
+    }
+    
+    GeneTrackData(range = gr, labels = labels, color = color, tooltip = tooltip)
 }
 ### EXAMPLE
 if (FALSE) {
@@ -223,7 +200,7 @@ if (FALSE) {
 }
 
 #' @export
-TxTrackDataFromGRangesList <- function (grl, tooltip = mcols(grl),
+TxTrackDataFromGRangesList <- function (grl, color = "red", tooltip = mcols(grl),
                                         labels = names(grl)) {
     force(tooltip)
     force(labels)
@@ -236,6 +213,7 @@ TxTrackDataFromGRangesList <- function (grl, tooltip = mcols(grl),
     gr.txs <- unlist(tx)
     mcols(gr.txs) <- NULL
     
+    gr.txs$color <- if (length(gr.txs)) color else character(0)
     gr.txs$tooltip <- as.data.frame(tooltip, optional = TRUE)[
         seq_along(grl)[lengths(grl) != 0], ]
     gr.txs$key <- seq_along(grl)[lengths(grl) != 0]
@@ -271,7 +249,7 @@ if (FALSE) {
 
 
 #' @export
-TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
+TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "red") {
     ## Set and restore seqlevels of txdb
     seqlevel.ori <- seqlevels(txdb)
     seqlevels(txdb) <- seqlevel
@@ -333,6 +311,13 @@ TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb)) {
         check.names = FALSE
     )
     gr.txs$gene_id <- NULL
+    
+    if (length(color) > 1) {
+        color <- color[[1]]
+        msg <- sprintf("TxTrackDataFromTxDb does not support multiple color values, use %s", color)
+        warning(msg)
+    }
+    gr.txs$color <- if (length(gr.txs)) color else character(0)
     new("TxTrackData", gr.txs)
 }
 
@@ -358,6 +343,17 @@ setValidity("RangeTrackData",
                 return("Missing 'tooltip' meta-column in RangeTrackData")
             else
                 return("The 'tooltip' meta-column should be a data frame")
+        if (!is.character(object$color))
+            if (is.null(object$color))
+                return("Missing 'color' meta-column in RangeTrackData")
+            else
+                return("The 'color' meta-column should be a character")
+        
+        k <- object$key
+        if (is.null(k))
+            return("Missing 'key' meta-column in RangeTrackData")
+        if (length(k) != length(unique(k)))
+            return("'key' is not unique in RangeTrackData")
         TRUE
     }
 )
@@ -403,18 +399,17 @@ setGeneric("compileTrackData",
 setMethod("compileTrackData", signature = "NoTrackData",
     function (trackData)
         jc(tnt.board.track.data.empty = NoArg)
-) 
+)
 
 #' @export
 setMethod("compileTrackData", signature = "RangeTrackData",
     function (trackData) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
-        df <- as.data.frame(trackData, optional = TRUE)[
-            c("start", "end", "tooltip")]
+        df <- as.data.frame(trackData, optional = TRUE) [
+            c("start", "end", colnames(mcols(trackData)))]
         jc.data <- jc(
             tnt.board.track.data.sync = ma(),
-            retriever = jc(tnr.range_data_retriever =
-                               jc(tnr.add_index = df))
+            retriever = jc(tnr.range_data_retriever = df)
         )
         jc.data
     }
@@ -432,37 +427,18 @@ setMethod("compileTrackData", signature = "PosTrackData",
         stopifnot(length(unique(seqnames(trackData))) == 1)
         stopifnot(all(width(trackData) == 1))
         
-        df <- as.data.frame(trackData, optional = TRUE)[
-            c("start", "tooltip")]
+        df <- as.data.frame(trackData, optional = TRUE)[c("start", colnames(mcols(trackData)))]
         df <- S4Vectors::rename(df, c(start = "pos"))
         
         jc.data <- jc(
             tnt.board.track.data.sync = ma(),
-            retriever = jc(tnr.pos_data_retriever =
-                               jc(tnr.add_index = df))
+            retriever = jc(tnr.pos_data_retriever = df)
         )
         jc.data
     }
 )
 
-#' @export
-setMethod("compileTrackData", signature = "PosValTrackData",
-    function (trackData) {
-        stopifnot(length(unique(seqnames(trackData))) == 1)
-        stopifnot(all(width(trackData) == 1))
-        
-        df <- as.data.frame(trackData, optional = TRUE)[
-            c("start", "val","tooltip")]
-        df <- S4Vectors::rename(df, c(start = "pos"))
-        
-        jc.data <- jc(
-            tnt.board.track.data.sync = ma(),
-            retriever = jc(tnr.pos_data_retriever =
-                               jc(tnr.add_index = df))
-        )
-        jc.data
-    }
-)
+
 ##EXAMPLE
 if (FALSE) {
     gpos <- GRanges("chr12", IRanges(seq(1, 10, 3), width = 1))
@@ -474,37 +450,7 @@ if (FALSE) {
     compileTrackData(pt)
 }
 
-#' @export
-setMethod("compileTrackData", signature = "GeneTrackData",
-    function (trackData) {
-        stopifnot(length(unique(seqnames(trackData))) == 1)
-        
-        df <- as.data.frame(trackData, optional = TRUE)[
-            c("start", "end", "tooltip", "display_label", "id")]
-        
-        jc.data <- jc(
-            tnt.board.track.data.sync = ma(),
-            # Unlike RangeTrackData or PosTrackData, here is no need to add index
-            retriever = jc(tnr.range_data_retriever = df)
-        )
-        jc.data
-        
-    }
-)
 
-#' @export
-setMethod("compileTrackData", signature = "TxTrackData",
-    function (trackData) {
-        stopifnot(length(unique(seqnames(trackData))) == 1)
-        df <- as.data.frame(trackData, optional = TRUE)
-        df <- df[c("start", "end", "display_label", "key", "id", "exons", "tooltip")]
-        jc.data <- jc(
-            tnt.board.track.data.sync = ma(),
-            retriever = jc(tnr.range_data_retriever = df)
-        )
-        jc.data
-    }
-)
 
 # EXAMPLE
 if (FALSE) local({
