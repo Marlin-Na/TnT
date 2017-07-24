@@ -221,7 +221,8 @@ wakeupBoard <- function (tntboard) {
     coord <- tntboard@CoordRange
     stopifnot(length(coord) == 1)
     
-    tntboard@ZoomAllow <- IRanges(10, width(coord) + 1)
+    tntboard@ZoomAllow <- if (width(coord) <= 15) IRanges(1, 100)
+                          else IRanges(10, width(coord) + 100)
     tntboard
 }
 

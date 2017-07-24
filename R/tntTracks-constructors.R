@@ -8,7 +8,8 @@ new_track <- function (class, data, display = list(), background = "white", heig
     t <- new(Class = class, Data = data, Display = display, ...)
     trackSpec(t, "background") <- background
     trackSpec(t, "height") <- height
-    trackSpec(t, "label") <- label
+    ## TODO: can label be NULL? How about the tooltip header?
+    trackSpec(t, "label") <- if (is.null(label)) "" else label
     t
 }
 
