@@ -1,0 +1,58 @@
+---
+title: "Colors of Track"
+---
+
+Colors of features in a track can be specified with a character vector which will
+be expanded to the same length of track data. The values will be part of the track
+data and can be modified after the track is constructed.
+
+
+```{r}
+suppressPackageStartupMessages({
+    library(TnT)
+    library(GenomicFeatures)
+    library(magrittr)
+})
+```
+
+
+## R Color Names
+
+This example shows all available color names in R with a block track.
+
+
+```{r}
+colors <- colors()
+data <- GRanges("Unknown", IRanges(seq_along(colors), width = 2), "Color Name" = colors)
+track <- BlockTrack(data, color = data$"Color Name", label = NULL)
+TnTBoard(track)
+```
+
+<br/> <br/>
+
+## Use Color Palettes
+
+R have functions to assist the picking of colors, by which a qualitative value
+can be mapped to colors, e.g. the `rainbow` function.
+
+```{r}
+# A helper function
+showCols <- function (colors) {
+    data <- GRanges("Unknown", IRanges(seq_along(colors), width = 2), "Color" = colors)
+    track <- BlockTrack(data, color = data$"Color", label = NULL)
+    TnTBoard(track, view.range = range(data))
+}
+showCols(rainbow(6))
+showCols(heat.colors(6))
+showCols(terrain.colors(6))
+showCols(topo.colors(6))
+showCols(cm.colors(6))
+```
+
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
+

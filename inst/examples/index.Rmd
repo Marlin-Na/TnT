@@ -13,6 +13,9 @@ This page contains examples of visualization created with TnT package.
 - Tooltip
     - [Tooltip display for tracks](track-tooltip-display.html)
 
+- Colors
+    - [Feature colors](track-colors.html)
+
 - Low level utils
     - [trackWidget](trackWidget.html)
 
