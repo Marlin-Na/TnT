@@ -24,17 +24,15 @@ new_track <- function (class, data, display = list(), background = NULL, height 
 
 #' @export
 BlockTrack <- function (range, label = deparse(substitute(range)),
-                        tooltip = mcols(range), color = NULL, background = NULL,
+                        tooltip = mcols(range), color = "blue", background = NULL,
                         height = 30) {
     
-    color <- .parseCol(color)
-    
-    data <- RangeTrackData(range = range, tooltip = tooltip)
+    data <- RangeTrackData(range = range, tooltip = tooltip, color = color)
     display <- list(
         tnt.board.track.feature.block = ma(),
-        color = color,
+        color = js("function (d) {return d.color;}"),
         # The index slot is actually added on JS side
-        index = js("function (d) {return d['.index.'];}")
+        index = js("function (d) {return d.key;}")
     )
     new_track("BlockTrack",
               b = background, h = height, l = label, da = data, di = display)
@@ -43,20 +41,19 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
 #' @export
 PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
                       label = deparse(substitute(pos)),
-                      tooltip = mcols(pos), color = NULL, background = NULL,
+                      tooltip = mcols(pos), color = "red", background = NULL,
                       height = 40) {
-    color <- .parseCol(color)
     
     if (is.null(value))
         stop("Value (i.e. height) at each position not specified.")
     stopifnot(length(domain) == 2)
     
-    data <- PosValTrackData(pos = pos, val = value, tooltip = tooltip)
+    data <- PosValTrackData(pos = pos, val = value, tooltip = tooltip, color = color)
     display <- list(
         tnt.board.track.feature.pin = ma(),
         domain = domain,
-        color = color,
-        index = js("function (d) {return d['.index.'];}")
+        color = js("function (d) {return d.color;}"),
+        index = js("function (d) {return d.key;}")
     )
     new_track("PinTrack",
               b = background, h = height, l = label, da = data, di = display)
@@ -65,14 +62,13 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
 #' @export
 GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
                        label = deparse(substitute(txdb)), # TODO: tooltip?
-                       color = NULL, background = NULL, height = 100) {
-    color <- .parseCol(color)
+                       color = "black", background = NULL, height = 100) {
     
-    data <- GeneTrackDataFromTxDb(txdb = txdb, seqlevel = seqlevel)
+    data <- GeneTrackDataFromTxDb(txdb = txdb, seqlevel = seqlevel, color = color)
     display <- list(
         tnt.board.track.feature.genome.gene = ma(),
         # TODO: color for each range
-        color = color
+        color = js("function (d) {return d.color;}")
     )
     new_track("GeneTrack",
               b = background, h = height, l = label, da = data, di = display)
@@ -82,17 +78,15 @@ GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
 FeatureTrack <- function (range, label = deparse(substitute(range)),
                           tooltip = mcols(range),
                           names = base::names(range),
-                          color = NULL, background = NULL, height = 200) {
-    color <- .parseCol(color)
-    
+                          color = "black", background = NULL, height = 200) {
     force(tooltip)
     force(names)
     data <- GeneTrackData(range, labels = names,
-                          ids = seq_along(range), tooltip = tooltip)
+                          ids = seq_along(range), tooltip = tooltip, color = color)
     display <- list(
         tnt.board.track.feature.genome.gene = ma(),
         # TODO
-        color = color
+        color = js("function (d) {return d.color;}")
     )
     new_track("GeneTrack",
               b = background, h = height, l = label, da = data, di = display)
@@ -113,19 +107,15 @@ if (FALSE) {
 GroupFeatureTrack <- function (grangelist, label = deparse(substitute(grangelist)),
                                tooltip = mcols(grangelist),
                                names = base::names(grangelist),
-                               color = NULL, background = NULL, height = 200) {
-    color <- .parseCol(color)
-    
+                               color = "black", background = NULL, height = 200) {
     force(tooltip)
     force(names)
     
-    data <- TxTrackDataFromGRangesList(grangelist, tooltip = tooltip,
+    data <- TxTrackDataFromGRangesList(grangelist, tooltip = tooltip, color = color,
                                        labels = names)
     display <- list(
         tnt.board.track.feature.genome.transcript = ma(),
-        # TODO: this is not the correct approach
-        color = if (is.null(color)) js('function (t) { return "red" }')
-                else js(sprintf('function (t) { return "%s" }', color))
+        color = js("function (d) { return d.color; }")
     )
     new_track("TxTrack",
               b = background, h = height, l = label, da = data, di = display)
@@ -143,15 +133,12 @@ if (FALSE) {
 #' @export
 TxTrack <- function (txdb, seqlevel = seqlevels(txdb),
                      label = deparse(substitute(txdb)),
-                     color = NULL, background = NULL, height = 300) {
-    color <- .parseCol(color)
+                     color = "red", background = NULL, height = 300) {
     
-    data <- TxTrackDataFromTxDb(txdb, seqlevel = seqlevel)
+    data <- TxTrackDataFromTxDb(txdb, seqlevel = seqlevel, color = color)
     display <- list(
         tnt.board.track.feature.genome.transcript = ma(),
-        # TODO: this is not the correct approach
-        color = if (is.null(color)) js('function (t) { return "red" }')
-                else js(sprintf('function (t) { return "%s" }', color))
+        color = js("function (d) { return d.color; }")
     )
     
     new_track("TxTrack",
