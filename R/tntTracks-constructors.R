@@ -28,14 +28,8 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
                         height = 30) {
     
     data <- RangeTrackData(range = range, tooltip = tooltip, color = color)
-    display <- list(
-        tnt.board.track.feature.block = ma(),
-        color = js("function (d) {return d.color;}"),
-        # The index slot is actually added on JS side
-        index = js("function (d) {return d.key;}")
-    )
     new_track("BlockTrack",
-              b = background, h = height, l = label, da = data, di = display)
+              b = background, h = height, l = label, da = data, di = list())
 }
 
 #' @export
@@ -49,14 +43,8 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
     stopifnot(length(domain) == 2)
     
     data <- PosValTrackData(pos = pos, val = value, tooltip = tooltip, color = color)
-    display <- list(
-        tnt.board.track.feature.pin = ma(),
-        domain = domain,
-        color = js("function (d) {return d.color;}"),
-        index = js("function (d) {return d.key;}")
-    )
     new_track("PinTrack",
-              b = background, h = height, l = label, da = data, di = display, Domain = domain)
+              b = background, h = height, l = label, da = data, di = list(), Domain = domain)
 }
 
 #' @export
@@ -65,13 +53,8 @@ GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
                        color = "black", background = NULL, height = 100) {
     
     data <- GeneTrackDataFromTxDb(txdb = txdb, seqlevel = seqlevel, color = color)
-    display <- list(
-        tnt.board.track.feature.genome.gene = ma(),
-        # TODO: color for each range
-        color = js("function (d) {return d.color;}")
-    )
     new_track("GeneTrack",
-              b = background, h = height, l = label, da = data, di = display)
+              b = background, h = height, l = label, da = data, di = list())
 }
 
 #' @export
@@ -83,13 +66,8 @@ FeatureTrack <- function (range, label = deparse(substitute(range)),
     force(names)
     data <- GeneTrackData(range, labels = names,
                           ids = seq_along(range), tooltip = tooltip, color = color)
-    display <- list(
-        tnt.board.track.feature.genome.gene = ma(),
-        # TODO
-        color = js("function (d) {return d.color;}")
-    )
     new_track("GeneTrack",
-              b = background, h = height, l = label, da = data, di = display)
+              b = background, h = height, l = label, da = data, di = list())
 }
 ##EXAMPLE
 if (FALSE) {
@@ -113,12 +91,8 @@ GroupFeatureTrack <- function (grangelist, label = deparse(substitute(grangelist
     
     data <- TxTrackDataFromGRangesList(grangelist, tooltip = tooltip, color = color,
                                        labels = names)
-    display <- list(
-        tnt.board.track.feature.genome.transcript = ma(),
-        color = js("function (d) { return d.color; }")
-    )
     new_track("TxTrack",
-              b = background, h = height, l = label, da = data, di = display)
+              b = background, h = height, l = label, da = data, di = list())
 }
 # EXAMPLE
 if (FALSE) {
@@ -136,11 +110,7 @@ TxTrack <- function (txdb, seqlevel = seqlevels(txdb),
                      color = "red", background = NULL, height = 300) {
     
     data <- TxTrackDataFromTxDb(txdb, seqlevel = seqlevel, color = color)
-    display <- list(
-        tnt.board.track.feature.genome.transcript = ma(),
-        color = js("function (d) { return d.color; }")
-    )
     
     new_track("TxTrack",
-              b = background, h = height, l = label, da = data, di = display)
+              b = background, h = height, l = label, da = data, di = list())
 }
