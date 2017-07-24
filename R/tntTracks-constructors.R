@@ -4,8 +4,8 @@
 
 
 #' @export
-new_track <- function (class, data, display = list(), background = NULL, height = NULL, label = NULL) {
-    t <- new(Class = class, Data = data, Display = display)
+new_track <- function (class, data, display = list(), background = NULL, height = NULL, label = NULL, ...) {
+    t <- new(Class = class, Data = data, Display = display, ...)
     trackSpec(t, "background") <- background
     trackSpec(t, "height") <- height
     trackSpec(t, "label") <- label
@@ -56,7 +56,7 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
         index = js("function (d) {return d.key;}")
     )
     new_track("PinTrack",
-              b = background, h = height, l = label, da = data, di = display)
+              b = background, h = height, l = label, da = data, di = display, Domain = domain)
 }
 
 #' @export

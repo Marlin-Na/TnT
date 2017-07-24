@@ -480,9 +480,18 @@ setClass("TnTTrack", slots = c(
 setClass("RangeTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
 
 setClass("BlockTrack", contains = "RangeTrack", slots = c(Data = "RangeTrackData"))
-setClass("PinTrack", contains = "RangeTrack", slots = c(Data = "PosValTrackData"))
 setClass("GeneTrack", contains = "RangeTrack", slots = c(Data = "GeneTrackData"))
 setClass("TxTrack", contains = "RangeTrack", slots = c(Data = "TxTrackData"))
+
+setClass("DomainValTrack", contains = "RangeTrack", slots = c(Domain = "numeric"))
+setValidity("DomainValTrack",
+    function (object) if (length(object@Domain) != 2)
+        "Domain must be a length-two numeric vector" else TRUE
+)
+
+setClass("PinTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrackData"))
+
+
 
 #### Seqinfo Methods        ========
 #' @export
@@ -624,6 +633,8 @@ setMethod("show", signature = "RangeTrack",
         cat("| Label:\t", label, "\n", sep="")
         cat("| Background:\t", background, "\n", sep="")
         cat("| Height:\t", height, "\n", sep="")
+        if (inherits(object, "DomainValTrack"))
+            cat("| Domain:\t", object@Domain, "\n", sep="")
         cat("| Data:\t")
         dout <- capture.output(show(trackData(object)))
         dout[-1] <- paste0("|  ", dout[-1])

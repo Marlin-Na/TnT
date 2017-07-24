@@ -9,12 +9,16 @@
 
 
 #' @export
-setGeneric("wakeupTrack", function (track) standardGeneric("wakeupTrack"))
-
-setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
-    function (track) {
-      # Update tooltip setting
-      # TODO: move the template to js side
+.wakeupRangeTrack <- function (track, feaname, extra = list()) {
+    
+    di.init <- setNames(list(ma()), feaname)
+    di.color <- list(color = js("function (d) {return d.color;}"))
+    di.index <- list(index = js("function (d) {return d.key;}"))
+    di.extra <- extra
+    ## For certain types of track
+    di.domain <- list(domain = if (inherits(track, "DomainValTrack")) track@Domain
+                               else NULL)
+    di.tooltip <- {
         toolti <- tooltip(track)
         stopifnot(
             is.data.frame(toolti),
@@ -22,14 +26,33 @@ setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
             !any(duplicated(names(toolti)))
         )
         toolti.header <- trackSpec(track, "label")
-        toolti.colnames <- colnames(toolti)
-        js.callback <- tooltipCallback(header = toolti.header, entries = toolti.colnames)
-        toolti.spec <- list(on = ma("click", js.callback))
-        # Append to "Display"
-        track@Display <- c(track@Display, toolti.spec)
-        
-      # TODO2: May optionally simplify the "color" callback
-        track
+        toolti.entries <- colnames(toolti)
+        list(on = ma("click",
+            tooltipCallback(header = toolti.header, entries = toolti.entries)
+        ))
+    }
+    
+    display <- c(di.init, di.color, di.index, di.extra, di.domain, di.tooltip)
+    track@Display <- display
+    track
+}
+
+
+
+#' @export
+setGeneric("wakeupTrack", function (track) standardGeneric("wakeupTrack"))
+
+setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
+    function (track) {
+        class <- class(track)
+        feaname <- switch(class,
+            BlockTrack = "tnt.board.track.feature.block",
+            GeneTrack = "tnt.board.track.feature.genome.gene",
+            TxTrack = "tnt.board.track.feature.genome.transcript",
+            PinTrack = "tnt.board.track.feature.pin",
+            stop()
+        )
+        .wakeupRangeTrack(track, feaname = feaname)
     }
 )
 # EXAMPLE
@@ -46,7 +69,7 @@ if (FALSE) {
     track
     wakeupTrack(track)
     
-    TnTBoard(list(track), viewrange = GRanges("chr12", IRanges(1, 100)))
+    TnTBoard(list(track), view.range = GRanges("chr12", IRanges(1, 100)))
 }
 
 
