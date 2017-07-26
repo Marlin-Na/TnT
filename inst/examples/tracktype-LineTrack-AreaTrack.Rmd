@@ -1,0 +1,47 @@
+---
+title: "Line Track and Area Track"
+---
+
+Line Track is created from a series of points in the track (i.e. width-one GRanges and their height).
+These points are applied a __tension__ to smooth the connections between points.
+
+Area Track is similar to Line Track but coloring the area behind the curve.
+
+```{r}
+suppressPackageStartupMessages({
+    library(TnT)
+    library(GenomicFeatures)
+})
+set.seed(69)
+```
+
+
+## Basic LineTrack Example
+
+```{r}
+pos <- IRanges(seq(1, 1000, by = 10), width = 1)
+height <- .5 + cumsum(runif(length(pos), min = -.1, max = .1))
+height[height >= 1] <- 1
+height[height <= 0] <- 0
+
+ltrack <- LineTrack(pos, value = height, color = "blue")
+TnTBoard(ltrack)
+```
+
+
+<br/> <br/>
+
+## Basic AreaTrack Example
+
+```{r}
+artrack <- AreaTrack(pos, value = height, color = "blue")
+TnTBoard(artrack)
+```
+
+<br/> <br/>
+
+## Session Info
+
+```{r}
+sessionInfo()
+```

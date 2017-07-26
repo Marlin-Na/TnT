@@ -9,6 +9,8 @@ This page contains examples of visualization created with TnT package.
     - [Pin Track](tracktype-PinTrack.html)
     - [Gene Track](tracktype-GeneTrack.html)
     - [Tx Track](tracktype-TxTrack.html)
+    - [Vline Track](tracktype-VlineTrack.html)
+    - [Line Track and Area Track](tracktype-LineTrack-AreaTrack.html)
 
 - Tooltip
     - [Tooltip display for tracks](track-tooltip-display.html)

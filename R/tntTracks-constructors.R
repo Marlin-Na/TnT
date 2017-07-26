@@ -67,7 +67,7 @@ AreaTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
                        height = 70) {
     arglist <- as.list(environment())
     linetrack <- do.call(LineTrack, arglist)
-    as(linetrack, "AreaTrack")
+    as(as(linetrack, "DomainValTrack"), "AreaTrack")
 }
 
 #' @export

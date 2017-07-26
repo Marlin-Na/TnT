@@ -11,7 +11,7 @@ data and can be modified after the track is constructed.
 suppressPackageStartupMessages({
     library(TnT)
     library(GenomicFeatures)
-    library(magrittr)
+    library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 })
 ```
 
@@ -47,6 +47,26 @@ showCols(heat.colors(6))
 showCols(terrain.colors(6))
 showCols(topo.colors(6))
 showCols(cm.colors(6))
+```
+
+## Gene Colors
+
+This example shows a gene track that genes have different colors based on their biotypes.
+
+First is to get the data from EnsDb.
+
+```{r}
+library(EnsDb.Hsapiens.v86)
+gene <- genes(EnsDb.Hsapiens.v86)
+```
+
+TnT has defined a helper function `mapcol` to scale qualitative values to colors.
+We supply the scaled color to the track constructor.
+
+```{r}
+genetrack <- FeatureTrack(gene, tooltip = as.data.frame(gene),
+                          color = mapcol(gene$gene_biotype, palette.fun = grDevices::rainbow))
+TnTBoard(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .5)
 ```
 
 

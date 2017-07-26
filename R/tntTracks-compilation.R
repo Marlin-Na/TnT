@@ -13,13 +13,36 @@
     # For RangeTrack
     
     di.init <- setNames(list(ma()), feaname)
-    di.color <- list(color = js("function (d) {return d.color;}"))
-    di.index <- list(index = js("function (d) {return d.key;}"))
+    di.color <- list(color = {
+        ## TODO: temporary solution for LineTrack and AreaTrack
+        if (inherits(track, c("LineTrack", "AreaTrack"))) {
+            co <- unique(trackData(track)$color)
+            if (length(co) > 1) {
+                # TODO: add informative warning in constructor
+                warning("LineTrack and AreaTrack do not support multiple color values")
+                co <- co[1]
+            }
+            if (length(co) == 0)
+                NULL  ## empty track?
+            else
+                co
+        }
+        else
+            js('function (d) {return d.color;}')
+    })
+    di.index <- list(index = js('function (d) {return d.key;}'))
     di.extra <- extra
     ## For certain types of track
     ## TODO: we should use method dispatch instead
-    di.domain <- list(domain = if (inherits(track, "DomainValTrack")) track@Domain
-                               else NULL)
+    di.domain <- list(domain = {
+        if (inherits(track, "DomainValTrack"))
+            ## TODO: temporary solution for LineTrack and AreaTrack
+            if (inherits(track, c("LineTrack", "AreaTrack")))
+                NULL
+            else
+                track@Domain
+        else NULL
+    })
     di.tooltip <- {
         toolti <- tooltip(track)
         stopifnot(

@@ -1,0 +1,37 @@
+---
+title: "Vline Track"
+---
+
+Vline Track displays vertical lines in the given positions (i.e. width-one GRanges).
+
+
+```{r}
+suppressPackageStartupMessages({
+    library(TnT)
+    library(GenomicFeatures)
+})
+set.seed(42)
+```
+
+
+## Basic Example
+
+```{r}
+pos <- IRanges(start = sample(1:1000, 6), width = 1)
+colors <- c("red", "yellow", "green", "cyan", "blue", "magenta")
+vltrack <- VlineTrack(pos,tooltip = data.frame(Position = start(pos), Color = colors),
+                      color = colors, label = NULL)
+# TODO: currently broken
+TnTBoard(vltrack)
+trackData(vltrack)$key <- start(pos)
+TnTBoard(vltrack)
+```
+
+<br/> <br/>
+
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
