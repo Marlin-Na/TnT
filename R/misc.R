@@ -21,6 +21,13 @@ NULL
 
 
 
+#' @export
+mapcol <- function (value, palette.fun = grDevices::rainbow, ...) {
+    uniqueV <- unique(value)
+    mappedC <- palette.fun(length(uniqueV), ...)
+    mappedC[match(value, uniqueV)]
+}
+
 
 #' @export
 ul <- function(x)
