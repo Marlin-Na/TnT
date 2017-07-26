@@ -23,6 +23,14 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
 }
 
 #' @export
+VlineTrack <- function (pos, label = deparse(substitute(pos)), tooltip = mcols(pos),
+                        color = "green", background = "white", height = 40) {
+    ## TODO: remove tooltip?
+    data <- PosTrackData(pos = pos, color = color, tooltip = tooltip)
+    new_track("VlineTrack", b = background, h = height, l = label, da = data, di = list())
+}
+
+#' @export
 PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
                       label = deparse(substitute(pos)),
                       tooltip = mcols(pos), color = "red", background = "white",
@@ -35,6 +43,31 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
     data <- PosValTrackData(pos = pos, val = value, tooltip = tooltip, color = color)
     new_track("PinTrack",
               b = background, h = height, l = label, da = data, di = list(), Domain = domain)
+}
+
+#' @export
+LineTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
+                       label = deparse(substitute(pos)),
+                       tooltip = mcols(pos), color = "yellow", background = "white",
+                       height = 70) {
+    if (is.null(value))
+        stop("Value (i.e. height) at each position not specified.")
+    stopifnot(length(domain) == 2)
+    
+    ## TODO: remove tooltip?
+    data <- PosValTrackData(pos = pos, val = value, tooltip = tooltip, color = color)
+    new_track("LineTrack",
+              b = background, h = height, l = label, da = data, di = list(), Domain = domain)
+}
+
+#' @export
+AreaTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
+                       label = deparse(substitute(pos)),
+                       tooltip = mcols(pos), color = "pink", background = "white",
+                       height = 70) {
+    arglist <- as.list(environment())
+    linetrack <- do.call(LineTrack, arglist)
+    as(linetrack, "AreaTrack")
 }
 
 #' @export

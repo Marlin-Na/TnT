@@ -483,6 +483,8 @@ setClass("BlockTrack", contains = "RangeTrack", slots = c(Data = "RangeTrackData
 setClass("GeneTrack", contains = "RangeTrack", slots = c(Data = "GeneTrackData"))
 setClass("TxTrack", contains = "RangeTrack", slots = c(Data = "TxTrackData"))
 
+setClass("VlineTrack", contains = "RangeTrack", slots = c(Data = "PosTrackData"))
+
 setClass("DomainValTrack", contains = "RangeTrack", slots = c(Domain = "numeric"))
 setValidity("DomainValTrack",
     function (object) if (length(object@Domain) != 2)
@@ -490,6 +492,8 @@ setValidity("DomainValTrack",
 )
 
 setClass("PinTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrackData"))
+setClass("LineTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrackData"))
+setClass("AreaTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrackData"))
 
 
 

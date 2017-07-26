@@ -66,7 +66,10 @@ setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
             BlockTrack = "tnt.board.track.feature.block",
             GeneTrack = "tnt.board.track.feature.genome.gene",
             TxTrack = "tnt.board.track.feature.genome.transcript",
+            VlineTrack = "tnt.board.track.feature.vline",
             PinTrack = "tnt.board.track.feature.pin",
+            LineTrack = "tnt.board.track.feature.line",
+            AreaTrack = "tnt.board.track.feature.area",
             stop()
         )
         track <- .initDisplay(track, feaname = feaname)
