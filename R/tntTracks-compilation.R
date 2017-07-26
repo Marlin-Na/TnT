@@ -27,7 +27,11 @@
             #all(sapply(toolti, is.atomic)),
             !any(duplicated(names(toolti)))
         )
-        toolti.header <- trackSpec(track, "label")
+        toolti.header <- {
+            label <- trackSpec(track, "label")
+            if (is.null(label)) ""
+            else                label
+        }
         toolti.entries <- colnames(toolti)
         list(on = ma("click",
             tooltipCallback(header = toolti.header, entries = toolti.entries)
@@ -96,11 +100,20 @@ compileTrack <- function (tntTrack) {
     # Wake up
     tntTrack <- wakeupTrack(tntTrack)
     
+    label <- trackSpec(tntTrack, "label")
+    label <- if (is.null(label)) "" else label
+    
+    background <- trackSpec(tntTrack, "background")
+    background <- if (is.null(background)) "white" else background
+    
+    height <- trackSpec(tntTrack, "height")
+    height <- if (is.null(height)) 100 else height
+    
     li.spec <- list(
         tnt.board.track = ma(),
-        label  = trackSpec(tntTrack, "label"),
-        color  = trackSpec(tntTrack, "background"),  # rename to "color"
-        height = trackSpec(tntTrack, "height")
+        label  = label,
+        color  = background,  # rename to "color"
+        height = height
     )
     
     jc.spec <- asJC(li.spec)
