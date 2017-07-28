@@ -16,23 +16,37 @@ setClass("TnTBoard",
     )
 )
 
+setClass("TnTGenome", contains = "TnTBoard",
+    slots = c(
+        Species = "character",
+        Chromosome = "character"
+    )
+)
+
 #### TnT Board Constructor      ========
 
 
 
 #' @export
 TnTBoard <- function (tracklist, view.range = GRanges(),
-                      coord.range = IRanges(), zoom.allow = IRanges()) {
+                      coord.range = IRanges(), zoom.allow = IRanges(), use.tnt.genome = FALSE) {
     
     if (is(tracklist, "TnTTrack"))
         tracklist <- list(tracklist)
     else
         stopifnot(all(sapply(tracklist, inherits, what = "TnTTrack")))
     
-    b <- new("TnTBoard", ViewRange = view.range, CoordRange = coord.range,
+    b <- new(if (use.tnt.genome) "TnTGenome" else "TnTBoard",
+             ViewRange = view.range, CoordRange = coord.range,
              ZoomAllow = zoom.allow, TrackList = tracklist)
     b
 }
+
+#' @export
+TnTGenome <- function (...) {
+    TnTBoard(..., use.tnt.genome = TRUE)
+}
+
 
 ## EXAMPLE
 if (FALSE) {
@@ -66,7 +80,10 @@ tracklist <- function (tntboard) {
 compileBoard <- function (tntboard) {
     b <- wakeupBoard(tntboard)
     
-    spec <- .compileBoardSpec(b)
+    if (inherits(b, "TnTGenome"))
+        spec <- .compileBoardSpec(b, use.tnt.genome = TRUE)
+    else
+        spec <- .compileBoardSpec(b)
     tklst <- .compileTrackList(b)
     tntdef <- c(spec, tklst)
     tntdef
@@ -75,16 +92,16 @@ compileBoard <- function (tntboard) {
 
 #' @export
 wakeupBoard <- function (tntboard) {
-    if (inherits(tntboard, "TnTGenome"))
-        stop() # TODO
     
     tntboard <- .selectView(tntboard)
+    tntboard <- .fillGenome(tntboard)
     tntboard <- .filterSeq(tntboard)
     tntboard <- .selectCoord(tntboard)
     tntboard <- .selectZoom(tntboard)
     
     tntboard
 }
+
 
 
 #' @export
@@ -162,52 +179,81 @@ wakeupBoard <- function (tntboard) {
 #' @export
 .selectView <- function (tntboard) {
     viewrange0 <- tntboard@ViewRange
-    if (length(viewrange0) == 1)
-        return(tntboard) # Already specified
+    tracklist0 <- tracklist(tntboard)
+    
+    if (length(viewrange0) == 1) {
+        # Already specified
+        ## Update the combined seqinfo
+        comb.seqinfo <- do.call(merge, lapply(tracklist0, seqinfo))
+        comb.seqinfo <- merge(comb.seqinfo, seqinfo(viewrange0))
+        seqinfo(tntboard@ViewRange) <- comb.seqinfo
+        
+        return(tntboard)
+    }
     if (length(viewrange0) > 1)
         stop()
     
-    # ViewRange is not set
-    tracklist0 <- tracklist(tntboard)
+    # Then ViewRange is not set
     
-    li.tseqs <- lapply(tracklist0,
-                       # TODO: we shall define seqlevelsInUse method for TnTTrack
-                       function (t) seqlevelsInUse(trackData(t)))
-    li.tseqs <- li.tseqs[lengths(li.tseqs) != 0]
-    
-    if (length(li.tseqs) == 0) {
-        # No "InUse" seqlevels
-        li.tseqs <- lapply(tracklist0, seqlevels)
+    commonseqs <- {
+        # TODO: we shall define seqlevelsInUse method for TnTTrack
+        
+        li.tseqs <- lapply(tracklist0,
+                           function (t) seqlevelsInUse(trackData(t)))
         li.tseqs <- li.tseqs[lengths(li.tseqs) != 0]
+        
+        if (length(li.tseqs) == 0) {
+            # No "InUse" seqlevels
+            li.tseqs <- lapply(tracklist0, seqlevels)
+            li.tseqs <- li.tseqs[lengths(li.tseqs) != 0]
+        }
+        
+        if (length(li.tseqs) == 0)
+            # All seqlevels are empty...
+            character()
+        else
+            Reduce(intersect, li.tseqs)
     }
     
-    if (length(li.tseqs) == 0)
-        # All seqlevels are empty...
-        commonseqs <- character()
-    else
-        commonseqs <- Reduce(intersect, li.tseqs)
-    
-    if (length(commonseqs) == 0)
-        stop("No common seqlevel is found in the track list.")
-    
-    if (length(commonseqs) == 1)
-        sel.seq <- commonseqs
-    else
-        sel.seq <- commonseqs[1]
+    sel.seq <- {
+        if (length(commonseqs) == 0)
+            stop("No common seqlevel is found in the track list.")
+        if (length(commonseqs) == 1)
+            sel.seq <- commonseqs
+        else
+            sel.seq <- commonseqs[1]
+        unname(sel.seq)
+    }
     
     viewrg <- {
+        comb.seqinfo <- do.call(merge, lapply(tracklist0, seqinfo))
         # TODO
-        GRanges(sel.seq, IRanges(1, 1000))
+        GRanges(sel.seq, IRanges(1, 1000), seqinfo = comb.seqinfo)
     }
     
     tntboard@ViewRange <- viewrg
     
-    message <- sprintf("View range is not specified, automatically selecting %s to %s on seqlevel %s",
+    message <- sprintf("View range is not specified, automatically selecting %i to %i on seqlevel %s",
                    start(viewrg), end(viewrg), seqlevels(viewrg))
     message(message)
     
     tntboard
 }
+
+#' @export
+.fillGenome <- function (tntboard) {
+    if (!inherits(tntboard, "TnTGenome"))
+        return(tntboard)
+    
+    stopifnot(length(tntboard@ViewRange) == 1)
+    # Seqinfo of ViewRange is combined from the track list
+    seqinfo <- seqinfo(tntboard@ViewRange)
+    seqlv   <- seqlevelsInUse(tntboard@ViewRange)
+    tntboard@Species <- unname(genome(seqinfo)[seqlv])
+    tntboard@Chromosome <- seqlv
+    tntboard
+}
+    
 
 #' @export
 .selectZoom <- function (tntboard) {
@@ -227,27 +273,46 @@ wakeupBoard <- function (tntboard) {
 }
 
 #' @export
-.compileBoardSpec <- function (tntboard) {
+.compileBoardSpec <- function (tntboard, use.tnt.genome = FALSE) {
     .checkBoardSpec <- function (tntboard) {
         b <- tntboard
         stopifnot(
             # These three slots should be prepared before converted to JS
             length(b@ViewRange) == 1,
             length(b@CoordRange) == 1,
-            length(b@ZoomAllow) == 1
+            length(b@ZoomAllow) == 1,
+            if (inherits(b, "TnTGenome"))
+                length(b@Species) == 1 else TRUE,
+            if (inherits(b, "TnTGenome"))
+                length(b@Chromosome) == 1 else TRUE
         )
         b
     }
     b <- .checkBoardSpec(tntboard)
-    jc.board.spec <- jc(
-        tnt.board = ma(),
-        from     = start(b@ViewRange),
-        to       = end(b@ViewRange),
-        min      = start(b@CoordRange),
-        max      = end(b@CoordRange),
-        zoom_out = end(b@ZoomAllow),
-        zoom_in  = start(b@ZoomAllow)
-    )
+    if (use.tnt.genome)
+        jc.board.spec <- jc(
+            tnt.board.genome = ma(),
+            from = start(b@ViewRange),
+            to   = end(b@ViewRange),
+            species = if (is.na(b@Species)) "Unknown sequence" else b@Species,
+            chr     = b@Chromosome,
+            min_coord = js(sprintf('new Promise (function (resolve) { resolve (%i); })',
+                                   start(b@CoordRange))),
+            max_coord = js(sprintf('new Promise (function (resolve) { resolve (%i); })',
+                                   end(b@CoordRange))),
+            zoom_out = end(b@ZoomAllow),
+            zoom_in  = start(b@ZoomAllow)
+        )
+    else
+        jc.board.spec <- jc(
+            tnt.board = ma(),
+            from     = start(b@ViewRange),
+            to       = end(b@ViewRange),
+            min      = start(b@CoordRange),
+            max      = end(b@CoordRange),
+            zoom_out = end(b@ZoomAllow),
+            zoom_in  = start(b@ZoomAllow)
+        )
     jc.board.spec
 }
     
@@ -322,10 +387,3 @@ if (FALSE) local({
 
 
 
-###   TnT Genome    ############################################################
-
-# setClass("TnTGenome", contains = "TnTBoard",
-#     slots = c(
-#         
-#     )
-# )

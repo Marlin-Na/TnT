@@ -66,7 +66,7 @@ We supply the scaled color to the track constructor.
 ```{r}
 genetrack <- FeatureTrack(gene, tooltip = as.data.frame(gene),
                           color = mapcol(gene$gene_biotype, palette.fun = grDevices::rainbow))
-TnTBoard(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .5)
+TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .5)
 ```
 
 
