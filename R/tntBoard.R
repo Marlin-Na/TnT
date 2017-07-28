@@ -196,10 +196,7 @@ wakeupBoard <- function (tntboard) {
     # Then ViewRange is not set
     
     commonseqs <- {
-        # TODO: we shall define seqlevelsInUse method for TnTTrack
-        
-        li.tseqs <- lapply(tracklist0,
-                           function (t) seqlevelsInUse(trackData(t)))
+        li.tseqs <- lapply(tracklist0, function (t) seqlevelsInUse(t))
         li.tseqs <- li.tseqs[lengths(li.tseqs) != 0]
         
         if (length(li.tseqs) == 0) {

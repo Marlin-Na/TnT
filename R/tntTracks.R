@@ -499,16 +499,20 @@ setClass("AreaTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrack
 
 #### Seqinfo Methods        ========
 #' @export
-setMethod("seqinfo", signature = c("TnTTrack"),
+setMethod("seqinfo", signature = c("RangeTrack"),
     function (x) seqinfo(trackData(x))
 )
 #' @export
-setMethod("seqinfo<-", signature = c(x = "TnTTrack"),
+setMethod("seqinfo<-", signature = c(x = "RangeTrack"),
     function (x, new2old, force, pruning.mode, value) {
         trackData(x) <- `seqinfo<-`(x = trackData(x), new2old = new2old,
                                     force = force, pruning.mode = pruning.mode, value = value)
         x
     }
+)
+#' @export
+setMethod("seqlevelsInUse", signature = c(x = "RangeTrack"),
+    function (x) seqlevelsInUse(trackData(x))
 )
 
 #### TrackData Accessor          ========
