@@ -473,7 +473,7 @@ setClass("TnTTrack", slots = c(
     Height = "ScalarNumericOrNull",
     Label = "ScalarCharacterOrNull",
     
-    Data = "TrackData",
+    Data = "ANY",
     Display = "list"
 ))
 

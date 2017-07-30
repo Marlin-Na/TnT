@@ -2,38 +2,66 @@
 
 #' @include tntTracks-compilation.R
 
+setClass("CompositeTrack", contains = "TnTTrack", slots = c(Data = "list"))
+
+setValidity("CompositeTrack",
+    function (object) {
+        data <- trackData(object)
+        if (!all(sapply(data, inherits, what = "RangeTrack")))
+            return("All components of CompositeTrack should be RangeTrack")
+        return(TRUE)
+    }
+)
+
+setMethod("merge", signature = c(x = "TnTTrack"),
+    function (x, y, ...) {
+        tracklist <- list(x, y, ...)
+        merge_tracklist(tracklist)
+    }
+)
+
 #' @export
-.mergeScalar <- function (l, name = c("background", "height", "label")) {
-    name <- match.arg(name)
+merge_tracklist <- function (tracklist) {
+    stopifnot(all(sapply(tracklist, inherits, what = c("RangeTrack", "CompositeTrack"))))
     
-    l <- unlist(l, recursive = FALSE, use.names = FALSE)
-    stopifnot(is.atomic(l))
+    which.comp <- sapply(tracklist, inherits, what = "CompositeTrack")
+    tracklist[which.comp] <- lapply(tracklist[which.comp], trackData)
+    tracklist <- c(tracklist, recursive = TRUE, use.names = FALSE)
     
-    if (length(l) == 1)
-        return(l)
-    if (length(l) == 0)
-        return(NULL)
-    
-    l <- l[1]
-    msg <- sprintf("Incompatible %s, use %s", name, l)
-    warning(msg)
-    l
+    .merge_tracklist <- function (tracklist) {
+        spec <- .mergeSpec(tracklist)
+        ans <- new("CompositeTrack", Data = tracklist)
+        trackSpec(ans, which = names(spec)) <- spec
+        ans
+    }
+    .mergeSpec <- function (tracklist) {
+        labels      <- unique(sapply(tracklist, trackSpec, which = "label"))
+        heights     <- unique(sapply(tracklist, trackSpec, which = "height"))
+        backgrounds <- unique(sapply(tracklist, trackSpec, which = "background"))
+        
+        stopifnot(is.atomic(labels), is.atomic(heights), is.atomic(backgrounds))
+        
+        f <- function(x, w = c("label", "height", "background")) {
+            w <- match.arg(w)
+            if (length(x) == 1)
+                return(x)
+            if (length(x) == 0)
+                return(NULL)
+            if (w == "label")
+                return(paste(paste(x[-length(x)], collapse = ", "), x[length(x)], sep = " and "))
+            if (w == "height")
+                return(na.fail(max(na.omit(x))))
+            if (w == "background")
+                return(x[1])
+            stop()
+        }
+        list(
+            label      = f(labels,      "label"),
+            height     = f(heights,     "height"),
+            background = f(backgrounds, "background")
+        )
+    }
+    .merge_tracklist(tracklist)
 }
 
-# .unmerge <- function (t) {
-#     if (!inherits(t, "CompositeTrack"))
-#         return(t)
-#     li.td <- unname(trackData(t))
-#     
-# }
-# 
-# setClass("CompositeTrack", contains = "TnTTrack", slots = c(Data = "list"))
-# 
-# setMethod("merge", signature = c(x = "TnTTrack", y = "TnTTrack"),
-#     function (x, y, ...) {
-#         li.t <- unname(list(x, y, ...))
-#         stopifnot(all(sapply(li.t, inherits, "TnTTrack")))
-#         
-#     }
-# )
 
