@@ -13,9 +13,15 @@ setValidity("CompositeTrack",
     }
 )
 
-setMethod("merge", signature = c(x = "TnTTrack"),
+setMethod("merge", signature = c(x = "TnTTrack", y = "TnTTrack"),
     function (x, y, ...) {
         tracklist <- list(x, y, ...)
+        merge_tracklist(tracklist)
+    }
+)
+setMethod("merge", signature = c(x = "TnTTrack", y = "missing"),
+    function (x, y, ...) {
+        tracklist <- list(x, ...)
         merge_tracklist(tracklist)
     }
 )
