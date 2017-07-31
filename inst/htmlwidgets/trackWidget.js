@@ -83,6 +83,34 @@ HTMLWidgets.widget({
             };
             return ans;
         };
+
+        tnr.composite_data_retriever = function () {
+
+            var ans = {
+                func_array: [],
+                add: function (ref, func) {
+                    this.func_array.append({
+                        ref: ref,
+                        func: func
+                    });
+                    return this;
+                },
+                done: function () {
+                    var func_array = this.func_array;
+                    var ans = function (loc) {
+                        var ret_data = {};
+                        for (var i = 0; i < func_array.length; i++) {
+                            var func = func_array[i];
+                            ret_data[func.ref] = func.func(loc);
+                        }
+                        return ret_data;
+                    };
+                    return ans;
+                }
+            };
+
+            return ans;
+        };
         
         
         // Define shared variables for this instance
@@ -114,3 +142,4 @@ HTMLWidgets.widget({
         };
     }
 });
+

@@ -122,9 +122,10 @@ if (FALSE) {
 #            function (tntTrack) standardGeneric("compileTrack"))
 
 #' @export
-compileTrack <- function (tntTrack) {
+compileTrack <- function (tntTrack, wakeup = TRUE) {
     # Wake up
-    tntTrack <- wakeupTrack(tntTrack)
+    if (wakeup)
+        tntTrack <- wakeupTrack(tntTrack)
     
     label <- trackSpec(tntTrack, "label")
     label <- if (is.null(label)) "" else label
