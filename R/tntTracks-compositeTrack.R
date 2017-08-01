@@ -13,6 +13,11 @@ setValidity("CompositeTrackData",
     }
 )
 
+#' @export
+CompositeTrackData <- function (tracklist) {
+    new("CompositeTrackData", tracklist)
+}
+
 setMethod("merge", signature = c(x = "TnTTrack", y = "TnTTrack"),
     function (x, y, ...) {
         tracklist <- list(x, y, ...)
@@ -37,7 +42,7 @@ merge_tracklist <- function (tracklist) {
     
     .merge_tracklist <- function (tracklist) {
         spec <- .mergeSpec(tracklist)
-        ans <- new("CompositeTrack", Data = new("CompositeTrackData", tracklist))
+        ans <- new("CompositeTrack", Data = CompositeTrackData(tracklist))
         trackSpec(ans, which = names(spec)) <- spec
         ans
     }
@@ -77,7 +82,34 @@ merge_tracklist <- function (tracklist) {
 setMethod("compileTrackData", signature = "CompositeTrackData",
     function (trackData) {
         li.t <- as.list(trackData)
-        .mkref(li.t)
+        
+        li.retriever <- lapply(li.t,
+            function (t) {
+                cd <- compileTrackData(trackData(t))
+                stopifnot(
+                    length(cd) == 2,
+                    identical(names(cd), c("tnt.board.track.data.sync", "retriever"))
+                )
+                cd[[2]]
+            }
+        )
+        
+        jc.retriever <- {
+            jc.init <- jc(tnr.composite_data_retriever = ma())
+            jc.add <- {
+                li.add <- mapply(ref = .mkref(li.t), func = li.retriever, USE.NAMES = FALSE,
+                    function (ref, func)
+                        jc(add = ma(ref, func))
+                )
+                do.call(c, unname(li.add))
+            }
+            jc.end <- jc(done = ma())
+            
+            c(jc.init, jc.add, jc.end)
+        }
+        
+        jc(tnt.board.track.data.sync = ma(),
+           retriever = jc.retriever)
     }
 )
 
