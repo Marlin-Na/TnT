@@ -97,7 +97,8 @@ setMethod("compileTrackData", signature = "CompositeTrackData",
         jc.retriever <- {
             jc.init <- jc(tnr.composite_data_retriever = ma())
             jc.add <- {
-                li.add <- mapply(ref = .mkref(li.t), func = li.retriever, USE.NAMES = FALSE,
+                li.add <- mapply(ref = .mkref(li.t), func = li.retriever,
+                                 USE.NAMES = FALSE, SIMPLIFY = FALSE,
                     function (ref, func)
                         jc(add = ma(ref, func))
                 )
@@ -110,6 +111,29 @@ setMethod("compileTrackData", signature = "CompositeTrackData",
         
         jc(tnt.board.track.data.sync = ma(),
            retriever = jc.retriever)
+    }
+)
+
+
+setMethod("wakeupTrack", signature = c(track = "CompositeTrack"),
+    function (track) {
+        li.track  <- lapply(trackData(track), wakeupTrack)
+        li.disply <- lapply(li.track, function (t) asJC(t@Display))
+        refs <- .mkref(li.track)
+        
+        l.init <- list(tnt.board.track.feature.composite = ma())
+        l.add <- {
+            l.add <- mapply(ref = refs, jc.dis = li.disply,
+                            USE.NAMES = FALSE, SIMPLIFY = FALSE,
+                function (ref, jc.dis) {
+                    list(add = ma(ref, jc.dis))
+                }
+            )
+            do.call(c, unname(l.add))
+        }
+        
+        track@Display <- c(l.init, l.add)
+        track
     }
 )
 
