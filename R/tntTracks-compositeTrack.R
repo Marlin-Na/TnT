@@ -138,6 +138,36 @@ setMethod("wakeupTrack", signature = c(track = "CompositeTrack"),
 )
 
 
+setMethod("seqinfo", signature = "CompositeTrack",
+    function (x) {
+        li.tracks <- trackData(x)
+        li.seqinfo <- lapply(li.tracks, seqinfo)
+        do.call(merge, unname(li.seqinfo))
+    }
+)
+
+setMethod("seqinfo<-", signature = c(x = "CompositeTrack"),
+    function (x, new2old, force, pruning.mode, value) {
+        li.tracks <- trackData(x)
+        for (i in seq_along(li.tracks)) {
+            seqinfo(li.tracks[[i]], new2old, force, pruning.mode) <- value
+        }
+        trackData(x) <- li.tracks
+        x
+    }
+)
+
+setMethod("seqlevelsInUse", signature = c(x = "CompositeTrack"),
+    function (x) {
+        li.tracks <- trackData(x)
+        li.seqs <- lapply(li.tracks, seqlevelsInUse)
+        unique(unlist(li.seqs))
+    }
+)
+
+
+
+
 # setMethod("wakeupTrack", signature = c(track = "CompositeTrack"),
 #     function (track) {
 #         li.track <- trackData(track)

@@ -89,7 +89,7 @@ HTMLWidgets.widget({
             var ans = {
                 func_array: [],
                 add: function (ref, func) {
-                    this.func_array.append({
+                    this.func_array.push({
                         ref: ref,
                         func: func
                     });
