@@ -58,6 +58,21 @@ if (FALSE) {
 }
 
 
+setMethod(range, signature = c(x = "TnTBoard"),
+    function (x, ..., with.revmap=FALSE, ignore.strand=FALSE, na.rm=FALSE) {
+        if (length(list(...)))
+            warning("Extra arguments ignored.")
+        li.track <- tracklist(x)
+        stopifnot(all(sapply(li.track, inherits, what = c("RangeTrack", "CompositeTrack"))))
+        
+        rg <- do.call(range, c(unname(li.track),
+            list(with.revmap=with.revmap, ignore.strand=ignore.strand, na.rm=na.rm)))
+        rg
+    }
+)
+
+
+
 #### Accessors                  ========
 
 #' @export
@@ -147,20 +162,13 @@ wakeupBoard <- function (tntboard) {
     
     # Then seqlength is not known
     coord <- {
-        li.t <- tracklist(tntboard)
-        if (all(sapply(li.t, inherits, what = c("RangeTrack", "CompositeTrack")))) {
-            ## Aggregate from track data
-            rg <- do.call(range, c(unname(li.t), list(ignore.strand = TRUE)))
-            rg <- keepSeqlevels(rg, seqlv, pruning.mode = "coarse")
-            stopifnot(length(rg) == 1) # TODO: However, there will be cases that all the tracks are empty
-            coord <- ranges(rg) * .7
-        }
-        # TODO: other cases? (well, no other case)
-        else {
-            ## Use the view range
-            coord <- ranges(tntboard@ViewRange) * .7
-        }
-        coord
+        ## Aggregate from track data
+        rg <- range(tntboard, ignore.strand = TRUE)
+        rg <- keepSeqlevels(rg, seqlv, pruning.mode = "coarse")
+        
+        stopifnot(length(rg) == 1) # TODO: However, there will be cases that all the tracks are empty
+        
+        ranges(rg) * .7
     }
     
     msg <- sprintf("Seqlenth is unknown, automatically set coordinate range to %s-%s",
@@ -170,6 +178,7 @@ wakeupBoard <- function (tntboard) {
     tntboard@CoordRange <- coord
     tntboard
 }
+
 
 #' @export
 .selectView <- function (tntboard) {
@@ -221,6 +230,7 @@ wakeupBoard <- function (tntboard) {
         comb.seqinfo <- do.call(merge, unname(lapply(tracklist0, seqinfo)))
         # TODO
         GRanges(sel.seq, IRanges(1, 1000), seqinfo = comb.seqinfo)
+        
     }
     
     tntboard@ViewRange <- viewrg
