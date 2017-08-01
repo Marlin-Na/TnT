@@ -131,7 +131,7 @@ wakeupBoard <- function (tntboard) {
     agg.seqinfo <- {
         li.t <- tracklist(tntboard)
         li.seqinfo <- lapply(li.t, seqinfo)
-        do.call(merge, li.seqinfo)
+        do.call(merge, unname(li.seqinfo))
     }
     
     seqlen <- {
@@ -148,19 +148,14 @@ wakeupBoard <- function (tntboard) {
     # Then seqlength is not known
     coord <- {
         li.t <- tracklist(tntboard)
-        if (all(sapply(li.t, inherits, what = "RangeTrack"))) {
-            # TODO: include the cases that not all of the tracks are RangeTrack
+        if (all(sapply(li.t, inherits, what = c("RangeTrack", "CompositeTrack")))) {
             ## Aggregate from track data
-            li.rgs <- lapply(li.t,
-                function (track) range(trackData(track))
-            )
-            rg <- do.call('c', li.rgs)
-            rg <- range(rg)
+            rg <- do.call(range, c(unname(li.t), list(ignore.strand = TRUE)))
             rg <- keepSeqlevels(rg, seqlv, pruning.mode = "coarse")
             stopifnot(length(rg) == 1) # TODO: However, there will be cases that all the tracks are empty
             coord <- ranges(rg) * .7
         }
-        # TODO: other cases?
+        # TODO: other cases? (well, no other case)
         else {
             ## Use the view range
             coord <- ranges(tntboard@ViewRange) * .7
@@ -184,7 +179,7 @@ wakeupBoard <- function (tntboard) {
     if (length(viewrange0) == 1) {
         # Already specified
         ## Update the combined seqinfo
-        comb.seqinfo <- do.call(merge, lapply(tracklist0, seqinfo))
+        comb.seqinfo <- do.call(merge, unname(lapply(tracklist0, seqinfo)))
         comb.seqinfo <- merge(comb.seqinfo, seqinfo(viewrange0))
         seqinfo(tntboard@ViewRange) <- comb.seqinfo
         
@@ -223,7 +218,7 @@ wakeupBoard <- function (tntboard) {
     }
     
     viewrg <- {
-        comb.seqinfo <- do.call(merge, lapply(tracklist0, seqinfo))
+        comb.seqinfo <- do.call(merge, unname(lapply(tracklist0, seqinfo)))
         # TODO
         GRanges(sel.seq, IRanges(1, 1000), seqinfo = comb.seqinfo)
     }
