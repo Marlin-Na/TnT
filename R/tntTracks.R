@@ -515,6 +515,7 @@ setMethod("seqlevelsInUse", signature = c(x = "RangeTrack"),
     function (x) seqlevelsInUse(trackData(x))
 )
 
+
 #### TrackData Accessor          ========
 
 #' @export
