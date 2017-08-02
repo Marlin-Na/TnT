@@ -118,6 +118,7 @@ setMethod("compileTrackData", signature = "CompositeTrackData",
 setMethod("wakeupTrack", signature = c(track = "CompositeTrack"),
     function (track) {
         li.track  <- lapply(trackData(track), wakeupTrack)
+        
         li.disply <- lapply(li.track, function (t) asJC(t@Display))
         refs <- .mkref(li.track)
         
@@ -132,6 +133,7 @@ setMethod("wakeupTrack", signature = c(track = "CompositeTrack"),
             do.call(c, unname(l.add))
         }
         
+        trackData(track) <- CompositeTrackData(li.track)
         track@Display <- c(l.init, l.add)
         track
     }
