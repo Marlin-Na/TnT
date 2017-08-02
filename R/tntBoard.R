@@ -171,7 +171,8 @@ wakeupBoard <- function (tntboard) {
         ranges(rg) * .7
     }
     
-    msg <- sprintf("Seqlenth is unknown, automatically set coordinate range to %s-%s",
+    msg <- sprintf(paste("- Coordinate limit is not specified and seqlength is unknown:",
+                         "  automatically set coordinate range to %s..%s ...", sep = "\n"),
                    start(coord), end(coord))
     message(msg)
     
@@ -264,7 +265,8 @@ wakeupBoard <- function (tntboard) {
     viewrg <- find.viewrg(tntboard = tntboard, sel.seq = sel.seq)
     tntboard@ViewRange <- viewrg
     
-    message <- sprintf("View range is not specified, automatically selecting %i to %i on seqlevel %s",
+    message <- sprintf(paste("- View range is not specified:",
+                             "  automatically select %i..%i on seqlevel %s ...", sep = "\n"),
                    start(viewrg), end(viewrg), seqlevels(viewrg))
     message(message)
     
