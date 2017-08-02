@@ -1,0 +1,85 @@
+---
+title: "Composite Track"
+---
+
+Composite track is a way to combine multiple types of features into one track.
+A composite track can be constructed by combining a list of different tracks with function `merge`.
+
+Label, background and height of the composite track will be derived from the component tracks and
+can be further accessed and modified with `trackSpec` and `trackSpec<-`.
+
+
+```{r}
+suppressPackageStartupMessages({
+    library(TnT)
+    library(GenomicFeatures)
+    library(AnnotationHub)
+})
+set.seed(42)
+```
+
+
+## Composite a Block Track and a Pin Track
+
+First to construct a block track and a pin track from data.
+
+```{r}
+gr <- GRanges("chr1", IRanges(c(11000, 20000, 60000), width = 2000))
+gpos <- GRanges("chr1", IRanges(c(12000, 21000, 61000), width = 1), value = c(1, 2, 3))
+
+btrack <- BlockTrack(gr, label = "Block Track", tooltip = as.data.frame(gr), color = "lightblue4")
+ptrack <- PinTrack(gpos, label = "Pin Track", tooltip = as.data.frame(gpos), background = "beige")
+```
+
+Then use `merge` to construct a composite track and showing it.
+
+```{r}
+ctrack <- merge(btrack, ptrack)
+TnTBoard(ctrack)
+```
+
+<br/> <br/>
+
+Be aware that the components in a composite track are rendered according to the order
+in `merge`. For example, the block track will cover the pin track if we switch the order.
+
+```{r}
+TnTBoard(merge(ptrack, btrack)) # the pin track has been covered
+```
+
+<br/> <br/>
+
+Show all three tracks and add axis indicator.
+
+```{r}
+TnTGenome(list(ctrack, ptrack, btrack))
+```
+
+
+<br/> <br/>
+
+
+## Gene Track and CpG Islands
+
+```{r}
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+gtrack <- GeneTrack(txdb, label = "Gene", color = "burlywood3")
+
+ah <- AnnotationHub()
+ah <- query(ah, "cpgisland")
+cpg <- ah[[names(ah[ah$genome == "hg19"])]]
+cpgtrack <- BlockTrack(cpg, label = "CpG Islands", tooltip = as.data.frame(cpg),
+                       color = "lightblue")
+TnTGenome(merge(cpgtrack, gtrack), view.range = GRanges("chr1", IRanges(84884317, 85205497)))
+```
+
+<br/> <br/>
+
+
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
