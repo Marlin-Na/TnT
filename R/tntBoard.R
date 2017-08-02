@@ -267,7 +267,7 @@ wakeupBoard <- function (tntboard) {
     
     message <- sprintf(paste("- View range is not specified:",
                              "  automatically select %i..%i on seqlevel %s ...", sep = "\n"),
-                   start(viewrg), end(viewrg), seqlevels(viewrg))
+                   start(viewrg), end(viewrg), seqlevelsInUse(viewrg))
     message(message)
     
     tntboard
