@@ -184,7 +184,7 @@ setMethods("range",
                 return(granges(trackData(track)))
             if (inherits(track, "CompositeTrack")) {
                 lgr <- lapply(trackData(track), trackData)
-                joingr(lgr)
+                return(joingr(lgr))
             }
             stop()
         })

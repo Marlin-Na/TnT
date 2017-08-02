@@ -239,7 +239,7 @@ wakeupBoard <- function (tntboard) {
         
         viewrg <- {
             # Find the intersection of the ranges and use it as view range
-            viewrg <- Reduce(intersect, li.rg[lengths(rg) != 0])
+            viewrg <- Reduce(intersect, li.rg[lengths(li.rg) != 0])
             
             if (length(viewrg)) {
                 # The intersection exists
