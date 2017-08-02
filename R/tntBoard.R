@@ -182,6 +182,8 @@ wakeupBoard <- function (tntboard) {
 
 #' @export
 .selectView <- function (tntboard) {
+    ## TODO: view range may support strands, i.e. only showing features on one strand
+    
     viewrange0 <- tntboard@ViewRange
     tracklist0 <- tracklist(tntboard)
     
@@ -226,13 +228,40 @@ wakeupBoard <- function (tntboard) {
         unname(sel.seq)
     }
     
-    viewrg <- {
-        comb.seqinfo <- do.call(merge, unname(lapply(tracklist0, seqinfo)))
-        # TODO
-        GRanges(sel.seq, IRanges(1, 1000), seqinfo = comb.seqinfo)
+    find.viewrg <- function (tntboard, sel.seq) {
+        li.track <- tracklist(tntboard)
+        comb.seqinfo <- do.call(merge, unname(lapply(li.track, seqinfo)))
         
+        li.rg <- lapply(li.track, range, ignore.strand = TRUE)
+        li.rg <- unname(lapply(li.rg, keepSeqlevels, value = sel.seq, pruning.mode = "coarse"))
+        
+        stopifnot(all(lengths(li.rg) %in% c(1L, 0L)))
+        
+        viewrg <- {
+            # Find the intersection of the ranges and use it as view range
+            viewrg <- Reduce(intersect, li.rg[lengths(rg) != 0])
+            
+            if (length(viewrg)) {
+                # The intersection exists
+                ## TODO
+                stopifnot(length(viewrg) == 1)
+                viewrg <- viewrg * .8
+            }
+            else {
+                # There is no intersection
+                ## TODO
+                viewrg <- do.call(range, c(unname(li.rg), ignore.strand = TRUE))
+                stopifnot(length(viewrg) == 1)
+                viewrg <- viewrg * .8
+            }
+            
+            seqinfo(viewrg) <- comb.seqinfo
+            viewrg
+        }
+        viewrg
     }
     
+    viewrg <- find.viewrg(tntboard = tntboard, sel.seq = sel.seq)
     tntboard@ViewRange <- viewrg
     
     message <- sprintf("View range is not specified, automatically selecting %i to %i on seqlevel %s",
