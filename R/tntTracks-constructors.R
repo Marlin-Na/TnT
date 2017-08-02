@@ -4,7 +4,7 @@
 
 
 #' @export
-new_track <- function (class, data, display = list(), background = "white", height = NULL, label = NULL, ...) {
+new_track <- function (class, data, display = list(), background = NULL, height = NULL, label = NULL, ...) {
     t <- new(Class = class, Data = data, Display = display, ...)
     trackSpec(t, "background") <- background
     trackSpec(t, "height") <- height
@@ -14,7 +14,7 @@ new_track <- function (class, data, display = list(), background = "white", heig
 
 #' @export
 BlockTrack <- function (range, label = deparse(substitute(range)),
-                        tooltip = mcols(range), color = "blue", background = "white",
+                        tooltip = mcols(range), color = "blue", background = NULL,
                         height = 30) {
     
     data <- RangeTrackData(range = range, tooltip = tooltip, color = color)
@@ -24,7 +24,7 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
 
 #' @export
 VlineTrack <- function (pos, label = deparse(substitute(pos)), tooltip = mcols(pos),
-                        color = "green", background = "white", height = 40) {
+                        color = "green", background = NULL, height = 40) {
     ## TODO: remove tooltip?
     data <- PosTrackData(pos = pos, color = color, tooltip = tooltip)
     new_track("VlineTrack", b = background, h = height, l = label, da = data, di = list())
@@ -33,7 +33,7 @@ VlineTrack <- function (pos, label = deparse(substitute(pos)), tooltip = mcols(p
 #' @export
 PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
                       label = deparse(substitute(pos)),
-                      tooltip = mcols(pos), color = "red", background = "white",
+                      tooltip = mcols(pos), color = "red", background = NULL,
                       height = 40) {
     
     if (is.null(value))
@@ -48,7 +48,7 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
 #' @export
 LineTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
                        label = deparse(substitute(pos)),
-                       tooltip = mcols(pos), color = "yellow", background = "white",
+                       tooltip = mcols(pos), color = "yellow", background = NULL,
                        height = 70) {
     if (is.null(value))
         stop("Value (i.e. height) at each position not specified.")
@@ -63,7 +63,7 @@ LineTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
 #' @export
 AreaTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
                        label = deparse(substitute(pos)),
-                       tooltip = mcols(pos), color = "pink", background = "white",
+                       tooltip = mcols(pos), color = "pink", background = NULL,
                        height = 70) {
     arglist <- as.list(environment())
     linetrack <- do.call(LineTrack, arglist)
@@ -75,7 +75,7 @@ AreaTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
 #' @export
 GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
                        label = deparse(substitute(txdb)), # TODO: tooltip?
-                       color = "black", background = "white", height = 100) {
+                       color = "black", background = NULL, height = 100) {
     
     data <- GeneTrackDataFromTxDb(txdb = txdb, seqlevel = seqlevel, color = color)
     new_track("GeneTrack",
@@ -86,7 +86,7 @@ GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
 FeatureTrack <- function (range, label = deparse(substitute(range)),
                           tooltip = mcols(range),
                           names = base::names(range),
-                          color = "black", background = "white", height = 200) {
+                          color = "black", background = NULL, height = 200) {
     force(tooltip)
     force(names)
     data <- GeneTrackData(range, labels = names,
@@ -110,7 +110,7 @@ if (FALSE) {
 GroupFeatureTrack <- function (grangelist, label = deparse(substitute(grangelist)),
                                tooltip = mcols(grangelist),
                                names = base::names(grangelist),
-                               color = "black", background = "white", height = 200) {
+                               color = "black", background = NULL, height = 200) {
     force(tooltip)
     force(names)
     
@@ -132,7 +132,7 @@ if (FALSE) {
 #' @export
 TxTrack <- function (txdb, seqlevel = seqlevels(txdb),
                      label = deparse(substitute(txdb)),
-                     color = "red", background = "white", height = 300) {
+                     color = "red", background = NULL, height = 300) {
     
     data <- TxTrackDataFromTxDb(txdb, seqlevel = seqlevel, color = color)
     

@@ -47,9 +47,9 @@ merge_tracklist <- function (tracklist) {
         ans
     }
     .mergeSpec <- function (tracklist) {
-        labels      <- unique(sapply(tracklist, trackSpec, which = "label"))
-        heights     <- unique(sapply(tracklist, trackSpec, which = "height"))
-        backgrounds <- unique(sapply(tracklist, trackSpec, which = "background"))
+        labels      <- unname(unlist(lapply(tracklist, trackSpec, which = "label")))
+        heights     <- unname(unlist(lapply(tracklist, trackSpec, which = "height")))
+        backgrounds <- unname(unlist(lapply(tracklist, trackSpec, which = "background")))
         
         stopifnot(is.atomic(labels), is.atomic(heights), is.atomic(backgrounds))
         
