@@ -4,20 +4,132 @@ title: "TnT Examples"
 
 This page contains examples of visualization created with TnT package.
 
-- Different Track Types
-    - [Block Track](tracktype-BlockTrack.html)
-    - [Pin Track](tracktype-PinTrack.html)
-    - [Gene Track](tracktype-GeneTrack.html)
-    - [Tx Track](tracktype-TxTrack.html)
-    - [Vline Track](tracktype-VlineTrack.html)
-    - [Line Track and Area Track](tracktype-LineTrack-AreaTrack.html)
+```{r, include=FALSE}
+suppressPackageStartupMessages({
+    library(TnT)
+    library(GenomicFeatures)
+})
+```
 
-- Tooltip
-    - [Tooltip display for tracks](track-tooltip-display.html)
+------
 
-- Colors
-    - [Feature colors](track-colors.html)
+## TnT Board and TnT Genome
 
-- Low level utils
-    - [trackWidget](trackWidget.html)
+
+------
+
+## Different Track Types and Their Constructors
+
+### [Block Track](tracktype-BlockTrack.html)
+
+```{r, echo=FALSE}
+ir <- IRanges(c(100, 400, 800), width = c(100, 150, 250))
+gr <- GRanges("na", ir)
+bt <- BlockTrack(gr, color = "salmon2", label = NULL)
+TnTBoard(bt, view.range = range(gr) * .7, coord.range = ranges(range(gr)) * .5)
+```
+
+<br> </br>
+
+### [Pin Track](tracktype-PinTrack.html)
+
+```{r, echo=FALSE}
+ir <- IRanges(start = c(100, 200, 300, 400), width = 1)
+gpos <- GRanges("na", ir)
+gpos$value <- 1:4
+
+ptrack <- PinTrack(gpos, color = c("green", "blue", "yellow", "red"), label = NULL)
+TnTBoard(ptrack, view.range = GRanges("na", IRanges(0, 500)), coord.range = IRanges(0, 500))
+```
+
+<br> </br>
+
+### [Line Track and Area Track](tracktype-LineTrack-AreaTrack.html)
+
+```{r, echo=FALSE}
+pos <- IRanges(seq(0, 500, by = 10), width = 1)
+pos <- GRanges("na", pos)
+pos$value <- c(1, 0.6, 0.1, 0.7, 0.1, 0, 0.9, 0.4, 0.6, 0.1, 0, 0.8, 0.4,  0.5, 0.3, 0.2, 0.3, 0.8, 0.1, 0.8, 0.1, 0, 1, 0.3, 0, 0.9, 1,  0.6, 0.6, 0.1, 0.9, 0.3, 0.7, 0.2, 0.2, 0.6, 0.1, 0, 1, 0.6,  0.1, 0.5, 0.2, 0.4, 0, 1, 0, 0.4, 0.6, 0.5, 0)
+lt <- LineTrack(pos, domain = c(0, 1), label = NULL, color = "steelblue", height = 40)
+at <- AreaTrack(pos, domain = c(0, 1), label = NULL, color = "orange", height = 40)
+TnTBoard(c(lt, at), view.range = GRanges("na", IRanges(0, 500)), coord.range = IRanges(0, 500),
+         zoom.allow = IRanges(70, 500))
+```
+
+<br> </br>
+
+### [Vline Track](tracktype-VlineTrack.html)
+
+```{r, echo=FALSE}
+```
+
+<br> </br>
+
+### [Gene Track and Feature Track](tracktype-GeneTrack.html)
+
+```{r, echo=FALSE}
+suppressPackageStartupMessages(library(EnsDb.Hsapiens.v86))
+gene <- genes(EnsDb.Hsapiens.v86)
+genetrack <- FeatureTrack(gene, tooltip = as.data.frame(gene), height = 100, color = "darkslategray4")
+TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .5)
+```
+
+<br> </br>
+
+### [Tx Track and FeatureGroup Track](tracktype-TxTrack.html)
+
+```{r, echo=FALSE}
+```
+
+<br> </br>
+
+
+### [Composite Track](track-CompositeTrack.html)
+
+```{r, echo=FALSE}
+```
+
+<br> </br>
+
+------
+
+## Track Manipulation
+
+### [Background, Height and Label (`trackSpec` and `trackSpec<-`)]()
+
+### [Track Data (`trackData` and `trackData<-`)]()
+
+------
+
+## Tooltip
+
+### [Tooltip display for tracks](track-tooltip-display.html)
+
+------
+
+## Colors
+
+### [Feature colors](track-colors.html)
+
+
+```{r, echo=FALSE}
+suppressMessages({
+    library(TnT)
+    library(EnsDb.Hsapiens.v86)
+    gene <- genes(EnsDb.Hsapiens.v86)
+    genetrack <- FeatureTrack(gene, tooltip = as.data.frame(gene), height = 100,
+                              color = mapcol(gene$gene_biotype, palette.fun = grDevices::rainbow))
+    TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .5)
+})
+```
+
+
+
+------
+
+## Low level utils
+
+### [trackWidget](trackWidget.html)
+
+------
 
