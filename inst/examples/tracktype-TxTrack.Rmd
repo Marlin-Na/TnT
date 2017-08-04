@@ -14,13 +14,13 @@ txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 ```
 
 
-## Basic Example
+## Transcript Track From TxDb
 
 
 ```{r}
 txs <- transcripts(txdb)
 txtrack <- TxTrackFromTxDb(txdb, label = "Transcripts", height = 300)
-TnTBoard(txtrack, txs[txs$tx_id == 4200])
+TnTGenome(txtrack, txs[txs$tx_id == 4200])
 ```
 
 

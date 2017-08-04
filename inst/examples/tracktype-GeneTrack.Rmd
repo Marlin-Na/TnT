@@ -14,13 +14,13 @@ txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 ```
 
 
-## Basic Example
+## Gene Track From TxDb
 
 
 ```{r}
 gene <- genes(txdb)
 gtrack <- GeneTrackFromTxDb(txdb, label = "Human Genome")
-TnTBoard(gtrack, gene[gene$gene_id == "2000"] * 0.1)
+TnTGenome(gtrack, gene[gene$gene_id == "2000"] * 0.1)
 ```
 
 
