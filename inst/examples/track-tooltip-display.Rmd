@@ -42,7 +42,7 @@ TnTBoard(myTrack, GRanges("UnKnown", IRanges(1, 2000)))
 First, construct a gene track from the TxDb object.
 
 ```{r}
-geneTrack <- GeneTrack(txdb, height = 300)
+geneTrack <- GeneTrackFromTxDb(txdb, height = 300)
 ```
 
 We can extract and replace the tooltip with `tooltip` and `tooltip<-`.

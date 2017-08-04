@@ -19,7 +19,7 @@ txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 
 ```{r}
 txs <- transcripts(txdb)
-txtrack <- TxTrack(txdb, label = "Transcripts", height = 300)
+txtrack <- TxTrackFromTxDb(txdb, label = "Transcripts", height = 300)
 TnTBoard(txtrack, txs[txs$tx_id == 4200])
 ```
 

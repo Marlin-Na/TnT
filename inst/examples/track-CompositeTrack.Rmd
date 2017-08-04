@@ -64,7 +64,7 @@ TnTGenome(list(ctrack, ptrack, btrack))
 ```{r}
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-gtrack <- GeneTrack(txdb, label = "Gene", color = "burlywood3")
+gtrack <- GeneTrackFromTxDb(txdb, label = "Gene", color = "burlywood3")
 
 ah <- AnnotationHub()
 ah <- query(ah, "cpgisland")

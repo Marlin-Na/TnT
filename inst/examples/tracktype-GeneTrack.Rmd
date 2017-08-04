@@ -19,7 +19,7 @@ txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 
 ```{r}
 gene <- genes(txdb)
-gtrack <- GeneTrack(txdb, label = "Human Genome")
+gtrack <- GeneTrackFromTxDb(txdb, label = "Human Genome")
 TnTBoard(gtrack, gene[gene$gene_id == "2000"] * 0.1)
 ```
 

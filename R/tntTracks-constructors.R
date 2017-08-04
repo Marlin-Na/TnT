@@ -73,7 +73,7 @@ AreaTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
 }
 
 #' @export
-GeneTrack <- function (txdb, seqlevel = seqlevels(txdb),
+GeneTrackFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
                        label = deparse(substitute(txdb)), # TODO: tooltip?
                        color = "black", background = NULL, height = 100) {
     
@@ -130,7 +130,7 @@ if (FALSE) {
 }
 
 #' @export
-TxTrack <- function (txdb, seqlevel = seqlevels(txdb),
+TxTrackFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
                      label = deparse(substitute(txdb)),
                      color = "red", background = NULL, height = 300) {
     
