@@ -193,7 +193,9 @@ wakeupBoard <- function (tntboard) {
         ## Update the combined seqinfo
         comb.seqinfo <- do.call(merge, unname(lapply(tracklist0, seqinfo)))
         comb.seqinfo <- merge(comb.seqinfo, seqinfo(viewrange0))
-        seqinfo(tntboard@ViewRange) <- comb.seqinfo
+        
+        seqinfo(tntboard@ViewRange,
+            new2old = match(seqlevels(comb.seqinfo), seqlevels(tntboard@ViewRange))) <- comb.seqinfo
         
         return(tntboard)
     }
@@ -256,7 +258,8 @@ wakeupBoard <- function (tntboard) {
                 viewrg <- viewrg * .8
             }
             
-            seqinfo(viewrg) <- comb.seqinfo
+            seqinfo(viewrg, new2old = match(seqlevels(comb.seqinfo), seqlevels(viewrg))) <- comb.seqinfo
+            
             viewrg
         }
         viewrg
