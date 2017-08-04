@@ -2,9 +2,6 @@
 title: "Tooltip Display in Tracks"
 ---
 
-
-A transcript track can be constructed from a TxDb object.
-
 Tooltip can be specified by supplying a data frame when constructing the track
 and it can be modified after the track is constructed.
 
@@ -62,27 +59,7 @@ head(tooltip(geneTrack))
 Click to see the tooltip.
 
 ```{r}
-TnTBoard(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
-```
-
-<br/> <br/>
-
-## Use a List Column in The Supplied Data Frame
-
-Some times we may want to include multiple elements in a cell of a tooltip table.
-For example, here we include the gene ontology terms of every gene in the
-tooltip:
-
-```{r}
-head(df.tooltip)
-columns(org.Hs.eg.db)
-go <- AnnotationDbi::select(org.Hs.eg.db, keys = as.character(df.tooltip$`Gene ID`),
-                            columns = "GO", keytype = "ENTREZID")
-df.tooltip$GO <- split(go$GO, go$ENTREZID)[as.character(df.tooltip$`Gene ID`)]
-df.tooltip$Evidence <- split(go$EVIDENCE, go$ENTREZID)[as.character(df.tooltip$`Gene ID`)]
-df.tooltip$Ontology <- split(go$ONTOLOGY, go$ENTREZID)[as.character(df.tooltip$`Gene ID`)]
-tooltip(geneTrack) <- df.tooltip
-TnTBoard(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
+TnTGenome(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
 ```
 
 <br/> <br/>
@@ -90,15 +67,13 @@ TnTBoard(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
 
 ## Use Sub-headers in Tooltip
 
-Columns that have empty columns will be regarded as subsection titles, for example:
+Columns of empty strings will be regarded as subsection titles, for example:
 
 ```{r}
 head(df.tooltip)
 df.tooltip <- cbind(
     data.frame(`Identity` = ""),
-    df.tooltip[c("Gene ID", "Location", "Gene Name")],
-    data.frame(`GO Profile` = "", check.names = FALSE),
-    df.tooltip[c("GO", "Evidence", "Ontology")]
+    df.tooltip[c("Gene ID", "Location", "Gene Name")]
 )
 ```
 
@@ -106,7 +81,7 @@ Click to see.
 
 ```{r}
 tooltip(geneTrack) <- df.tooltip
-TnTBoard(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
+TnTGenome(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
 ```
 
 <br/> <br/>
