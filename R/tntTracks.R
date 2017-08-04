@@ -407,10 +407,17 @@ setMethod("compileTrackData", signature = "RangeTrackData",
         stopifnot(length(unique(seqnames(trackData))) == 1)
         df <- as.data.frame(trackData, optional = TRUE) [
             c("start", "end", colnames(mcols(trackData)))]
-        jc.data <- jc(
-            tnt.board.track.data.sync = ma(),
-            retriever = jc(tnr.range_data_retriever = df)
-        )
+        
+        if (inherits(trackData, "TxTrackData"))
+            jc.data <- jc(
+                tnt.board.track.data.sync = ma(),
+                retriever = jc(tnr.range_data_retriever = jc(tnr.cp_tx_color_to_exon = df))
+            )
+        else
+            jc.data <- jc(
+                tnt.board.track.data.sync = ma(),
+                retriever = jc(tnr.range_data_retriever = df)
+            )
         jc.data
     }
 )

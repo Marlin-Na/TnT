@@ -11,9 +11,6 @@ HTMLWidgets.widget({
         
         tnr.tooltip_callback = function (header, entries) {
             
-            var header  = header;
-            var entries = entries;
-            
             // entries may be a scalar variable, but we need an array
             if (typeof entries != "object") {
                 entries = [entries];
@@ -37,6 +34,19 @@ HTMLWidgets.widget({
                     });
             };
             return ans;
+        };
+        
+        tnr.cp_tx_color_to_exon = function (data) {
+            var txData = data;
+            
+            for (var i = 0; i < txData.length; i++) {
+                var col = txData[i].color;
+                var exons = txData[i].exons;
+                for (var j = 0; j < exons.length; j++) {
+                    exons[j].color = col;
+                }
+            }
+            return txData;
         };
         
         //tnr.add_index = function (data) {
