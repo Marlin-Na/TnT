@@ -2,12 +2,20 @@
 title: "TnT Examples"
 ---
 
-This page contains examples of visualization created with TnT package.
+This site contains examples of visualization created with TnT R package.
+
+R version: <code>`r sub(x = sub(x = R.Version()$version.string, "R version ", ""), " ", paste0(" ", R.Version()$nickname, " "))`</code>
+
+Bioc version: <code>`r BiocInstaller::biocVersion()`</code>
+
+TnT version: <code>`r Biobase::package.version("TnT")`</code>
+
 
 ```{r, include=FALSE}
 suppressPackageStartupMessages({
     library(TnT)
     library(GenomicFeatures)
+    library(EnsDb.Hsapiens.v86)
 })
 ```
 
@@ -68,10 +76,12 @@ TnTBoard(c(lt, at), view.range = GRanges("na", IRanges(0, 500)), coord.range = I
 ### [Gene Track and Feature Track](tracktype-GeneTrack.html)
 
 ```{r, echo=FALSE}
-suppressPackageStartupMessages(library(EnsDb.Hsapiens.v86))
 gene <- genes(EnsDb.Hsapiens.v86)
-genetrack <- FeatureTrack(gene, tooltip = as.data.frame(gene), height = 100, color = "darkslategray4")
-TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .5)
+genetrack <- FeatureTrack(gene, tooltip = as.data.frame(gene),
+                          names = paste(gene$symbol, " (", gene$gene_biotype, ")", sep = ""),
+                          height = 100,
+                          color = mapcol(gene$gene_biotype, palette.fun = grDevices::rainbow))
+TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .7)
 ```
 
 <br> </br>
@@ -113,14 +123,6 @@ TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .5)
 
 
 ```{r, echo=FALSE}
-suppressMessages({
-    library(TnT)
-    library(EnsDb.Hsapiens.v86)
-    gene <- genes(EnsDb.Hsapiens.v86)
-    genetrack <- FeatureTrack(gene, tooltip = as.data.frame(gene), height = 100,
-                              color = mapcol(gene$gene_biotype, palette.fun = grDevices::rainbow))
-    TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .5)
-})
 ```
 
 
