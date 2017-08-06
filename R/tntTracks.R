@@ -532,11 +532,64 @@ trackData <- function (track) {
 
 #' @export
 `trackData<-` <- function (track, value) {
+    # TODO: convert value to the needed class
     track@Data <- value
     validObject(track)
     track
 }
 
+#### `[`, `[[`, etc.        ========
+
+setMethod("[", signature = c(x = "TnTTrack"),
+    function (x, i, j, ..., drop = TRUE) {
+        #trackData(x)[i, j, ..., drop = TRUE]
+        s <- match.call()
+        s$x <- bquote(TnT::trackData(.(s$x)))
+        eval.parent(s)
+    }
+)
+
+setMethod("[[", signature = c(x = "TnTTrack"),
+    function (x, ...) {
+        s <- match.call()
+        s$x <- bquote(TnT::trackData(.(s$x)))
+        eval.parent(s)
+    }
+)
+
+setMethod("$", signature = c(x = "TnTTrack"),
+    function (x, name) {
+        s <- as.call(list(`$`, trackData(x), name))
+        eval.parent(s)
+    }
+)
+
+setMethod("[<-", signature = c(x = "TnTTrack"),
+    function (x, i, j, ..., value) {
+        s <- match.call()
+        s$x <- bquote(TnT::trackData(.(s$x)))
+        trackData(x) <- eval.parent(s)
+        x
+    }
+)
+
+setMethod("[[<-", signature = c(x = "TnTTrack"),
+    function (x, i, j, ..., value) {
+        s <- match.call()
+        s$x <- bquote(TnT::trackData(.(s$x)))
+        trackData(x) <- eval.parent(s)
+        x
+    }
+)
+
+setMethod("$<-", signature = c(x = "TnTTrack"),
+    function (x, name, value) {
+        s <- match.call()
+        s$x <- bquote(TnT::trackData(.(s$x)))
+        trackData(x) <- eval.parent(s)
+        x
+    }
+)
 
 #### TrackSpec Accessor     ========
 
