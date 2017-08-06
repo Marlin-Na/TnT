@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Line Track and Area Track</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<script src="site_libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="site_libs/d3-3.5.17/d3.v3.min.js"></script>
+<link href="site_libs/tnt.genome-0.1.6/tnt.genome.css" rel="stylesheet" />
+<script src="site_libs/tnt.genome-0.1.6/tnt.genome.min.js"></script>
+<link href="site_libs/tnt.tooltip-0.2.0/tnt.tooltip.css" rel="stylesheet" />
+<script src="site_libs/tnt.tooltip-0.2.0/tnt.tooltip.js"></script>
+<script src="site_libs/trackWidget-binding-0.0.0.9016/trackWidget.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">TnT Examples</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Index</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Line Track and Area Track</h1>
+
+</div>
+
+
+<p>Line Track is created from a series of points in the track (i.e. width-one GRanges and their height). These points are applied a <strong>tension</strong> to smooth the connections between points.</p>
+<p>Area Track is similar to Line Track but coloring the area behind the curve.</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+    library(TnT)
+    library(GenomicFeatures)
+})
+set.seed(69)</code></pre>
+<div id="basic-linetrack-example" class="section level2">
+<h2>Basic LineTrack Example</h2>
+<pre class="r"><code>pos &lt;- IRanges(seq(1, 1000, by = 10), width = 1)
+height &lt;- .5 + cumsum(runif(length(pos), min = -.1, max = .1))
+height[height &gt;= 1] &lt;- 1
+height[height &lt;= 0] &lt;- 0
+
+ltrack &lt;- LineTrack(pos, value = height, color = &quot;blue&quot;)
+TnTBoard(ltrack)</code></pre>
+<pre><code>## - View range is not specified:
+##   automatically select -123..1114 on seqlevel UnKnown ...</code></pre>
+<pre><code>## - Coordinate limit is not specified and seqlength is unknown:
+##   automatically set coordinate range to -211..1203 ...</code></pre>
+<div id="htmlwidget-af71e2c04701c20bc9c7" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-af71e2c04701c20bc9c7">{"x":{"tntdef":"tnt.board()\n.from(-123)\n.to(1114)\n.min(-211)\n.max(1203)\n.zoom_out(1515)\n.zoom_in(10)\n.add_track(tnt.board.track()\n.label(\"pos\")\n.color(\"white\")\n.height(70)\n.display(tnt.board.track.feature.line()\n.color(\"blue\")\n.index(function (d) {return d.key;})\n.on(\"click\", tnr.tooltip_callback(\"pos\", [])))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.pos_data_retriever([\n  {\n    \"pos\": 1,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 1,\n    \"val\": 0.5062\n  },\n  {\n    \"pos\": 11,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 2,\n    \"val\": 0.5599\n  },\n  {\n    \"pos\": 21,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 3,\n    \"val\": 0.5891\n  },\n  {\n    \"pos\": 31,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 4,\n    \"val\": 0.6621\n  },\n  {\n    \"pos\": 41,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 5,\n    \"val\": 0.6359\n  },\n  {\n    \"pos\": 51,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 6,\n    \"val\": 0.7097\n  },\n  {\n    \"pos\": 61,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 7,\n    \"val\": 0.6439\n  },\n  {\n    \"pos\": 71,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 8,\n    \"val\": 0.7014\n  },\n  {\n    \"pos\": 81,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 9,\n    \"val\": 0.6361\n  },\n  {\n    \"pos\": 91,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 10,\n    \"val\": 0.5406\n  },\n  {\n    \"pos\": 101,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 11,\n    \"val\": 0.6171\n  },\n  {\n    \"pos\": 111,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 12,\n    \"val\": 0.5885\n  },\n  {\n    \"pos\": 121,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 13,\n    \"val\": 0.6736\n  },\n  {\n    \"pos\": 131,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 14,\n    \"val\": 0.6256\n  },\n  {\n    \"pos\": 141,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 15,\n    \"val\": 0.5622\n  },\n  {\n    \"pos\": 151,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 16,\n    \"val\": 0.515\n  },\n  {\n    \"pos\": 161,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 17,\n    \"val\": 0.4393\n  },\n  {\n    \"pos\": 171,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 18,\n    \"val\": 0.4652\n  },\n  {\n    \"pos\": 181,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 19,\n    \"val\": 0.3768\n  },\n  {\n    \"pos\": 191,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 20,\n    \"val\": 0.435\n  },\n  {\n    \"pos\": 201,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 21,\n    \"val\": 0.4215\n  },\n  {\n    \"pos\": 211,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 22,\n    \"val\": 0.3553\n  },\n  {\n    \"pos\": 221,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 23,\n    \"val\": 0.3828\n  },\n  {\n    \"pos\": 231,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 24,\n    \"val\": 0.3475\n  },\n  {\n    \"pos\": 241,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 25,\n    \"val\": 0.2766\n  },\n  {\n    \"pos\": 251,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 26,\n    \"val\": 0.223\n  },\n  {\n    \"pos\": 261,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 27,\n    \"val\": 0.2552\n  },\n  {\n    \"pos\": 271,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 28,\n    \"val\": 0.2816\n  },\n  {\n    \"pos\": 281,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 29,\n    \"val\": 0.2006\n  },\n  {\n    \"pos\": 291,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 30,\n    \"val\": 0.1635\n  },\n  {\n    \"pos\": 301,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 31,\n    \"val\": 0.1982\n  },\n  {\n    \"pos\": 311,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 32,\n    \"val\": 0.2804\n  },\n  {\n    \"pos\": 321,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 33,\n    \"val\": 0.2353\n  },\n  {\n    \"pos\": 331,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 34,\n    \"val\": 0.226\n  },\n  {\n    \"pos\": 341,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 35,\n    \"val\": 0.1951\n  },\n  {\n    \"pos\": 351,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 36,\n    \"val\": 0.2341\n  },\n  {\n    \"pos\": 361,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 37,\n    \"val\": 0.2711\n  },\n  {\n    \"pos\": 371,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 38,\n    \"val\": 0.2662\n  },\n  {\n    \"pos\": 381,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 39,\n    \"val\": 0.2458\n  },\n  {\n    \"pos\": 391,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 40,\n    \"val\": 0.2585\n  },\n  {\n    \"pos\": 401,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 41,\n    \"val\": 0.3573\n  },\n  {\n    \"pos\": 411,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 42,\n    \"val\": 0.3192\n  },\n  {\n    \"pos\": 421,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 43,\n    \"val\": 0.3155\n  },\n  {\n    \"pos\": 431,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 44,\n    \"val\": 0.3481\n  },\n  {\n    \"pos\": 441,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 45,\n    \"val\": 0.2917\n  },\n  {\n    \"pos\": 451,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 46,\n    \"val\": 0.1954\n  },\n  {\n    \"pos\": 461,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 47,\n    \"val\": 0.1149\n  },\n  {\n    \"pos\": 471,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 48,\n    \"val\": 0.0657\n  },\n  {\n    \"pos\": 481,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 49,\n    \"val\": 0.0471\n  },\n  {\n    \"pos\": 491,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 50,\n    \"val\": 0\n  },\n  {\n    \"pos\": 501,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 51,\n    \"val\": 0\n  },\n  {\n    \"pos\": 511,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 52,\n    \"val\": 0.0426\n  },\n  {\n    \"pos\": 521,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 53,\n    \"val\": 0.0935\n  },\n  {\n    \"pos\": 531,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 54,\n    \"val\": 0.0707\n  },\n  {\n    \"pos\": 541,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 55,\n    \"val\": 0.1585\n  },\n  {\n    \"pos\": 551,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 56,\n    \"val\": 0.1828\n  },\n  {\n    \"pos\": 561,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 57,\n    \"val\": 0.1119\n  },\n  {\n    \"pos\": 571,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 58,\n    \"val\": 0.0592\n  },\n  {\n    \"pos\": 581,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 59,\n    \"val\": 0.1136\n  },\n  {\n    \"pos\": 591,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 60,\n    \"val\": 0.1635\n  },\n  {\n    \"pos\": 601,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 61,\n    \"val\": 0.172\n  },\n  {\n    \"pos\": 611,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 62,\n    \"val\": 0.0922\n  },\n  {\n    \"pos\": 621,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 63,\n    \"val\": 0\n  },\n  {\n    \"pos\": 631,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 64,\n    \"val\": 0.0149\n  },\n  {\n    \"pos\": 641,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 65,\n    \"val\": 0\n  },\n  {\n    \"pos\": 651,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 66,\n    \"val\": 0\n  },\n  {\n    \"pos\": 661,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 67,\n    \"val\": 0\n  },\n  {\n    \"pos\": 671,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 68,\n    \"val\": 0\n  },\n  {\n    \"pos\": 681,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 69,\n    \"val\": 0.0447\n  },\n  {\n    \"pos\": 691,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 70,\n    \"val\": 0.0938\n  },\n  {\n    \"pos\": 701,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 71,\n    \"val\": 0.0819\n  },\n  {\n    \"pos\": 711,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 72,\n    \"val\": 0.1256\n  },\n  {\n    \"pos\": 721,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 73,\n    \"val\": 0.2107\n  },\n  {\n    \"pos\": 731,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 74,\n    \"val\": 0.269\n  },\n  {\n    \"pos\": 741,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 75,\n    \"val\": 0.1923\n  },\n  {\n    \"pos\": 751,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 76,\n    \"val\": 0.2865\n  },\n  {\n    \"pos\": 761,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 77,\n    \"val\": 0.2527\n  },\n  {\n    \"pos\": 771,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 78,\n    \"val\": 0.2525\n  },\n  {\n    \"pos\": 781,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 79,\n    \"val\": 0.2387\n  },\n  {\n    \"pos\": 791,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 80,\n    \"val\": 0.2906\n  },\n  {\n    \"pos\": 801,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 81,\n    \"val\": 0.3272\n  },\n  {\n    \"pos\": 811,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 82,\n    \"val\": 0.3211\n  },\n  {\n    \"pos\": 821,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 83,\n    \"val\": 0.3416\n  },\n  {\n    \"pos\": 831,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 84,\n    \"val\": 0.3904\n  },\n  {\n    \"pos\": 841,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 85,\n    \"val\": 0.4869\n  },\n  {\n    \"pos\": 851,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 86,\n    \"val\": 0.5076\n  },\n  {\n    \"pos\": 861,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 87,\n    \"val\": 0.5523\n  },\n  {\n    \"pos\": 871,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 88,\n    \"val\": 0.6157\n  },\n  {\n    \"pos\": 881,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 89,\n    \"val\": 0.6379\n  },\n  {\n    \"pos\": 891,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 90,\n    \"val\": 0.6882\n  },\n  {\n    \"pos\": 901,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 91,\n    \"val\": 0.7319\n  },\n  {\n    \"pos\": 911,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 92,\n    \"val\": 0.7846\n  },\n  {\n    \"pos\": 921,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 93,\n    \"val\": 0.7958\n  },\n  {\n    \"pos\": 931,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 94,\n    \"val\": 0.7565\n  },\n  {\n    \"pos\": 941,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 95,\n    \"val\": 0.6804\n  },\n  {\n    \"pos\": 951,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 96,\n    \"val\": 0.6311\n  },\n  {\n    \"pos\": 961,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 97,\n    \"val\": 0.62\n  },\n  {\n    \"pos\": 971,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 98,\n    \"val\": 0.5459\n  },\n  {\n    \"pos\": 981,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 99,\n    \"val\": 0.5166\n  },\n  {\n    \"pos\": 991,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 100,\n    \"val\": 0.5059\n  }\n]\n))))"},"evals":[],"jsHooks":[]}</script>
+<p><br/> <br/></p>
+</div>
+<div id="basic-areatrack-example" class="section level2">
+<h2>Basic AreaTrack Example</h2>
+<pre class="r"><code>artrack &lt;- AreaTrack(pos, value = height, color = &quot;blue&quot;)
+TnTBoard(artrack)</code></pre>
+<pre><code>## - View range is not specified:
+##   automatically select -123..1114 on seqlevel UnKnown ...</code></pre>
+<pre><code>## - Coordinate limit is not specified and seqlength is unknown:
+##   automatically set coordinate range to -211..1203 ...</code></pre>
+<div id="htmlwidget-5657ef02912f89e3ed86" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5657ef02912f89e3ed86">{"x":{"tntdef":"tnt.board()\n.from(-123)\n.to(1114)\n.min(-211)\n.max(1203)\n.zoom_out(1515)\n.zoom_in(10)\n.add_track(tnt.board.track()\n.label(\"pos\")\n.color(\"white\")\n.height(70)\n.display(tnt.board.track.feature.area()\n.color(\"blue\")\n.index(function (d) {return d.key;})\n.on(\"click\", tnr.tooltip_callback(\"pos\", [])))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.pos_data_retriever([\n  {\n    \"pos\": 1,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 1,\n    \"val\": 0.5062\n  },\n  {\n    \"pos\": 11,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 2,\n    \"val\": 0.5599\n  },\n  {\n    \"pos\": 21,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 3,\n    \"val\": 0.5891\n  },\n  {\n    \"pos\": 31,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 4,\n    \"val\": 0.6621\n  },\n  {\n    \"pos\": 41,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 5,\n    \"val\": 0.6359\n  },\n  {\n    \"pos\": 51,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 6,\n    \"val\": 0.7097\n  },\n  {\n    \"pos\": 61,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 7,\n    \"val\": 0.6439\n  },\n  {\n    \"pos\": 71,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 8,\n    \"val\": 0.7014\n  },\n  {\n    \"pos\": 81,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 9,\n    \"val\": 0.6361\n  },\n  {\n    \"pos\": 91,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 10,\n    \"val\": 0.5406\n  },\n  {\n    \"pos\": 101,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 11,\n    \"val\": 0.6171\n  },\n  {\n    \"pos\": 111,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 12,\n    \"val\": 0.5885\n  },\n  {\n    \"pos\": 121,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 13,\n    \"val\": 0.6736\n  },\n  {\n    \"pos\": 131,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 14,\n    \"val\": 0.6256\n  },\n  {\n    \"pos\": 141,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 15,\n    \"val\": 0.5622\n  },\n  {\n    \"pos\": 151,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 16,\n    \"val\": 0.515\n  },\n  {\n    \"pos\": 161,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 17,\n    \"val\": 0.4393\n  },\n  {\n    \"pos\": 171,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 18,\n    \"val\": 0.4652\n  },\n  {\n    \"pos\": 181,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 19,\n    \"val\": 0.3768\n  },\n  {\n    \"pos\": 191,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 20,\n    \"val\": 0.435\n  },\n  {\n    \"pos\": 201,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 21,\n    \"val\": 0.4215\n  },\n  {\n    \"pos\": 211,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 22,\n    \"val\": 0.3553\n  },\n  {\n    \"pos\": 221,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 23,\n    \"val\": 0.3828\n  },\n  {\n    \"pos\": 231,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 24,\n    \"val\": 0.3475\n  },\n  {\n    \"pos\": 241,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 25,\n    \"val\": 0.2766\n  },\n  {\n    \"pos\": 251,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 26,\n    \"val\": 0.223\n  },\n  {\n    \"pos\": 261,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 27,\n    \"val\": 0.2552\n  },\n  {\n    \"pos\": 271,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 28,\n    \"val\": 0.2816\n  },\n  {\n    \"pos\": 281,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 29,\n    \"val\": 0.2006\n  },\n  {\n    \"pos\": 291,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 30,\n    \"val\": 0.1635\n  },\n  {\n    \"pos\": 301,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 31,\n    \"val\": 0.1982\n  },\n  {\n    \"pos\": 311,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 32,\n    \"val\": 0.2804\n  },\n  {\n    \"pos\": 321,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 33,\n    \"val\": 0.2353\n  },\n  {\n    \"pos\": 331,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 34,\n    \"val\": 0.226\n  },\n  {\n    \"pos\": 341,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 35,\n    \"val\": 0.1951\n  },\n  {\n    \"pos\": 351,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 36,\n    \"val\": 0.2341\n  },\n  {\n    \"pos\": 361,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 37,\n    \"val\": 0.2711\n  },\n  {\n    \"pos\": 371,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 38,\n    \"val\": 0.2662\n  },\n  {\n    \"pos\": 381,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 39,\n    \"val\": 0.2458\n  },\n  {\n    \"pos\": 391,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 40,\n    \"val\": 0.2585\n  },\n  {\n    \"pos\": 401,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 41,\n    \"val\": 0.3573\n  },\n  {\n    \"pos\": 411,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 42,\n    \"val\": 0.3192\n  },\n  {\n    \"pos\": 421,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 43,\n    \"val\": 0.3155\n  },\n  {\n    \"pos\": 431,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 44,\n    \"val\": 0.3481\n  },\n  {\n    \"pos\": 441,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 45,\n    \"val\": 0.2917\n  },\n  {\n    \"pos\": 451,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 46,\n    \"val\": 0.1954\n  },\n  {\n    \"pos\": 461,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 47,\n    \"val\": 0.1149\n  },\n  {\n    \"pos\": 471,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 48,\n    \"val\": 0.0657\n  },\n  {\n    \"pos\": 481,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 49,\n    \"val\": 0.0471\n  },\n  {\n    \"pos\": 491,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 50,\n    \"val\": 0\n  },\n  {\n    \"pos\": 501,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 51,\n    \"val\": 0\n  },\n  {\n    \"pos\": 511,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 52,\n    \"val\": 0.0426\n  },\n  {\n    \"pos\": 521,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 53,\n    \"val\": 0.0935\n  },\n  {\n    \"pos\": 531,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 54,\n    \"val\": 0.0707\n  },\n  {\n    \"pos\": 541,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 55,\n    \"val\": 0.1585\n  },\n  {\n    \"pos\": 551,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 56,\n    \"val\": 0.1828\n  },\n  {\n    \"pos\": 561,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 57,\n    \"val\": 0.1119\n  },\n  {\n    \"pos\": 571,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 58,\n    \"val\": 0.0592\n  },\n  {\n    \"pos\": 581,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 59,\n    \"val\": 0.1136\n  },\n  {\n    \"pos\": 591,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 60,\n    \"val\": 0.1635\n  },\n  {\n    \"pos\": 601,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 61,\n    \"val\": 0.172\n  },\n  {\n    \"pos\": 611,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 62,\n    \"val\": 0.0922\n  },\n  {\n    \"pos\": 621,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 63,\n    \"val\": 0\n  },\n  {\n    \"pos\": 631,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 64,\n    \"val\": 0.0149\n  },\n  {\n    \"pos\": 641,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 65,\n    \"val\": 0\n  },\n  {\n    \"pos\": 651,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 66,\n    \"val\": 0\n  },\n  {\n    \"pos\": 661,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 67,\n    \"val\": 0\n  },\n  {\n    \"pos\": 671,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 68,\n    \"val\": 0\n  },\n  {\n    \"pos\": 681,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 69,\n    \"val\": 0.0447\n  },\n  {\n    \"pos\": 691,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 70,\n    \"val\": 0.0938\n  },\n  {\n    \"pos\": 701,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 71,\n    \"val\": 0.0819\n  },\n  {\n    \"pos\": 711,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 72,\n    \"val\": 0.1256\n  },\n  {\n    \"pos\": 721,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 73,\n    \"val\": 0.2107\n  },\n  {\n    \"pos\": 731,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 74,\n    \"val\": 0.269\n  },\n  {\n    \"pos\": 741,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 75,\n    \"val\": 0.1923\n  },\n  {\n    \"pos\": 751,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 76,\n    \"val\": 0.2865\n  },\n  {\n    \"pos\": 761,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 77,\n    \"val\": 0.2527\n  },\n  {\n    \"pos\": 771,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 78,\n    \"val\": 0.2525\n  },\n  {\n    \"pos\": 781,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 79,\n    \"val\": 0.2387\n  },\n  {\n    \"pos\": 791,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 80,\n    \"val\": 0.2906\n  },\n  {\n    \"pos\": 801,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 81,\n    \"val\": 0.3272\n  },\n  {\n    \"pos\": 811,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 82,\n    \"val\": 0.3211\n  },\n  {\n    \"pos\": 821,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 83,\n    \"val\": 0.3416\n  },\n  {\n    \"pos\": 831,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 84,\n    \"val\": 0.3904\n  },\n  {\n    \"pos\": 841,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 85,\n    \"val\": 0.4869\n  },\n  {\n    \"pos\": 851,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 86,\n    \"val\": 0.5076\n  },\n  {\n    \"pos\": 861,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 87,\n    \"val\": 0.5523\n  },\n  {\n    \"pos\": 871,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 88,\n    \"val\": 0.6157\n  },\n  {\n    \"pos\": 881,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 89,\n    \"val\": 0.6379\n  },\n  {\n    \"pos\": 891,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 90,\n    \"val\": 0.6882\n  },\n  {\n    \"pos\": 901,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 91,\n    \"val\": 0.7319\n  },\n  {\n    \"pos\": 911,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 92,\n    \"val\": 0.7846\n  },\n  {\n    \"pos\": 921,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 93,\n    \"val\": 0.7958\n  },\n  {\n    \"pos\": 931,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 94,\n    \"val\": 0.7565\n  },\n  {\n    \"pos\": 941,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 95,\n    \"val\": 0.6804\n  },\n  {\n    \"pos\": 951,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 96,\n    \"val\": 0.6311\n  },\n  {\n    \"pos\": 961,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 97,\n    \"val\": 0.62\n  },\n  {\n    \"pos\": 971,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 98,\n    \"val\": 0.5459\n  },\n  {\n    \"pos\": 981,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 99,\n    \"val\": 0.5166\n  },\n  {\n    \"pos\": 991,\n    \"tooltip\": {\n\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 100,\n    \"val\": 0.5059\n  }\n]\n))))"},"evals":[],"jsHooks":[]}</script>
+<p><br/> <br/></p>
+</div>
+<div id="session-info" class="section level2">
+<h2>Session Info</h2>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 3.4.1 (2017-06-30)
+## Platform: x86_64-suse-linux-gnu (64-bit)
+## Running under: openSUSE Tumbleweed
+## 
+## Matrix products: default
+## BLAS: /usr/lib64/R/lib/libRblas.so
+## LAPACK: /usr/lib64/R/lib/libRlapack.so
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats4    parallel  stats     graphics  grDevices utils     datasets 
+## [8] methods   base     
+## 
+## other attached packages:
+##  [1] org.Hs.eg.db_3.4.1                     
+##  [2] AnnotationHub_2.8.0                    
+##  [3] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
+##  [4] EnsDb.Hsapiens.v86_2.1.0               
+##  [5] ensembldb_2.0.0                        
+##  [6] AnnotationFilter_1.0.0                 
+##  [7] GenomicFeatures_1.28.0                 
+##  [8] AnnotationDbi_1.38.0                   
+##  [9] Biobase_2.36.0                         
+## [10] GenomicRanges_1.28.0                   
+## [11] GenomeInfoDb_1.12.0                    
+## [12] IRanges_2.10.0                         
+## [13] S4Vectors_0.14.3                       
+## [14] BiocGenerics_0.22.0                    
+## [15] TnT_0.0.0.9016                         
+## [16] jsonlite_1.5                           
+## [17] microbenchmark_1.4-2.1                 
+## [18] magrittr_1.5                           
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.11                  lattice_0.20-35              
+##  [3] Rsamtools_1.28.0              Biostrings_2.44.0            
+##  [5] gtools_3.5.0                  rprojroot_1.2                
+##  [7] digest_0.6.12                 mime_0.5                     
+##  [9] R6_2.2.2                      plyr_1.8.4                   
+## [11] backports_1.0.5               RSQLite_1.1-2                
+## [13] evaluate_0.10                 BiocInstaller_1.26.0         
+## [15] httr_1.2.1                    ggplot2_2.2.1                
+## [17] gplots_3.0.1                  zlibbioc_1.22.0              
+## [19] rlang_0.1.1                   curl_2.5                     
+## [21] lazyeval_0.2.0                gdata_2.18.0                 
+## [23] Matrix_1.2-10                 rmarkdown_1.5                
+## [25] BiocParallel_1.10.0           stringr_1.2.0                
+## [27] ProtGenerics_1.8.0            htmlwidgets_0.8              
+## [29] RCurl_1.95-4.8                biomaRt_2.32.0               
+## [31] munsell_0.4.3                 shiny_1.0.3                  
+## [33] DelayedArray_0.2.0            compiler_3.4.1               
+## [35] httpuv_1.3.3                  rtracklayer_1.36.0           
+## [37] htmltools_0.3.6               SummarizedExperiment_1.6.0   
+## [39] tibble_1.3.3                  GenomeInfoDbData_0.99.0      
+## [41] interactiveDisplayBase_1.14.0 matrixStats_0.52.2           
+## [43] XML_3.98-1.6                  GenomicAlignments_1.12.0     
+## [45] bitops_1.0-6                  grid_3.4.1                   
+## [47] ulimit_0.0-3                  xtable_1.8-2                 
+## [49] gtable_0.2.0                  DBI_0.7                      
+## [51] scales_0.4.1                  KernSmooth_2.23-15           
+## [53] stringi_1.1.5                 XVector_0.16.0               
+## [55] tools_3.4.1                   yaml_2.1.14                  
+## [57] colorspace_1.3-2              caTools_1.17.1               
+## [59] memoise_1.1.0                 knitr_1.15.1</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

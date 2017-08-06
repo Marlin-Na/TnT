@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Pin Track</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<script src="site_libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="site_libs/d3-3.5.17/d3.v3.min.js"></script>
+<link href="site_libs/tnt.genome-0.1.6/tnt.genome.css" rel="stylesheet" />
+<script src="site_libs/tnt.genome-0.1.6/tnt.genome.min.js"></script>
+<link href="site_libs/tnt.tooltip-0.2.0/tnt.tooltip.css" rel="stylesheet" />
+<script src="site_libs/tnt.tooltip-0.2.0/tnt.tooltip.js"></script>
+<script src="site_libs/trackWidget-binding-0.0.0.9016/trackWidget.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">TnT Examples</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Index</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Pin Track</h1>
+
+</div>
+
+
+<p>A Pin track can be created from a width-one GRanges that represents the genomic position and a numeric vector representing height of each “pin”.</p>
+<pre class="r"><code>suppressPackageStartupMessages({
+    library(TnT)
+    library(GenomicFeatures)
+})
+set.seed(42)</code></pre>
+<div id="basic-example" class="section level2">
+<h2>Basic Example</h2>
+<p>Construct the data.</p>
+<pre class="r"><code>ir &lt;- IRanges(start = c(10, 100, 1000), width = 1)
+gpos &lt;- GRanges(&quot;chr12&quot;, ir)
+gpos$score &lt;- c(0.1, 0.5, 1)</code></pre>
+<p>To construct the track and create the visualization.</p>
+<pre class="r"><code>ptrack &lt;- PinTrack(gpos, value = gpos$score, domain = c(0, 1), color = c(&quot;yellow&quot;, &quot;blue&quot;, &quot;red&quot;))
+TnTBoard(ptrack, GRanges(&quot;chr12&quot;, IRanges(1, 1200)))</code></pre>
+<pre><code>## - Coordinate limit is not specified and seqlength is unknown:
+##   automatically set coordinate range to -202..1212 ...</code></pre>
+<div id="htmlwidget-e532a79a19b43ef7b05d" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e532a79a19b43ef7b05d">{"x":{"tntdef":"tnt.board()\n.from(1)\n.to(1200)\n.min(-202)\n.max(1212)\n.zoom_out(1515)\n.zoom_in(10)\n.add_track(tnt.board.track()\n.label(\"gpos\")\n.color(\"white\")\n.height(40)\n.display(tnt.board.track.feature.pin()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.domain([0,1])\n.on(\"click\", tnr.tooltip_callback(\"gpos\", \"score\")))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.pos_data_retriever([\n  {\n    \"pos\": 10,\n    \"tooltip\": {\n      \"score\": 0.1\n    },\n    \"color\": \"#FFFF00\",\n    \"key\": 1,\n    \"val\": 0.1\n  },\n  {\n    \"pos\": 100,\n    \"tooltip\": {\n      \"score\": 0.5\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 2,\n    \"val\": 0.5\n  },\n  {\n    \"pos\": 1000,\n    \"tooltip\": {\n      \"score\": 1\n    },\n    \"color\": \"#FF0000\",\n    \"key\": 3,\n    \"val\": 1\n  }\n]\n))))"},"evals":[],"jsHooks":[]}</script>
+<p><br/> <br/></p>
+</div>
+<div id="session-info" class="section level2">
+<h2>Session Info</h2>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 3.4.1 (2017-06-30)
+## Platform: x86_64-suse-linux-gnu (64-bit)
+## Running under: openSUSE Tumbleweed
+## 
+## Matrix products: default
+## BLAS: /usr/lib64/R/lib/libRblas.so
+## LAPACK: /usr/lib64/R/lib/libRlapack.so
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats4    parallel  stats     graphics  grDevices utils     datasets 
+## [8] methods   base     
+## 
+## other attached packages:
+##  [1] org.Hs.eg.db_3.4.1                     
+##  [2] AnnotationHub_2.8.0                    
+##  [3] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
+##  [4] EnsDb.Hsapiens.v86_2.1.0               
+##  [5] ensembldb_2.0.0                        
+##  [6] AnnotationFilter_1.0.0                 
+##  [7] GenomicFeatures_1.28.0                 
+##  [8] AnnotationDbi_1.38.0                   
+##  [9] Biobase_2.36.0                         
+## [10] GenomicRanges_1.28.0                   
+## [11] GenomeInfoDb_1.12.0                    
+## [12] IRanges_2.10.0                         
+## [13] S4Vectors_0.14.3                       
+## [14] BiocGenerics_0.22.0                    
+## [15] TnT_0.0.0.9016                         
+## [16] jsonlite_1.5                           
+## [17] microbenchmark_1.4-2.1                 
+## [18] magrittr_1.5                           
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.11                  lattice_0.20-35              
+##  [3] Rsamtools_1.28.0              Biostrings_2.44.0            
+##  [5] gtools_3.5.0                  rprojroot_1.2                
+##  [7] digest_0.6.12                 mime_0.5                     
+##  [9] R6_2.2.2                      plyr_1.8.4                   
+## [11] backports_1.0.5               RSQLite_1.1-2                
+## [13] evaluate_0.10                 BiocInstaller_1.26.0         
+## [15] httr_1.2.1                    ggplot2_2.2.1                
+## [17] gplots_3.0.1                  zlibbioc_1.22.0              
+## [19] rlang_0.1.1                   curl_2.5                     
+## [21] lazyeval_0.2.0                gdata_2.18.0                 
+## [23] Matrix_1.2-10                 rmarkdown_1.5                
+## [25] BiocParallel_1.10.0           stringr_1.2.0                
+## [27] ProtGenerics_1.8.0            htmlwidgets_0.8              
+## [29] RCurl_1.95-4.8                biomaRt_2.32.0               
+## [31] munsell_0.4.3                 shiny_1.0.3                  
+## [33] DelayedArray_0.2.0            compiler_3.4.1               
+## [35] httpuv_1.3.3                  rtracklayer_1.36.0           
+## [37] htmltools_0.3.6               SummarizedExperiment_1.6.0   
+## [39] tibble_1.3.3                  GenomeInfoDbData_0.99.0      
+## [41] interactiveDisplayBase_1.14.0 matrixStats_0.52.2           
+## [43] XML_3.98-1.6                  GenomicAlignments_1.12.0     
+## [45] bitops_1.0-6                  grid_3.4.1                   
+## [47] ulimit_0.0-3                  xtable_1.8-2                 
+## [49] gtable_0.2.0                  DBI_0.7                      
+## [51] scales_0.4.1                  KernSmooth_2.23-15           
+## [53] stringi_1.1.5                 XVector_0.16.0               
+## [55] tools_3.4.1                   yaml_2.1.14                  
+## [57] colorspace_1.3-2              caTools_1.17.1               
+## [59] memoise_1.1.0                 knitr_1.15.1</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
