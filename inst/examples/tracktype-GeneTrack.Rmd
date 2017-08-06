@@ -1,27 +1,64 @@
 ---
-title: "Gene Track"
+title: "Gene Track and Feature Track"
 ---
 
-The gene track can be constructed from a TxDb object.
+This page describes how to construct a GeneTrack/FeatureTrack from TxDb or GRanges.
 
 ```{r}
 suppressPackageStartupMessages({
     library(TnT)
     library(GenomicFeatures)
     library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+    library(EnsDb.Hsapiens.v86)
 })
-txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 ```
 
 
 ## Gene Track From TxDb
 
+A GeneTrack can be easily constructed from a TxDb.
 
 ```{r}
-gene <- genes(txdb)
-gtrack <- GeneTrackFromTxDb(txdb, label = "Human Genome")
-TnTGenome(gtrack, gene[gene$gene_id == "2000"] * 0.1)
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+gtrack <- GeneTrackFromTxDb(txdb)
+gtrack
 ```
+
+To show the track, put the track into a `TnTBoard` or `TnTGenome`, optionally specifing the
+view range with a GRanges object.
+
+```{r}
+TnTGenome(gtrack, view.range = GRanges("chr13", IRanges(32889617, 32973809)) * 0.7)
+```
+
+<br/> <br/>
+
+## Feature Track
+
+FeatureTrack is an alias of GeneTrack, in the sense that this display method can be
+applied to general overlapping genomic features.
+
+Function `FeatureTrack` can construct a GeneTrack/FeatureTrack from a GRanges object, and
+gives you more control of the display (i.e. color, feature labels, tooltip).
+
+For example, we first extract the genes as a GRanges object from a EnsDb.
+
+```{r}
+gene <- genes(EnsDb.Hsapiens.v86)
+head(gene)
+```
+
+Then we construct the GeneTrack using this GRanges object with `FeatureTrack`, specifing
+our custom feature labels, feature colors and tooltips. Finally show the track with `TnTGenome`.
+
+```{r}
+ensGeneTrack <- FeatureTrack(gene, tooltip = as.data.frame(gene),
+                       names = paste(gene$symbol, " (", gene$gene_biotype, ")", sep = ""),
+                       color = mapcol(gene$gene_biotype, palette.fun = grDevices::rainbow))
+TnTGenome(ensGeneTrack, view.range = gene[gene$symbol == "BRCA2"][1] * .7)
+```
+
+<br/> <br/>
 
 
 <br/> <br/>
