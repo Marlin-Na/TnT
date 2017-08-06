@@ -23,6 +23,8 @@ suppressPackageStartupMessages({
 
 ## TnT Board and TnT Genome
 
+### [View Range, Coordinate Limit and Allowed Zoom Range]()
+
 
 ------
 
@@ -103,20 +105,6 @@ TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .7)
 
 ------
 
-## Track Manipulation
-
-### [Background, Height and Label (`trackSpec` and `trackSpec<-`)]()
-
-### [Track Data (`trackData` and `trackData<-`)]()
-
-------
-
-## Tooltip
-
-### [Tooltip display for tracks](track-tooltip-display.html)
-
-------
-
 ## Colors
 
 ### [Feature colors](track-colors.html)
@@ -129,6 +117,24 @@ track <- BlockTrack(data, color = data$"Color Name", label = NULL)
 TnTBoard(track, view.range = range(track), coord.range = ranges(range(track)))
 ```
 
+<br> </br>
+
+
+------
+
+## Track Manipulation
+
+### [Background, Height and Label (`trackSpec`)]()
+
+### [Track Data (`trackData`)]()
+
+### [Methods Passed to Track Data (`[`, `$`, `seqinfo`, `range`)]()
+
+------
+
+## Tooltip
+
+### [Tooltip display for tracks](track-tooltip-display.html)
 
 
 ------
