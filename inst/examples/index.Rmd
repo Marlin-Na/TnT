@@ -123,6 +123,10 @@ TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .7)
 
 
 ```{r, echo=FALSE}
+colors <- colors()
+data <- GRanges("Unknown", IRanges(seq_along(colors), width = 2), "Color Name" = colors)
+track <- BlockTrack(data, color = data$"Color Name", label = NULL)
+TnTBoard(track, view.range = range(track), coord.range = ranges(range(track)))
 ```
 
 
