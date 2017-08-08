@@ -200,6 +200,71 @@ if (FALSE) {
 }
 
 #' @export
+TxTrackDataFromGRanges <- function (gr, type = gr$type, tx_id = gr$tx_id, tx_name = gr$tx_name,
+                                    color = "red") {
+    # Check columns
+    check_col <- function(a, name = c("type", "tx_id")) {
+        if (!is.null(a))
+            return(TRUE)
+        name <- match.arg(name)
+        msg <- sprintf("%s is required to construct TxTrackData", dQuote(name))
+        stop(msg)
+    }
+    check_col(type,  "type")
+    check_col(tx_id, "tx_id")
+    force(tx_name) # tx_name is optional
+    
+    mcols(gr)  <- NULL
+    gr$type    <- type
+    gr$tx_id   <- tx_id
+    gr$tx_name <- tx_name
+    rm(type, tx_id, tx_name)
+    
+    gr <- gr[gr$type %in% c("exon", "cds")]
+    gr.tx <- {
+        gr.tx <- split(gr, gr$tx_id, drop = TRUE)
+        gr.tx <- range(gr.tx)
+        gr.tx <- if (any(lengths(gr.tx) != 1L)) stop() else unlist(gr.tx)
+        
+        gr.tx$tx_id <- gr$tx_id[match(names(gr.tx), gr$tx_id)] # match character to integer
+        gr.tx$tx_id <- na.fail(gr.tx$tx_id)
+        
+        gr.tx$tx_name <- if (is.null(gr$tx_name)) NULL else {
+            gr$tx_name[match(gr.tx$tx_id, gr$tx_id)]
+        }
+        
+        unname(gr.tx)
+    }
+    
+    gr.tx$exons <- {
+        exons <- data.frame(start = start(gr), end = end(gr),
+                            offset = start(gr) - start(gr.tx)[match(gr$tx_id, gr.tx$tx_id)],
+                            coding = ifelse(gr$type == "cds", TRUE, FALSE))
+        exons <- splitdf(exons, gr$tx_id)
+        exons <- unname(exons[match(names(exons), gr.tx$tx_id)])
+        exons
+    }
+    
+    gr.tx$display_label <- strandlabel(
+        labels = if (is.null(gr.tx$tx_name)) gr.tx$tx_id else gr.tx$tx_name,
+        strands = strand(gr.tx)
+    )
+    
+    gr.tx$key <- as.integer(as.factor(gr.tx$tx_id))
+    gr.tx$id  <- as.character(gr.tx$tx_id)
+    
+    gr.tx$tooltip <- data.frame(stringsAsFactors = FALSE,
+        tx_id    = gr.tx$tx_id,
+        tx_name  = gr.tx$tx_name,
+        location = as.character(gr.tx) 
+    )
+    
+    gr.tx$color <- color
+    new("TxTrackData", gr.tx)
+}
+
+
+#' @export
 TxTrackDataFromGRangesList <- function (grl, color = "red", tooltip = mcols(grl),
                                         labels = names(grl)) {
     force(tooltip)

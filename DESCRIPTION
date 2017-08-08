@@ -17,6 +17,7 @@ Imports:
     IRanges,
     S4Vectors,
     GenomicRanges,
+    biovizBase
 Suggests:
     shiny,
     knitr,
@@ -29,7 +30,7 @@ RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 URL: https://github.com/Marlin-Na/TnT
 BugReports: https://github.com/Marlin-Na/TnT/issues
-Collate: 
+Collate:
     'JavascriptCascade.R'
     'misc.R'
     'tntTracks.R'

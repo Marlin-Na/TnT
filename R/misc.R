@@ -17,6 +17,7 @@ NULL
 #' @import Biobase
 #' @import jsonlite
 #' @importFrom gplots col2hex
+#' @importFrom biovizBase crunch
 NULL
 
 
@@ -46,12 +47,12 @@ splitdf <- function (df, f) {
         df[["___FACTOR___"]] <- f
         ldf <- data.table:::split.data.table(
             data.table::as.data.table(df),
-            by = "___FACTOR___", keep.by = FALSE, flatten = FALSE
+            drop = TRUE, by = "___FACTOR___", keep.by = FALSE, flatten = FALSE
         )
     }
     else {
         warning("Install data.table could speed up the spliting process")
-        ldf <- split(df, f)
+        ldf <- split(df, f, drop = TRUE)
     }
     ldf
 }
