@@ -259,7 +259,9 @@ TxTrackDataFromGRanges <- function (gr, type = gr$type, tx_id = gr$tx_id, tx_nam
         location = as.character(gr.tx) 
     )
     
-    gr.tx$color <- color
+    if (length(color) != 1)
+        stop("Currently do not support multiple color values")
+    gr.tx$color <- if (length(gr.tx)) color else character(0)
     new("TxTrackData", gr.tx)
 }
 
@@ -267,6 +269,8 @@ TxTrackDataFromGRanges <- function (gr, type = gr$type, tx_id = gr$tx_id, tx_nam
 #' @export
 TxTrackDataFromGRangesList <- function (grl, color = "red", tooltip = mcols(grl),
                                         labels = names(grl)) {
+    ## TODO: check overlap within each group
+    
     force(tooltip)
     force(labels)
     stopifnot(nrow(tooltip) == length(grl))
