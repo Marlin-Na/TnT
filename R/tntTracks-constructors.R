@@ -139,3 +139,12 @@ TxTrackFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
     new_track("TxTrack",
               b = background, h = height, l = label, da = data, di = list())
 }
+
+#' @export
+TxTrackFromGRanges <- function (gr, label = deparse(substitute(gr)),
+                                color = "red", background = NULL, height = 300) {
+    data <- TxTrackDataFromGRanges(gr, color = color)
+    new_track("TxTrack",
+              b = background, h = height, l = label, da = data, di = list())
+}
+    
