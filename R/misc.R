@@ -4,6 +4,11 @@
 #' @export
 magrittr::`%>%`
 
+#' @importFrom biovizBase crunch
+#' @export
+biovizBase::crunch
+
+
 #' @import methods
 NULL
 
@@ -17,7 +22,6 @@ NULL
 #' @import Biobase
 #' @import jsonlite
 #' @importFrom gplots col2hex
-#' @importFrom biovizBase crunch
 NULL
 
 
