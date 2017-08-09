@@ -239,7 +239,8 @@ TxTrackDataFromGRanges <- function (gr, type = gr$type, tx_id = gr$tx_id, tx_nam
     gr.tx$exons <- {
         exons <- data.frame(start = start(gr), end = end(gr),
                             offset = start(gr) - start(gr.tx)[match(gr$tx_id, gr.tx$tx_id)],
-                            coding = ifelse(gr$type == "cds", TRUE, FALSE))
+                            coding = na.fail(ifelse(gr$type == "cds", TRUE,
+                                             ifelse(gr$type == "exon", FALSE, NA))))
         exons <- splitdf(exons, gr$tx_id)
         exons <- unname(exons[match(names(exons), gr.tx$tx_id)])
         exons
@@ -279,6 +280,8 @@ TxTrackDataFromGRangesList <- function (grl, color = "red", tooltip = mcols(grl)
     
     force(tooltip)
     force(labels)
+    if (is.null(labels))
+        labels <- rep("", length(grl))
     stopifnot(nrow(tooltip) == length(grl))
     stopifnot(length(labels) == length(grl))
     tx <- range(grl)

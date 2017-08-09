@@ -107,14 +107,23 @@ if (FALSE) {
 }
 
 #' @export
-GroupFeatureTrack <- function (grangelist, label = deparse(substitute(grangelist)),
-                               tooltip = mcols(grangelist),
-                               names = base::names(grangelist),
+GroupFeatureTrack <- function (grl, label = deparse(substitute(grl)),
+                               tooltip = mcols(grl),
+                               names = base::names(grl),
                                color = "black", background = NULL, height = 200) {
     force(tooltip)
     force(names)
     
-    data <- TxTrackDataFromGRangesList(grangelist, tooltip = tooltip, color = color,
+    # # Check wheter strands within each group are consistent
+    # strands <- as(unique(strand(grl)), "CharacterList")
+    # strands[lengths(strands) == 0L] <- "" # may be empty
+    # if (any(lengths(strands) != 1L))
+    #     stop("Strands are not consistent within each group")
+    # strands <- as.character(strands)
+    # 
+    # labels <- strandlabel(names, strands)
+    
+    data <- TxTrackDataFromGRangesList(grl, tooltip = tooltip, color = color,
                                        labels = names)
     new_track("TxTrack",
               b = background, h = height, l = label, da = data, di = list())
