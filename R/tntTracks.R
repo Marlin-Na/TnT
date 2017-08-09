@@ -253,11 +253,17 @@ TxTrackDataFromGRanges <- function (gr, type = gr$type, tx_id = gr$tx_id, tx_nam
     gr.tx$key <- as.integer(as.factor(gr.tx$tx_id))
     gr.tx$id  <- as.character(gr.tx$tx_id)
     
-    gr.tx$tooltip <- data.frame(stringsAsFactors = FALSE,
-        tx_id    = gr.tx$tx_id,
-        tx_name  = gr.tx$tx_name,
-        location = as.character(gr.tx) 
-    )
+    if (is.null(gr.tx$tx_name))
+        gr.tx$tooltip <- data.frame(stringsAsFactors = FALSE,
+            tx_id    = gr.tx$tx_id,
+            location = as.character(gr.tx) 
+        )
+    else
+        gr.tx$tooltip <- data.frame(
+            tx_id    = gr.tx$tx_id,
+            tx_name  = gr.tx$tx_name,
+            location = as.character(gr.tx) 
+        )
     
     if (length(color) != 1)
         stop("Currently do not support multiple color values")
