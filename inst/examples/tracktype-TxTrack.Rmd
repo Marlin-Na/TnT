@@ -1,14 +1,34 @@
 ---
-title: "Transcript Track"
+title: "TxTrack and GroupFeatureTrack"
 ---
 
-A transcript track can be constructed from a TxDb object.
+A TxTrack displays transcripts and their stucture (exons, coding sequence) along
+genomic coordinate. It can be constructed from either a TxDb object by `TxTrackFromTxDb`
+or a GRanges object by `TxTrackFromGRanges`.
+
+For the constructing method from GRanges, two necessary meta-columns ("type", "tx_id")
+of the GRanges are required. The "tx_id" indicates grouping, and the "type" can be "exon" or "cds"
+by which ranges of "cds" will be filled with color. This method can be used together with
+`biovizBase::crunch` to fetch gene model in a certain region or of a certain gene from
+TxDb or EnsDb.
+
+The constructed track may be further modified to adjust color, tooltip, display labels, etc.
+
+Similar to the relationship between GeneTrack and FeatureTrack,
+when the display method of TxTrack applied to genomic feature that may have gaps on
+genomic coordinate, e.g. RNA-related features that are mapped to genomic coordinate,
+it is called GroupFeatureTrack. It can be constructed from a GRangesList object
+by `GroupFeatureTrack` function, assuming ranges in each group are on the same strand
+and do not overlap.
+
+
 
 ```{r}
 suppressPackageStartupMessages({
     library(TnT)
     library(GenomicFeatures)
     library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+    library(EnsDb.Hsapiens.v75)
 })
 txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 ```
@@ -18,13 +38,72 @@ txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 
 
 ```{r}
-txs <- transcripts(txdb)
-txtrack <- TxTrackFromTxDb(txdb, label = "Transcripts", height = 300)
-TnTGenome(txtrack, txs[txs$tx_id == 4200])
+txtrack <- TxTrackFromTxDb(txdb, height = 400)
+TnTGenome(txtrack, view.range = GRanges("chr17", IRanges(41190000, 41290000)))
 ```
 
+Please note that `TxTrackFromTxDb` currently consumes a relative large amount of memory,
+currently you can use `seqlevel` argument to limit the chromosomes to extract data from,
+e.g. `TxTrackFromTxDb(txdb, seqlevel = "chr17")`. But in future, we will use S4 class
+`CompressedSplitDataFrameList` to store the exons and implement direct conversion method
+to JSON to avoid the intermediate structure as list of data frame.
+
+
+## Transcript Track From GRanges (Fetched From EnsDb)
+
+We can use function `crunch` from `biovizBase` package to fetch gene model within a
+certain genomic region or of a certain gene.
+
+```{r}
+gr <- biovizBase::crunch(EnsDb.Hsapiens.v75, ~ symbol == "BRCA2")
+gr
+```
+
+Then we use this GRanges object to construct the TxTrack.
+
+```{r}
+brca2tx <- TxTrackFromGRanges(gr, label = "BRCA2, transcripts", color = "grey2", height = 300)
+TnTGenome(brca2tx)
+```
 
 <br/> <br/>
+
+## Modify Track Color and Tooltip
+
+Following the example above, we can fill the tooltip with more information and change
+the colors.
+
+```{r}
+brca2tx$tooltip <- select(EnsDb.Hsapiens.v75,
+    keys = brca2tx$tooltip$tx_id, keytype = "TXID", columns = c("GENEID", "SYMBOL", "TXBIOTYPE")
+)
+brca2tx$color         <- mapcol(brca2tx$tooltip$TXBIOTYPE)
+brca2tx$display_label <- strandlabel(
+    paste(brca2tx$tooltip$SYMBOL, brca2tx$tooltip$TXBIOTYPE), strand(trackData(brca2tx))
+)
+TnTGenome(brca2tx)
+```
+
+<br/> <br/>
+
+
+## GroupFeatureTrack From GRangesList
+
+```{r}
+grl <- GRangesList(
+    GRanges("chr12", IRanges(c(100,  200, 1000), width = 50), strand = "+"),
+    GRanges("chr12", IRanges(c(900, 1300, 1400), width = 50), strand = "-"),
+    GRanges("chr12", IRanges(c(900, 1300, 1400), width = 50), strand = "-"),
+    GRanges("chr12", IRanges(c(900, 1300, 1400), width = 50), strand = "*"),
+    GRanges("chr12", IRanges(c(900, 1300, 1400), width = 50), strand = "-"),
+    GRanges("chr12", IRanges(c(900, 1300, 1400), width = 50), strand = "-"),
+    GRanges()
+)
+names(grl) <- LETTERS[1:7]
+grltrack <- GroupFeatureTrack(grl, color = "steelblue")
+TnTGenome(grltrack)
+```
+
 
 
 ## Session Info
@@ -32,3 +111,4 @@ TnTGenome(txtrack, txs[txs$tx_id == 4200])
 ```{r}
 sessionInfo()
 ```
+
