@@ -34,7 +34,7 @@ TnTBoard(myTrack, GRanges("UnKnown", IRanges(1, 2000)))
 
 <br/> <br/>
 
-## Modify The Tooltip of a Constructed Track
+## Modify Tooltip of a Constructed Track
 
 First, construct a gene track from the TxDb object.
 
@@ -54,6 +54,12 @@ genename <- AnnotationDbi::select(org.Hs.eg.db, as.character(df.tooltip$`Gene ID
 df.tooltip$`Gene Name` <- genename$SYMBOL[match(df.tooltip$`Gene ID`, genename$ENTREZID)]
 tooltip(geneTrack) <- df.tooltip
 head(tooltip(geneTrack))
+```
+
+We can also modify the label to show gene symbol instead of entrez ID.
+
+```{r}
+geneTrack$display_label <- strandlabel(tooltip(geneTrack)$`Gene Name`, strand(trackData(geneTrack)))
 ```
 
 Click to see the tooltip.

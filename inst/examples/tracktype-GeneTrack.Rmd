@@ -35,6 +35,8 @@ TnTGenome(gtrack, view.range = GRanges("chr13", IRanges(32889617, 32973809)) * 0
 
 ## Feature Track
 
+### Feature Track Showing Genes
+
 FeatureTrack is an alias of GeneTrack, in the sense that this display method can be
 applied to general overlapping genomic features.
 
@@ -60,6 +62,12 @@ TnTGenome(ensGeneTrack, view.range = gene[gene$symbol == "BRCA2"][1] * .7)
 
 <br/> <br/>
 
+### Feature Track Showing Alignment
+
+TODO
+
+```{r}
+```
 
 <br/> <br/>
 
