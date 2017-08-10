@@ -242,7 +242,7 @@ TxTrackDataFromGRanges <- function (gr, type = gr$type, tx_id = gr$tx_id, tx_nam
                             coding = na.fail(ifelse(gr$type == "cds", TRUE,
                                              ifelse(gr$type == "exon", FALSE, NA))))
         exons <- splitdf(exons, gr$tx_id)
-        exons <- unname(exons[match(names(exons), gr.tx$tx_id)])
+        exons <- unname(exons[match(gr.tx$tx_id, names(exons))])
         exons
     }
     
