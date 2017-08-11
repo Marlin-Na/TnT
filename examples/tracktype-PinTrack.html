@@ -222,8 +222,8 @@ gpos$score &lt;- c(0.1, 0.5, 1)</code></pre>
 TnTBoard(ptrack, GRanges(&quot;chr12&quot;, IRanges(1, 1200)))</code></pre>
 <pre><code>## - Coordinate limit is not specified and seqlength is unknown:
 ##   automatically set coordinate range to -202..1212 ...</code></pre>
-<div id="htmlwidget-c4110f3bfc2e4a84845f" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c4110f3bfc2e4a84845f">{"x":{"tntdef":"tnt.board()\n.from(1)\n.to(1200)\n.min(-202)\n.max(1212)\n.zoom_out(1515)\n.zoom_in(10)\n.add_track(tnt.board.track()\n.label(\"gpos\")\n.color(\"white\")\n.height(40)\n.display(tnt.board.track.feature.pin()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.domain([0,1])\n.on(\"click\", tnr.tooltip_callback(\"gpos\", \"score\")))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.pos_data_retriever([\n  {\n    \"pos\": 10,\n    \"tooltip\": {\n      \"score\": 0.1\n    },\n    \"color\": \"#FFFF00\",\n    \"key\": 1,\n    \"val\": 0.1\n  },\n  {\n    \"pos\": 100,\n    \"tooltip\": {\n      \"score\": 0.5\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 2,\n    \"val\": 0.5\n  },\n  {\n    \"pos\": 1000,\n    \"tooltip\": {\n      \"score\": 1\n    },\n    \"color\": \"#FF0000\",\n    \"key\": 3,\n    \"val\": 1\n  }\n]\n))))"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c461762dd795deaeafc5" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c461762dd795deaeafc5">{"x":{"tntdef":"tnt.board()\n.from(1)\n.to(1200)\n.min(-202)\n.max(1212)\n.zoom_out(1515)\n.zoom_in(10)\n.add_track(tnt.board.track()\n.label(\"gpos\")\n.color(\"white\")\n.height(40)\n.display(tnt.board.track.feature.pin()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.domain([0,1])\n.on(\"click\", tnr.tooltip_callback(\"gpos\", \"score\")))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.pos_data_retriever([\n  {\n    \"pos\": 10,\n    \"tooltip\": {\n      \"score\": 0.1\n    },\n    \"color\": \"#FFFF00\",\n    \"key\": 1,\n    \"val\": 0.1\n  },\n  {\n    \"pos\": 100,\n    \"tooltip\": {\n      \"score\": 0.5\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 2,\n    \"val\": 0.5\n  },\n  {\n    \"pos\": 1000,\n    \"tooltip\": {\n      \"score\": 1\n    },\n    \"color\": \"#FF0000\",\n    \"key\": 3,\n    \"val\": 1\n  }\n]\n))))"},"evals":[],"jsHooks":[]}</script>
 <p><br/> <br/></p>
 </div>
 <div id="session-info" class="section level2">
@@ -252,27 +252,28 @@ TnTBoard(ptrack, GRanges(&quot;chr12&quot;, IRanges(1, 1200)))</code></pre>
 ## other attached packages:
 ##  [1] org.Hs.eg.db_3.4.1                     
 ##  [2] AnnotationHub_2.8.0                    
-##  [3] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
-##  [4] EnsDb.Hsapiens.v86_2.1.0               
-##  [5] ensembldb_2.0.0                        
-##  [6] AnnotationFilter_1.0.0                 
-##  [7] GenomicFeatures_1.28.0                 
-##  [8] AnnotationDbi_1.38.0                   
-##  [9] Biobase_2.36.0                         
-## [10] GenomicRanges_1.28.0                   
-## [11] GenomeInfoDb_1.12.0                    
-## [12] IRanges_2.10.0                         
-## [13] S4Vectors_0.14.3                       
-## [14] BiocGenerics_0.22.0                    
-## [15] TnT_0.0.0.9016                         
-## [16] jsonlite_1.5                           
-## [17] microbenchmark_1.4-2.1                 
-## [18] magrittr_1.5                           
+##  [3] EnsDb.Hsapiens.v86_2.1.0               
+##  [4] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
+##  [5] EnsDb.Hsapiens.v75_2.1.0               
+##  [6] ensembldb_2.0.0                        
+##  [7] AnnotationFilter_1.0.0                 
+##  [8] GenomicFeatures_1.28.0                 
+##  [9] AnnotationDbi_1.38.0                   
+## [10] Biobase_2.36.0                         
+## [11] GenomicRanges_1.28.0                   
+## [12] GenomeInfoDb_1.12.0                    
+## [13] IRanges_2.10.0                         
+## [14] S4Vectors_0.14.3                       
+## [15] BiocGenerics_0.22.0                    
+## [16] TnT_0.0.0.9016                         
+## [17] jsonlite_1.5                           
+## [18] microbenchmark_1.4-2.1                 
+## [19] magrittr_1.5                           
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] httr_1.2.1                    splines_3.4.1                
-##  [3] gtools_3.5.0                  shiny_1.0.3                  
-##  [5] Formula_1.2-1                 interactiveDisplayBase_1.14.0
+##  [3] gtools_3.5.0                  Formula_1.2-1                
+##  [5] shiny_1.0.3                   interactiveDisplayBase_1.14.0
 ##  [7] latticeExtra_0.6-28           BSgenome_1.44.0              
 ##  [9] GenomeInfoDbData_0.99.0       Rsamtools_1.28.0             
 ## [11] yaml_2.1.14                   RSQLite_1.1-2                
@@ -286,30 +287,29 @@ TnTBoard(ptrack, GRanges(&quot;chr12&quot;, IRanges(1, 1200)))</code></pre>
 ## [27] zlibbioc_1.22.0               xtable_1.8-2                 
 ## [29] scales_0.4.1                  gdata_2.18.0                 
 ## [31] ulimit_0.0-3                  BiocParallel_1.10.0          
-## [33] htmlTable_1.9                 tibble_1.3.3                 
-## [35] ggplot2_2.2.1                 SummarizedExperiment_1.6.0   
-## [37] nnet_7.3-12                   lazyeval_0.2.0               
-## [39] mime_0.5                      survival_2.41-3              
-## [41] memoise_1.1.0                 evaluate_0.10                
-## [43] gplots_3.0.1                  foreign_0.8-69               
-## [45] BiocInstaller_1.26.0          tools_3.4.1                  
-## [47] data.table_1.10.4             matrixStats_0.52.2           
-## [49] stringr_1.2.0                 munsell_0.4.3                
-## [51] cluster_2.0.6                 DelayedArray_0.2.0           
-## [53] Biostrings_2.44.0             compiler_3.4.1               
-## [55] caTools_1.17.1                rlang_0.1.1                  
-## [57] grid_3.4.1                    RCurl_1.95-4.8               
-## [59] dichromat_2.0-0               VariantAnnotation_1.22.0     
-## [61] htmlwidgets_0.8               bitops_1.0-6                 
-## [63] base64enc_0.1-3               rmarkdown_1.5                
-## [65] gtable_0.2.0                  curl_2.5                     
-## [67] DBI_0.7                       R6_2.2.2                     
-## [69] GenomicAlignments_1.12.0      gridExtra_2.2.1              
-## [71] knitr_1.15.1                  rtracklayer_1.36.0           
-## [73] Hmisc_4.0-2                   rprojroot_1.2                
-## [75] ProtGenerics_1.8.0            KernSmooth_2.23-15           
-## [77] stringi_1.1.5                 Rcpp_0.12.11                 
-## [79] rpart_4.1-11                  acepack_1.4.1</code></pre>
+## [33] htmlTable_1.9                 ggplot2_2.1.0                
+## [35] SummarizedExperiment_1.6.0    nnet_7.3-12                  
+## [37] lazyeval_0.2.0                mime_0.5                     
+## [39] survival_2.41-3               memoise_1.1.0                
+## [41] evaluate_0.10                 gplots_3.0.1                 
+## [43] foreign_0.8-69                BiocInstaller_1.26.0         
+## [45] tools_3.4.1                   data.table_1.10.4            
+## [47] matrixStats_0.52.2            stringr_1.2.0                
+## [49] munsell_0.4.3                 cluster_2.0.6                
+## [51] DelayedArray_0.2.0            Biostrings_2.44.0            
+## [53] compiler_3.4.1                caTools_1.17.1               
+## [55] grid_3.4.1                    RCurl_1.95-4.8               
+## [57] dichromat_2.0-0               VariantAnnotation_1.22.0     
+## [59] htmlwidgets_0.8               bitops_1.0-6                 
+## [61] base64enc_0.1-3               rmarkdown_1.5                
+## [63] gtable_0.2.0                  curl_2.5                     
+## [65] DBI_0.7                       R6_2.2.2                     
+## [67] GenomicAlignments_1.12.0      gridExtra_2.2.1              
+## [69] knitr_1.15.1                  rtracklayer_1.36.0           
+## [71] Hmisc_4.0-2                   rprojroot_1.2                
+## [73] ProtGenerics_1.8.0            KernSmooth_2.23-15           
+## [75] stringi_1.1.5                 Rcpp_0.12.11                 
+## [77] rpart_4.1-11                  acepack_1.4.1</code></pre>
 </div>
 
 
