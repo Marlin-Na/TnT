@@ -43,8 +43,10 @@ TnTBoard <- function (tracklist, view.range = GRanges(),
 }
 
 #' @export
-TnTGenome <- function (...) {
-    TnTBoard(..., use.tnt.genome = TRUE)
+TnTGenome <- function (tracklist, view.range = GRanges(),
+                       coord.range = IRanges(), zoom.allow = IRanges()) {
+    TnTBoard(tracklist, view.range = GRanges(),
+             coord.range = IRanges(), zoom.allow = IRanges(), use.tnt.genome = TRUE)
 }
 
 
@@ -392,7 +394,7 @@ wakeupBoard <- function (tntboard) {
 
 
 ## Printing     ====
-#' @export
+
 setMethod("show", signature = c("TnTBoard"),
     function (object) {
         # TODO: Have to provide renderTnT and TnTOutput
@@ -400,7 +402,6 @@ setMethod("show", signature = c("TnTBoard"),
         print(widget)
     }
 )
-#' @export
 knit_print.TnTBoard <- function (x, ..., options = NULL) {
     # Redirect method to htmlwidget
     x <- trackWidget(x, elementId = NULL)

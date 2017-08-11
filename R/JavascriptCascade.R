@@ -64,12 +64,10 @@ setClass("JavaScript", contains = "character")
 setClass("JSCascade", contains = "SimpleList")
 setClass("MultiArgs", contains = "SimpleList")
 
-#' @export
 JavaScript <- function (code) {
     new("JavaScript", code)
 }
 
-#' @export
 JSCascade <- function (..., .listData) {
     if (missing(.listData))
         lst <- list(...)
@@ -82,7 +80,6 @@ JSCascade <- function (..., .listData) {
     ans
 }
 
-#' @export
 MultiArgs <- function (..., .listData) {
     if (missing(.listData))
         new("MultiArgs", listData = list(...))
@@ -90,25 +87,18 @@ MultiArgs <- function (..., .listData) {
         new("MultiArgs", listData = .listData)
 }
 
-#' @export
 NoArg <- MultiArgs()
 
-#' @export
 js <- JavaScript
-#' @export
 jc <- JSCascade
-#' @export
 ma <- MultiArgs
-#' @export
 na <- NoArg
 
 
-#' @export
 setGeneric("asJS",
     function (object) standardGeneric("asJS")
 )
 
-#' @export
 setGeneric("asJC",
     function (object, ...) standardGeneric("asJC")
 )

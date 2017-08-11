@@ -61,7 +61,6 @@
 
 
 
-#' @export
 tooltipCallback <- function (header, entries) {
     stopifnot(length(header) == 1)
     jc(tnr.tooltip_callback = ma(header, entries))
@@ -95,10 +94,8 @@ setClass("TxTrackData", contains = "RangeTrackData")
 
 #### TrackData constructors     ========
 
-#' @export
 NoTrackData <- function () new("NoTrackData")
 
-#' @export
 RangeTrackData <- function (range, color = "black", tooltip = mcols(range), key = seq_along(range)) {
     range <-
         if (is(range, "IRanges"))
@@ -121,7 +118,6 @@ RangeTrackData <- function (range, color = "black", tooltip = mcols(range), key 
     new("RangeTrackData", range)
 }
 
-#' @export
 PosTrackData <- function (pos, color = "black", tooltip = mcols(pos)) {
     trackdata <- RangeTrackData(range = pos, color = color, tooltip = tooltip)
     trackdata <- as(trackdata, "PosTrackData")
@@ -129,7 +125,6 @@ PosTrackData <- function (pos, color = "black", tooltip = mcols(pos)) {
     trackdata
 }
 
-#' @export
 PosValTrackData <- function (pos, val, color = "black", tooltip = mcols(pos)) {
     mcols(pos) <- NULL
     
@@ -142,7 +137,6 @@ PosValTrackData <- function (pos, val, color = "black", tooltip = mcols(pos)) {
 }
 
 
-#' @export
 GeneTrackData <- function (range, labels = paste("Gene", mcols(range)$gene_id),
                            ids = make.unique(labels), color = "black", tooltip = mcols(range)) {
     force(labels)
@@ -168,7 +162,6 @@ if (FALSE) {
     GeneTrackData(ir, labels = paste("gene", 1:3))
 }
 
-#' @export
 GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "black") {
     seqlevel.ori <- seqlevels(txdb)
     seqlevels(txdb) <- seqlevel         # Set and restore the seqlevels
@@ -199,7 +192,6 @@ if (FALSE) {
     GeneTrackDataFromTxDb(txdb, c("chrX", "chrY"))
 }
 
-#' @export
 TxTrackDataFromGRanges <- function (gr, type = gr$type, tx_id = gr$tx_id, tx_name = gr$tx_name,
                                     color = "red") {
     # Check columns
@@ -273,7 +265,6 @@ TxTrackDataFromGRanges <- function (gr, type = gr$type, tx_id = gr$tx_id, tx_nam
 }
 
 
-#' @export
 TxTrackDataFromGRangesList <- function (grl, color = "red", tooltip = mcols(grl),
                                         labels = names(grl)) {
     ## TODO: check overlap within each group
@@ -326,7 +317,6 @@ if (FALSE) {
 
 
 
-#' @export
 TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "red") {
     ## Set and restore seqlevels of txdb
     seqlevel.ori <- seqlevels(txdb)
@@ -469,17 +459,14 @@ setValidity("TxTrackData",
 
 #### TrackData Compilation  ========
 
-#' @export
 setGeneric("compileTrackData",
            function (trackData) standardGeneric("compileTrackData"))
 
-#' @export
 setMethod("compileTrackData", signature = "NoTrackData",
     function (trackData)
         jc(tnt.board.track.data.empty = NoArg)
 )
 
-#' @export
 setMethod("compileTrackData", signature = "RangeTrackData",
     function (trackData) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
@@ -506,7 +493,6 @@ if (FALSE) local({
     compileTrackData(data)
 })
 
-#' @export
 setMethod("compileTrackData", signature = "PosTrackData",
     function (trackData) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
@@ -583,11 +569,11 @@ setClass("AreaTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrack
 
 
 #### Seqinfo Methods        ========
-#' @export
+
 setMethod("seqinfo", signature = c("RangeTrack"),
     function (x) seqinfo(trackData(x))
 )
-#' @export
+
 setMethod("seqinfo<-", signature = c(x = "RangeTrack"),
     function (x, new2old, force, pruning.mode, value) {
         trackData(x) <- `seqinfo<-`(x = trackData(x), new2old = new2old,
@@ -595,7 +581,7 @@ setMethod("seqinfo<-", signature = c(x = "RangeTrack"),
         x
     }
 )
-#' @export
+
 setMethod("seqlevelsInUse", signature = c(x = "RangeTrack"),
     function (x) seqlevelsInUse(trackData(x))
 )
@@ -671,7 +657,6 @@ setMethod("$<-", signature = c(x = "TnTTrack"),
 
 #### TrackSpec Accessor     ========
 
-#' @export
 .mkScalarOrNull <- function (x)
     if (is.null(x)) x else Biobase::mkScalar(x)
 
@@ -712,9 +697,8 @@ trackSpec <- function (track, which = c("background", "height", "label")) {
 
 #### Track Tooltip          ========
 
-#' @export
 setGeneric("tooltip", function (x) standardGeneric("tooltip"))
-#' @export
+
 setGeneric("tooltip<-", function (x, value) standardGeneric("tooltip<-"))
 
 setMethod("tooltip", signature = "TrackData",

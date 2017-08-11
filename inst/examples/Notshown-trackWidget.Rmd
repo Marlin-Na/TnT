@@ -5,9 +5,7 @@ title: "trackWidget"
 This is the low-level util to create visualizations.
 
 ```{r}
-suppressPackageStartupMessages({
-    library(TnT)
-})
+suppressMessages(TnT:::expose_all("TnT"))
 ```
 
 

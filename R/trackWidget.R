@@ -1,7 +1,6 @@
 
 
 
-#' @export
 trackWidget <- function (tntdef, elementId = NULL) {
     # Determine the class of tntdef
     if (inherits(tntdef, "TnTBoard"))

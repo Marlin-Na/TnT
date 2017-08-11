@@ -34,16 +34,27 @@ mapcol <- function (value, palette.fun = grDevices::rainbow, ...) {
 }
 
 
-#' @export
 ul <- function(x)
     unlist(x, recursive = FALSE, use.names = FALSE)
 
-#' @export
 `ul<-` <- function (x, value)
     relist(value, x)
 
 
-#' @export
+expose_all <- function (package) {
+    attachname <- paste0(package, "_all")
+    while(attachname %in% search())
+        detach(attachname, character.only = TRUE)
+    
+    pkgns <- loadNamespace(package)
+    attach(pkgns, name = attachname)
+    invisible(pkgns)
+}
+
+
+
+
+
 splitdf <- function (df, f) {
     # We need to speed up this function
     if (requireNamespace("data.table", quietly = TRUE)) {
@@ -72,7 +83,12 @@ strandlabel <- function (labels, strands) {
             ifelse(strands == "-", "<", ""))
 }
 
-#' @export
+
+
+
+
+
+
 .removeAsIs <- function (df) {
     # The nested data frame converted from GRanges/DataFrame will have a
     # "AsIs" class, which will cause the data frame can not be shown and
@@ -88,7 +104,6 @@ strandlabel <- function (labels, strands) {
 }
 
 
-#' @export
 .JSONFilter <- function (colname) {
     stopifnot(is.character(colname))
     escapeColname <- sapply(colname, function (s) as.character(toJSON(unbox(s))))
