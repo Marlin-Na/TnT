@@ -5,13 +5,14 @@
 ###   TnT Board     ############################################################
 
 ####  Class Def for TnT Board   ========
+
+
 setClass("TnTBoard",
     slots = c(
         ViewRange = "GRanges",
         CoordRange = "IRanges",
         ZoomAllow = "IRanges",
-        # Drag should always be allowed.
-        #AllowDrag = "logical",
+        AllowDrag = "logical",
         TrackList = "list"
     )
 )
@@ -29,7 +30,8 @@ setClass("TnTGenome", contains = "TnTBoard",
 
 #' @export
 TnTBoard <- function (tracklist, view.range = GRanges(),
-                      coord.range = IRanges(), zoom.allow = IRanges(), use.tnt.genome = FALSE) {
+                      coord.range = IRanges(), zoom.allow = IRanges(), allow.drag = TRUE,
+                      use.tnt.genome = FALSE) {
     
     if (is(tracklist, "TnTTrack"))
         tracklist <- list(tracklist)
@@ -38,15 +40,16 @@ TnTBoard <- function (tracklist, view.range = GRanges(),
     
     b <- new(if (use.tnt.genome) "TnTGenome" else "TnTBoard",
              ViewRange = view.range, CoordRange = coord.range,
-             ZoomAllow = zoom.allow, TrackList = tracklist)
+             ZoomAllow = zoom.allow, TrackList = tracklist, AllowDrag = allow.drag)
     b
 }
 
 #' @export
 TnTGenome <- function (tracklist, view.range = GRanges(),
-                       coord.range = IRanges(), zoom.allow = IRanges()) {
+                       coord.range = IRanges(), zoom.allow = IRanges(), allow.drag = TRUE) {
     TnTBoard(tracklist, view.range = view.range,
-             coord.range = coord.range, zoom.allow = zoom.allow, use.tnt.genome = TRUE)
+             coord.range = coord.range, zoom.allow = zoom.allow, allow.drag = allow.drag,
+             use.tnt.genome = TRUE)
 }
 
 
@@ -93,7 +96,6 @@ tracklist <- function (tntboard) {
 
 #### TnT Board Compilation      ========
 
-#' @export
 compileBoard <- function (tntboard) {
     b <- wakeupBoard(tntboard)
     
@@ -319,6 +321,7 @@ wakeupBoard <- function (tntboard) {
             length(b@ViewRange) == 1,
             length(b@CoordRange) == 1,
             length(b@ZoomAllow) == 1,
+            length(b@AllowDrag) == 1,
             if (inherits(b, "TnTGenome"))
                 length(b@Species) == 1 else TRUE,
             if (inherits(b, "TnTGenome"))
@@ -332,14 +335,15 @@ wakeupBoard <- function (tntboard) {
             tnt.board.genome = ma(),
             from = start(b@ViewRange),
             to   = end(b@ViewRange),
-            species = if (is.na(b@Species)) "Unknown sequence" else b@Species,
+            species = if (is.na(b@Species)) "Unknown" else b@Species,
             chr     = b@Chromosome,
             min_coord = js(sprintf('new Promise (function (resolve) { resolve (%i); })',
                                    start(b@CoordRange))),
             max_coord = js(sprintf('new Promise (function (resolve) { resolve (%i); })',
                                    end(b@CoordRange))),
             zoom_out = end(b@ZoomAllow),
-            zoom_in  = start(b@ZoomAllow)
+            zoom_in  = start(b@ZoomAllow),
+            allow_drag = b@AllowDrag
         )
     else
         jc.board.spec <- jc(
@@ -349,7 +353,8 @@ wakeupBoard <- function (tntboard) {
             min      = start(b@CoordRange),
             max      = end(b@CoordRange),
             zoom_out = end(b@ZoomAllow),
-            zoom_in  = start(b@ZoomAllow)
+            zoom_in  = start(b@ZoomAllow),
+            allow_drag = b@AllowDrag
         )
     jc.board.spec
 }
