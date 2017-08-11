@@ -1,5 +1,8 @@
 ---
 title: "TxTrack and GroupFeatureTrack"
+#output:
+#  html_document:
+#  pandoc_args: [ "+RTS", "-K64m", "-RTS" ]
 ---
 
 A TxTrack displays transcripts and their stucture (exons, coding sequence) along
@@ -64,6 +67,13 @@ Then we use this GRanges object to construct the TxTrack.
 ```{r}
 brca2tx <- TxTrackFromGRanges(gr, label = "BRCA2, transcripts", color = "grey2", height = 300)
 TnTGenome(brca2tx)
+```
+
+Let's compare it with output of ggbio!
+
+```{r}
+library(ggbio)
+ggplot() + geom_alignment(EnsDb.Hsapiens.v75, which = ~ symbol == "BRCA2")
 ```
 
 <br/> <br/>
