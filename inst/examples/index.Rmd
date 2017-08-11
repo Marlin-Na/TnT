@@ -139,9 +139,3 @@ TnTBoard(track, view.range = range(track), coord.range = ranges(range(track)))
 
 ------
 
-## Low level utils
-
-### [trackWidget](trackWidget.html)
-
-------
-
