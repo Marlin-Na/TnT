@@ -21,9 +21,6 @@ pos <- IRanges(start = sample(1:1000, 6), width = 1)
 colors <- c("red", "yellow", "green", "cyan", "blue", "magenta")
 vltrack <- VlineTrack(pos,tooltip = data.frame(Position = start(pos), Color = colors),
                       color = colors, label = NULL)
-# TODO: currently broken
-TnTBoard(vltrack)
-trackData(vltrack)$key <- start(pos)
 TnTBoard(vltrack)
 ```
 

@@ -95,6 +95,13 @@ setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
             AreaTrack = "tnt.board.track.feature.area",
             stop()
         )
+        
+        ### TEMP: TO REMOVE IN FUTURE
+        if (class(track) == "VlineTrack") {
+            trackData(track)$key <- start(trackData(track))
+        }
+        ### TEMP: TO REMOVE IN FUTURE
+        
         track <- .initDisplay(track, feaname = feaname)
         track <- .convertCol(track)
         track

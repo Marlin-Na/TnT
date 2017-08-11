@@ -9,7 +9,7 @@ suppressPackageStartupMessages({
     library(TnT)
     library(GenomicFeatures)
     library(TxDb.Hsapiens.UCSC.hg19.knownGene)
-    library(EnsDb.Hsapiens.v86)
+    library(EnsDb.Hsapiens.v75)
 })
 ```
 
@@ -46,7 +46,7 @@ gives you more control of the display (i.e. color, feature labels, tooltip).
 For example, we first extract the genes as a GRanges object from a EnsDb.
 
 ```{r}
-gene <- genes(EnsDb.Hsapiens.v86)
+gene <- genes(EnsDb.Hsapiens.v75)
 head(gene)
 ```
 
