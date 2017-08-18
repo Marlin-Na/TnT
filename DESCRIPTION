@@ -13,6 +13,7 @@ Imports:
     gplots,
     jsonlite,
     magrittr,
+    data.table,
     Biobase,
     GenomeInfoDb,
     IRanges,
