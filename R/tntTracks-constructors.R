@@ -5,13 +5,37 @@
 
 new_track <- function (class, data, display = list(), background = NULL, height = NULL, label = NULL, ...) {
     t <- new(Class = class, Data = data, Display = display, ...)
+    if (length(label) > 1L)
+        label <- paste(label, collapse = " ")
     trackSpec(t, "background") <- background
     trackSpec(t, "height") <- height
     trackSpec(t, "label") <- label
     t
 }
 
+
+#' Track Constructors
+#' 
+#' @name track-constructors
+#' 
+#' @param range,pos GRanges or IRanges object. For pos, all the width should be one.
+#' @param value,domain `value` is a numeric vector that is parallel to pos, which indicates
+#'     height of features at each position for PinTrack, LineTrack and AreaTrack. `domain` is
+#'     a length-two numeric vector which sets the lower and upper limit of `value` (i.e. the limit on y-axis).
+#'
+#' @param label Character, shown as label of the track on the left, could be NULL.
+#' @param tooltip A data frame that is parallel to range or pos.
+#' @param color Character vector that sets the color of the features.
+#'     It can be parallel to the data (i.e. have the same length) thus sets colors
+#'     of each individual feature.
+#' @param background Length-one character vector that sets background of the track.
+#' @param height Length-one numeric vector that sets height of the track.
+#' 
+#' @return Returns an object that inherits "TnTTrack" class.
 #' @export
+#' @examples
+#' BlockTrack(range = GRanges("chr1", IRanges(199, 4000)),
+#'            color = "green", background = "red", height = 100)
 BlockTrack <- function (range, label = deparse(substitute(range)),
                         tooltip = mcols(range), color = "blue", background = NULL,
                         height = 30) {
@@ -21,6 +45,7 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
               b = background, h = height, l = label, da = data, di = list())
 }
 
+#' @rdname track-constructors
 #' @export
 VlineTrack <- function (pos, label = deparse(substitute(pos)), tooltip = mcols(pos),
                         color = "green", background = NULL, height = 40) {
@@ -29,6 +54,7 @@ VlineTrack <- function (pos, label = deparse(substitute(pos)), tooltip = mcols(p
     new_track("VlineTrack", b = background, h = height, l = label, da = data, di = list())
 }
 
+#' @rdname track-constructors
 #' @export
 PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
                       label = deparse(substitute(pos)),
@@ -44,25 +70,25 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
               b = background, h = height, l = label, da = data, di = list(), Domain = domain)
 }
 
+#' @rdname track-constructors
 #' @export
 LineTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
-                       label = deparse(substitute(pos)),
-                       tooltip = mcols(pos), color = "yellow", background = NULL,
+                       label = deparse(substitute(pos)), color = "yellow", background = NULL,
                        height = 70) {
     if (is.null(value))
         stop("Value (i.e. height) at each position not specified.")
     stopifnot(length(domain) == 2)
     
-    ## TODO: remove tooltip?
-    data <- PosValTrackData(pos = pos, val = value, tooltip = tooltip, color = color)
+    ## Do not need tooltip
+    data <- PosValTrackData(pos = pos, val = value, tooltip = NULL, color = color)
     new_track("LineTrack",
               b = background, h = height, l = label, da = data, di = list(), Domain = domain)
 }
 
+#' @rdname track-constructors
 #' @export
 AreaTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
-                       label = deparse(substitute(pos)),
-                       tooltip = mcols(pos), color = "pink", background = NULL,
+                       label = deparse(substitute(pos)), color = "pink", background = NULL,
                        height = 70) {
     arglist <- as.list(environment())
     linetrack <- do.call(LineTrack, arglist)
@@ -71,6 +97,8 @@ AreaTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
     ans
 }
 
+#' @rdname track-constructors
+#' @param txdb,seqlevel The TxDb and seqlevel to extract gene or transcript from.
 #' @export
 GeneTrackFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
                        label = deparse(substitute(txdb)), # TODO: tooltip?
@@ -81,6 +109,9 @@ GeneTrackFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
               b = background, h = height, l = label, da = data, di = list())
 }
 
+#' @rdname track-constructors
+#' @param names Character vector with the same length of data, which is used to generate display labels
+#'     shown together with features when zooming in.
 #' @export
 FeatureTrack <- function (range, label = deparse(substitute(range)),
                           tooltip = mcols(range),
@@ -105,6 +136,9 @@ if (FALSE) {
     
 }
 
+#' @rdname track-constructors
+#' @param grl For `GroupFeatureTrack` function, a GRangesList object that represents grouped ranges
+#'     as data source. It is assumed that ranges in each group are on the same strand and do not overlap.
 #' @export
 GroupFeatureTrack <- function (grl, label = deparse(substitute(grl)),
                                tooltip = mcols(grl),
@@ -137,6 +171,7 @@ if (FALSE) {
     TnTBoard(gft, viewrange = GRanges("chrX", IRanges(1000, 100000)))
 }
 
+#' @rdname track-constructors
 #' @export
 TxTrackFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
                      label = deparse(substitute(txdb)),
@@ -148,6 +183,11 @@ TxTrackFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
               b = background, h = height, l = label, da = data, di = list())
 }
 
+#' @rdname track-constructors
+#' @param gr For `TxTrackFromGRanges` function, a GRanges object that represents exons and cds as data
+#'     source, and will be rendered as transcripts. Two meta-columns ("type", "tx_id") are required,
+#'     "type" can be "exon" or "cds" by which ranges of "cds" will be filled with color, "tx_id" indicates
+#'     the grouping.
 #' @export
 TxTrackFromGRanges <- function (gr, label = deparse(substitute(gr)),
                                 color = "red", background = NULL, height = 300) {

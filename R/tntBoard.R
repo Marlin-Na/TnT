@@ -1,10 +1,10 @@
 
-
 #' @include tntTracks.R
 
 ###   TnT Board     ############################################################
 
 ####  Class Def for TnT Board   ========
+
 
 
 setClass("TnTBoard",
@@ -26,9 +26,32 @@ setClass("TnTGenome", contains = "TnTBoard",
 
 #### TnT Board Constructor      ========
 
-
-
+#' TnTBoard
+#' 
+#' A TnTBoard or TnTGenome object stores a list of tracks and can be automatically
+#' shown in an interactive R session or in rmarkdown output.
+#' 
+#' @param tracklist One track or a list of tracks to view.
+#' @param view.range Length-one GRanges object, sets the initial view range.
+#' @param coord.range Length-one IRanges object or length-two numeric vector,
+#'     sets the coordinate limit of the board (i.e. minimum/maximum possible coordinate).
+#' @param zoom.allow Length-one IRanges object or length-two numeric vector,
+#'     sets the minimum and maximum extent of the board (i.e. the limit when zooming in and zooming out).
+#' @param allow.drag Logical, whether drag should be allowed? Default TRUE.
+#' @param use.tnt.genome Logical, whether to add axis and location. `TnTGenome(...)` is essentially
+#'     a wrapper to `TnTBoard(..., use.tnt.genome = TRUE)`.
+#'
+#' @return
+#'     Returns a TnTBoard or TnTGenome object which has printing method to be rendered
+#'     as a htmlwidget.
 #' @export
+#' 
+#' @name tntboard
+#' @aliases tntgenome
+#' 
+#' @examples
+#' track <- BlockTrack(GRanges("chr1", IRanges(start = c(100, 300, 500), width = c(10, 100, 200))))
+#' TnTGenome(track)
 TnTBoard <- function (tracklist, view.range = GRanges(),
                       coord.range = IRanges(), zoom.allow = IRanges(), allow.drag = TRUE,
                       use.tnt.genome = FALSE) {
@@ -38,12 +61,26 @@ TnTBoard <- function (tracklist, view.range = GRanges(),
     else
         stopifnot(all(sapply(tracklist, inherits, what = "TnTTrack")))
     
+    if (is.numeric(coord.range)) {
+        if (length(coord.range) == 2L)
+            coord.range <- IRanges(coord.range[1], coord.range[2])
+        else
+            stop("coord.range should be a length-one IRanges or a length-two numeric vector")
+    }
+    if (is.numeric(zoom.allow)) {
+        if (length(zoom.allow) == 2L)
+            zoom.allow <- IRanges(zoom.allow[1], zoom.allow[2])
+        else
+            stop("zoom.allow should be a length-one IRanges or a length-two numeric vector")
+    }
+    
     b <- new(if (use.tnt.genome) "TnTGenome" else "TnTBoard",
              ViewRange = view.range, CoordRange = coord.range,
              ZoomAllow = zoom.allow, TrackList = tracklist, AllowDrag = allow.drag)
     b
 }
 
+#' @rdname tntboard
 #' @export
 TnTGenome <- function (tracklist, view.range = GRanges(),
                        coord.range = IRanges(), zoom.allow = IRanges(), allow.drag = TRUE) {
@@ -63,6 +100,14 @@ if (FALSE) {
 }
 
 
+
+
+# #' Get combined range of all tracks, used internally.
+# #'
+# #' @param x TnTBoard. 
+# #' @describeIn tntboard TnTBoard associated methods
+# #' @return GRanges.
+# #' 
 setMethod(range, signature = c(x = "TnTBoard"),
     function (x, ..., with.revmap=FALSE, ignore.strand=FALSE, na.rm=FALSE) {
         if (length(list(...)))
@@ -80,11 +125,30 @@ setMethod(range, signature = c(x = "TnTBoard"),
 
 #### Accessors                  ========
 
+#' Track List in TnTBoard
+#' 
+#' The tracks of a TnTBoard are stored as a list which can be accessed or modified
+#' with these functions. 
+#'
+#' @param tntboard A TnTBoard or TnTGenome object
+#' 
+#' @name tracklist
+#'
 #' @export
+#' @examples
+#' bt <- BlockTrack(GRanges("chr21", IRanges(100, 1200)))
+#' li.tracks <- list(bt, bt)
+#' board <- TnTBoard(li.tracks)
+#' tracklist(board)
+#' if (interactive()) show(board)
+#' tracklist(board) <- list(bt)
+#' if (interactive()) show(board)
 tracklist <- function (tntboard) {
     tntboard@TrackList
 }
 
+#' @rdname tracklist
+#' @param value A list of tracks
 #' @export
 `tracklist<-` <- function (tntboard, value) {
     tntboard@TrackList <- value
@@ -109,7 +173,6 @@ compileBoard <- function (tntboard) {
 }
 
 
-#' @export
 wakeupBoard <- function (tntboard) {
     
     tntboard <- .selectView(tntboard)
@@ -123,7 +186,6 @@ wakeupBoard <- function (tntboard) {
 
 
 
-#' @export
 .filterSeq <- function (tntboard, use.seq = seqlevelsInUse(tntboard@ViewRange)) {
     stopifnot(length(use.seq) == 1)
     
@@ -134,7 +196,6 @@ wakeupBoard <- function (tntboard) {
     tntboard
 }
 
-#' @export
 .selectCoord <- function (tntboard) {
     if (length(tntboard@CoordRange) == 1)
         return(tntboard)
@@ -185,7 +246,6 @@ wakeupBoard <- function (tntboard) {
 }
 
 
-#' @export
 .selectView <- function (tntboard) {
     ## TODO: view range may support strands, i.e. only showing features on one strand
     
@@ -280,7 +340,6 @@ wakeupBoard <- function (tntboard) {
     tntboard
 }
 
-#' @export
 .fillGenome <- function (tntboard) {
     if (!inherits(tntboard, "TnTGenome"))
         return(tntboard)
@@ -295,7 +354,6 @@ wakeupBoard <- function (tntboard) {
 }
     
 
-#' @export
 .selectZoom <- function (tntboard) {
     zoomalo <- tntboard@ZoomAllow
     if (length(zoomalo) == 1)
@@ -312,7 +370,6 @@ wakeupBoard <- function (tntboard) {
     tntboard
 }
 
-#' @export
 .compileBoardSpec <- function (tntboard, use.tnt.genome = FALSE) {
     .checkBoardSpec <- function (tntboard) {
         b <- tntboard
@@ -359,7 +416,6 @@ wakeupBoard <- function (tntboard) {
     jc.board.spec
 }
     
-#' @export
 .compileTrackList <- function (tntboard) {
     tracklist <- tntboard@TrackList
     li.jc <- lapply(tracklist, compileTrack)
