@@ -11,7 +11,7 @@
 \arguments{
 \item{x}{TnTBoard.}
 
-\item{..., with.revmap, ignore.strand, na.rm}{Passed to \code{\link{[GenomicRanges](range,GenomicRanges-method)}}.}
+\item{..., with.revmap, ignore.strand, na.rm}{Passed to \code{\link[GenomicRanges]{range,GenomicRanges-method}}.}
 }
 \value{
 GRanges.

@@ -108,7 +108,7 @@ if (FALSE) {
 #'
 #' @param x TnTBoard. 
 #' @param ...,with.revmap,ignore.strand,na.rm
-#'     Passed to \code{\link{[GenomicRanges](range,GenomicRanges-method)}}.
+#'     Passed to \code{\link[GenomicRanges]{range,GenomicRanges-method}}.
 #' @return GRanges.
 setMethod(range, signature = c(x = "TnTBoard"),
     function (x, ..., with.revmap=FALSE, ignore.strand=FALSE, na.rm=FALSE) {

@@ -10,7 +10,7 @@ mapcol(value, palette.fun = grDevices::rainbow, ...)
 \item{value}{A factor or character vector that may have n unique values.}
 
 \item{palette.fun}{The palette function to generate colors.
-For example, \code{\link{[grDevices](terrain.colors)}}.}
+For example, \code{\link[grDevices]{terrain.colors}}.}
 
 \item{...}{Extra arguments passed to the palette function.}
 }
