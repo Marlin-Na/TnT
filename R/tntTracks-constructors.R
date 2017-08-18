@@ -32,6 +32,10 @@ new_track <- function (class, data, display = list(), background = NULL, height 
 #' @param height Length-one numeric vector that sets height of the track.
 #' 
 #' @return Returns an object that inherits "TnTTrack" class.
+#' @seealso
+#'     You can find various examples at https://marlin-na.github.io/TnT/examples/ ,
+#'     also see \code{\link{merge}} on how to create a composite track.
+#'      
 #' @export
 #' @examples
 #' BlockTrack(range = GRanges("chr1", IRanges(199, 4000)),

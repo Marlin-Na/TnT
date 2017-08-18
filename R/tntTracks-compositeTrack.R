@@ -13,17 +13,39 @@ setValidity("CompositeTrackData",
     }
 )
 
-#' @export
 CompositeTrackData <- function (tracklist) {
     new("CompositeTrackData", tracklist)
 }
 
+#' Composite Track
+#' 
+#' Two or more arbitrary tracks can be used to create a composite track, by which
+#' different features can be shown in the same track.
+#' 
+#' @name composite-track
+#' @param x,y,... Track constructed with \link{track-constructors} or composite track.
+#'
+#' @return
+#'     Returns a "CompositeTrack" object.
+#' 
+#' @seealso https://marlin-na.github.io/TnT/examples/track-CompositeTrack.html
+#' @export
+#' @examples
+#' gr <- GRanges("chr1", IRanges(c(11000, 20000, 60000), width = 2000))
+#' gpos <- GRanges("chr1", IRanges(c(12000, 21000, 61000), width = 1), value = c(1, 2, 3))
+#' btrack <- BlockTrack(gr, label = "Block Track", tooltip = as.data.frame(gr), color = "lightblue4")
+#' ptrack <- PinTrack(gpos, label = "Pin Track", tooltip = as.data.frame(gpos), background = "beige")
+#' 
+#' ctrack <- merge(btrack, ptrack)
+#' TnTBoard(ctrack)
 setMethod("merge", signature = c(x = "TnTTrack", y = "TnTTrack"),
     function (x, y, ...) {
         tracklist <- list(x, y, ...)
         merge_tracklist(tracklist)
     }
 )
+
+#' @rdname composite-track
 setMethod("merge", signature = c(x = "TnTTrack", y = "missing"),
     function (x, y, ...) {
         tracklist <- list(x, ...)
@@ -31,7 +53,6 @@ setMethod("merge", signature = c(x = "TnTTrack", y = "missing"),
     }
 )
 
-#' @export
 merge_tracklist <- function (tracklist) {
     stopifnot(all(sapply(tracklist, inherits, what = c("RangeTrack", "CompositeTrack"))))
     

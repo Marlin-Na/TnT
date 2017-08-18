@@ -94,3 +94,7 @@ Track Constructors
 BlockTrack(range = GRanges("chr1", IRanges(199, 4000)),
            color = "green", background = "red", height = 100)
 }
+\seealso{
+You can find various examples at https://marlin-na.github.io/TnT/examples/ ,
+    also see \code{\link{merge}} on how to create a composite track.
+}
