@@ -96,5 +96,5 @@ BlockTrack(range = GRanges("chr1", IRanges(199, 4000)),
 }
 \seealso{
 You can find various examples at \url{https://marlin-na.github.io/TnT/examples/},
-    also see \code{\link{merge}} on how to create a composite track.
+    also see \code{\link{composite-track}} on how to create a composite track.
 }

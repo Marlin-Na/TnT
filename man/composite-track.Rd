@@ -3,7 +3,7 @@
 \docType{methods}
 \name{composite-track}
 \alias{composite-track}
-\alias{merge}
+\alias{merge-track}
 \alias{merge,TnTTrack,missing-method}
 \title{Composite Track}
 \usage{

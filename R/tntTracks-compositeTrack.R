@@ -23,7 +23,7 @@ CompositeTrackData <- function (tracklist) {
 #' different features can be shown in the same track.
 #' 
 #' @name composite-track
-#' @aliases merge
+#' @aliases merge-track
 #' @param x,y,... Track constructed with \link{track-constructors} or composite track.
 #'
 #' @return
