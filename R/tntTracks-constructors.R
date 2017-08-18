@@ -33,7 +33,7 @@ new_track <- function (class, data, display = list(), background = NULL, height 
 #' 
 #' @return Returns an object that inherits "TnTTrack" class.
 #' @seealso
-#'     You can find various examples at https://marlin-na.github.io/TnT/examples/ ,
+#'     You can find various examples at \url{https://marlin-na.github.io/TnT/examples/},
 #'     also see \code{\link{merge}} on how to create a composite track.
 #'      
 #' @export

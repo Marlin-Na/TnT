@@ -3,6 +3,7 @@
 \docType{methods}
 \name{composite-track}
 \alias{composite-track}
+\alias{merge}
 \alias{merge,TnTTrack,missing-method}
 \title{Composite Track}
 \usage{
@@ -30,5 +31,5 @@ ctrack <- merge(btrack, ptrack)
 TnTBoard(ctrack)
 }
 \seealso{
-https://marlin-na.github.io/TnT/examples/track-CompositeTrack.html
+\url{https://marlin-na.github.io/TnT/examples/track-CompositeTrack.html}
 }

@@ -23,12 +23,13 @@ CompositeTrackData <- function (tracklist) {
 #' different features can be shown in the same track.
 #' 
 #' @name composite-track
+#' @aliases merge
 #' @param x,y,... Track constructed with \link{track-constructors} or composite track.
 #'
 #' @return
 #'     Returns a "CompositeTrack" object.
 #' 
-#' @seealso https://marlin-na.github.io/TnT/examples/track-CompositeTrack.html
+#' @seealso \url{https://marlin-na.github.io/TnT/examples/track-CompositeTrack.html}
 #' @export
 #' @examples
 #' gr <- GRanges("chr1", IRanges(c(11000, 20000, 60000), width = 2000))
