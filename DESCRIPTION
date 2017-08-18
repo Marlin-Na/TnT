@@ -9,6 +9,8 @@ Depends:
     GenomicFeatures
 Imports:
     methods,
+    stats,
+    utils,
     htmlwidgets,
     gplots,
     jsonlite,

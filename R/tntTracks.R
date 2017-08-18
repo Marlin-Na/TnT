@@ -570,10 +570,22 @@ setClass("AreaTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrack
 
 #### Seqinfo Methods        ========
 
-setMethod("seqinfo", signature = c("RangeTrack"),
-    function (x) seqinfo(trackData(x))
-)
 
+#' Seqinfo of TnTTrack and TnTBoard
+#' 
+#' @param x A TnTTrack or TnTBoard object. 
+#' @param new2old,force,pruning.mode,value Passed to seqinfo method for GenomicRanges.
+#' @name seqinfo
+#' @examples
+#' btrack1 <- BlockTrack(GRanges("chr1", IRanges(1, 123)))
+#' btrack2 <- BlockTrack(GRanges("chr2", IRanges(3, 599)))
+#' ctrack <- merge(btrack1, btrack2)
+#' board <- TnTBoard(list(btrack1, btrack2))
+#' 
+#' seqinfo(btrack1)
+#' seqinfo(btrack2)
+#' seqinfo(ctrack)
+#' seqinfo(board)
 setMethod("seqinfo<-", signature = c(x = "RangeTrack"),
     function (x, new2old, force, pruning.mode, value) {
         trackData(x) <- `seqinfo<-`(x = trackData(x), new2old = new2old,
@@ -582,6 +594,14 @@ setMethod("seqinfo<-", signature = c(x = "RangeTrack"),
     }
 )
 
+#' @rdname seqinfo
+setMethod("seqinfo", signature = c("RangeTrack"),
+    function (x) {
+        seqinfo(trackData(x))
+    }
+)
+
+#' @rdname seqinfo
 setMethod("seqlevelsInUse", signature = c(x = "RangeTrack"),
     function (x) seqlevelsInUse(trackData(x))
 )
@@ -589,38 +609,38 @@ setMethod("seqlevelsInUse", signature = c(x = "RangeTrack"),
 
 #### TrackData Accessor          ========
 
+#' Access Track Data
+#' 
+#' Access and modify the track data. \code{x$name} and \code{x$name <- value} are
+#' just shortcuts for \code{trackData(x)$name} and \code{trackData(x)$name <- value},
+#' respectively.
+#' 
+#' @name trackdata
+#' @param x A TnTTrack object.
+#'
 #' @export
-trackData <- function (track) {
-    track@Data
+#' @examples
+#' track <- BlockTrack(GRanges("chr1", IRanges(6, 54)))
+#' trackData(track) # track data of block track is an object that inherits GRanges.
+#' ctrack <- merge(track, track)
+#' trackData(ctrack) # track data of composite track is a list of tracks
+trackData <- function (x) {
+    x@Data
 }
 
+#' @rdname trackdata
+#' @param value Replaced value.
 #' @export
-`trackData<-` <- function (track, value) {
+`trackData<-` <- function (x, value) {
     # TODO: convert value to the needed class
-    track@Data <- value
-    validObject(track)
-    track
+    x@Data <- value
+    validObject(x)
+    x
 }
 
 #### `[`, `[[`, etc.        ========
 
-setMethod("[", signature = c(x = "TnTTrack"),
-    function (x, i, j, ..., drop = TRUE) {
-        #trackData(x)[i, j, ..., drop = TRUE]
-        s <- match.call()
-        s$x <- bquote(TnT::trackData(.(s$x)))
-        eval.parent(s)
-    }
-)
-
-setMethod("[[", signature = c(x = "TnTTrack"),
-    function (x, ...) {
-        s <- match.call()
-        s$x <- bquote(TnT::trackData(.(s$x)))
-        eval.parent(s)
-    }
-)
-
+#' @rdname trackdata
 setMethod("$", signature = c(x = "TnTTrack"),
     function (x, name) {
         s <- as.call(list(`$`, trackData(x), name))
@@ -628,24 +648,8 @@ setMethod("$", signature = c(x = "TnTTrack"),
     }
 )
 
-setMethod("[<-", signature = c(x = "TnTTrack"),
-    function (x, i, j, ..., value) {
-        s <- match.call()
-        s$x <- bquote(TnT::trackData(.(s$x)))
-        trackData(x) <- eval.parent(s)
-        x
-    }
-)
-
-setMethod("[[<-", signature = c(x = "TnTTrack"),
-    function (x, i, j, ..., value) {
-        s <- match.call()
-        s$x <- bquote(TnT::trackData(.(s$x)))
-        trackData(x) <- eval.parent(s)
-        x
-    }
-)
-
+#' @rdname trackdata
+#' @param name Passed to the inner method for track data.
 setMethod("$<-", signature = c(x = "TnTTrack"),
     function (x, name, value) {
         s <- match.call()
@@ -654,6 +658,42 @@ setMethod("$<-", signature = c(x = "TnTTrack"),
         x
     }
 )
+
+# setMethod("[", signature = c(x = "TnTTrack"),
+#     function (x, i, j, ..., drop = TRUE) {
+#         #trackData(x)[i, j, ..., drop = TRUE]
+#         s <- match.call()
+#         s$x <- bquote(TnT::trackData(.(s$x)))
+#         eval.parent(s)
+#     }
+# )
+
+# setMethod("[<-", signature = c(x = "TnTTrack"),
+#     function (x, i, j, ..., value) {
+#         s <- match.call()
+#         s$x <- bquote(TnT::trackData(.(s$x)))
+#         trackData(x) <- eval.parent(s)
+#         x
+#     }
+# )
+
+# setMethod("[[", signature = c(x = "TnTTrack"),
+#     function (x, ...) {
+#         s <- match.call()
+#         s$x <- bquote(TnT::trackData(.(s$x)))
+#         eval.parent(s)
+#     }
+# )
+
+# setMethod("[[<-", signature = c(x = "TnTTrack"),
+#     function (x, i, j, ..., value) {
+#         s <- match.call()
+#         s$x <- bquote(TnT::trackData(.(s$x)))
+#         trackData(x) <- eval.parent(s)
+#         x
+#     }
+# )
+
 
 #### TrackSpec Accessor     ========
 

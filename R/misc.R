@@ -10,10 +10,6 @@ biovizBase::crunch
 
 
 #' @import methods
-NULL
-
-
-
 #' @import GenomicFeatures
 #' @import GenomicRanges
 #' @import GenomeInfoDb
@@ -22,6 +18,8 @@ NULL
 #' @import Biobase
 #' @import jsonlite
 #' @importFrom gplots col2hex
+#' @importFrom stats na.fail setNames
+#' @importFrom utils capture.output
 NULL
 
 

@@ -162,6 +162,7 @@ setMethod("wakeupTrack", signature = c(track = "CompositeTrack"),
 )
 
 
+#' @rdname seqinfo
 setMethod("seqinfo", signature = "CompositeTrack",
     function (x) {
         li.tracks <- trackData(x)
@@ -170,6 +171,7 @@ setMethod("seqinfo", signature = "CompositeTrack",
     }
 )
 
+#' @rdname seqinfo
 setMethod("seqinfo<-", signature = c(x = "CompositeTrack"),
     function (x, new2old, force, pruning.mode, value) {
         li.tracks <- trackData(x)
@@ -181,6 +183,7 @@ setMethod("seqinfo<-", signature = c(x = "CompositeTrack"),
     }
 )
 
+#' @rdname seqinfo
 setMethod("seqlevelsInUse", signature = c(x = "CompositeTrack"),
     function (x) {
         li.tracks <- trackData(x)

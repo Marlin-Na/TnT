@@ -107,7 +107,8 @@ if (FALSE) {
 #' Get combined range of all tracks in a TnTBoard, used internally.
 #'
 #' @param x TnTBoard. 
-#' 
+#' @param ...,with.revmap,ignore.strand,na.rm
+#'     Passed to \code{\link{[GenomicRanges](range,GenomicRanges-method)}}.
 #' @return GRanges.
 setMethod(range, signature = c(x = "TnTBoard"),
     function (x, ..., with.revmap=FALSE, ignore.strand=FALSE, na.rm=FALSE) {
@@ -156,6 +157,17 @@ tracklist <- function (tntboard) {
     tntboard
 }
 
+
+#### SeqInfo                    ========
+
+#' @rdname seqinfo
+setMethod("seqinfo", signature = "TnTBoard",
+    function (x) {
+        li.tracks <- tracklist(x)
+        li.seqinfo <- lapply(li.tracks, seqinfo)
+        do.call(merge, unname(li.seqinfo))
+    }
+)
 
 
 

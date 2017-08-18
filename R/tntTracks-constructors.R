@@ -45,8 +45,8 @@ BlockTrack <- function (range, label = deparse(substitute(range)),
                         height = 30) {
     
     data <- RangeTrackData(range = range, tooltip = tooltip, color = color)
-    new_track("BlockTrack",
-              b = background, h = height, l = label, da = data, di = list())
+    new_track("BlockTrack", background = background, height = height,
+              label = label, data = data, display = list())
 }
 
 #' @rdname track-constructors
@@ -55,7 +55,8 @@ VlineTrack <- function (pos, label = deparse(substitute(pos)), tooltip = mcols(p
                         color = "green", background = NULL, height = 40) {
     ## TODO: remove tooltip?
     data <- PosTrackData(pos = pos, color = color, tooltip = tooltip)
-    new_track("VlineTrack", b = background, h = height, l = label, da = data, di = list())
+    new_track("VlineTrack", background = background, height = height,
+              label = label, data = data, display = list())
 }
 
 #' @rdname track-constructors
@@ -70,8 +71,8 @@ PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
     stopifnot(length(domain) == 2)
     
     data <- PosValTrackData(pos = pos, val = value, tooltip = tooltip, color = color)
-    new_track("PinTrack",
-              b = background, h = height, l = label, da = data, di = list(), Domain = domain)
+    new_track("PinTrack", background = background, height = height,
+              label = label, data = data, display = list(), Domain = domain)
 }
 
 #' @rdname track-constructors
@@ -85,8 +86,8 @@ LineTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
     
     ## Do not need tooltip
     data <- PosValTrackData(pos = pos, val = value, tooltip = NULL, color = color)
-    new_track("LineTrack",
-              b = background, h = height, l = label, da = data, di = list(), Domain = domain)
+    new_track("LineTrack", background = background, height = height,
+              label = label, data = data, display = list(), Domain = domain)
 }
 
 #' @rdname track-constructors
@@ -109,8 +110,8 @@ GeneTrackFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
                        color = "black", background = NULL, height = 100) {
     
     data <- GeneTrackDataFromTxDb(txdb = txdb, seqlevel = seqlevel, color = color)
-    new_track("GeneTrack",
-              b = background, h = height, l = label, da = data, di = list())
+    new_track("GeneTrack", background = background, height = height,
+              label = label, data = data, display = list())
 }
 
 #' @rdname track-constructors
@@ -125,8 +126,8 @@ FeatureTrack <- function (range, label = deparse(substitute(range)),
     force(names)
     data <- GeneTrackData(range, labels = names,
                           ids = seq_along(range), tooltip = tooltip, color = color)
-    new_track("GeneTrack",
-              b = background, h = height, l = label, da = data, di = list())
+    new_track("GeneTrack", background = background, height = height,
+              label = label, data = data, display = list())
 }
 ##EXAMPLE
 if (FALSE) {
@@ -162,8 +163,8 @@ GroupFeatureTrack <- function (grl, label = deparse(substitute(grl)),
     
     data <- TxTrackDataFromGRangesList(grl, tooltip = tooltip, color = color,
                                        labels = names)
-    new_track("TxTrack",
-              b = background, h = height, l = label, da = data, di = list())
+    new_track("TxTrack", background = background, height = height,
+              label = label, data = data, display = list())
 }
 # EXAMPLE
 if (FALSE) {
@@ -183,8 +184,8 @@ TxTrackFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
     
     data <- TxTrackDataFromTxDb(txdb, seqlevel = seqlevel, color = color)
     
-    new_track("TxTrack",
-              b = background, h = height, l = label, da = data, di = list())
+    new_track("TxTrack", background = background, height = height,
+              label = label, data = data, display = list())
 }
 
 #' @rdname track-constructors
@@ -196,7 +197,7 @@ TxTrackFromTxDb <- function (txdb, seqlevel = seqlevels(txdb),
 TxTrackFromGRanges <- function (gr, label = deparse(substitute(gr)),
                                 color = "red", background = NULL, height = 300) {
     data <- TxTrackDataFromGRanges(gr, color = color)
-    new_track("TxTrack",
-              b = background, h = height, l = label, da = data, di = list())
+    new_track("TxTrack", background = background, height = height,
+              label = label, data = data, display = list())
 }
     
