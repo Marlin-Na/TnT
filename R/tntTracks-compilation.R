@@ -8,7 +8,6 @@
 ### Track Compilation       =======
 
 
-#' @export
 .initDisplay <- function (track, feaname, extra = list()) {
     # For RangeTrack
     
@@ -66,7 +65,6 @@
     track
 }
 
-#' @export
 .convertCol <- function (track) {
     # TODO: if all the colors are identical,
     #       we may modify the color callback to reduce the size of file
@@ -79,7 +77,12 @@
 }
 
 
-#' @export
+# #' Wake Up a Track
+# #' 
+# #' Internal function.
+# #'
+# #' @param track A TnTTrack.
+# #' @return A TnTTrack
 setGeneric("wakeupTrack", function (track) standardGeneric("wakeupTrack"))
 
 setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
@@ -128,7 +131,6 @@ if (FALSE) {
 # setGeneric("compileTrack",
 #            function (tntTrack) standardGeneric("compileTrack"))
 
-#' @export
 compileTrack <- function (tntTrack, wakeup = TRUE) {
     # Wake up
     if (wakeup)

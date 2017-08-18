@@ -102,12 +102,13 @@ if (FALSE) {
 
 
 
-# #' Get combined range of all tracks, used internally.
-# #'
-# #' @param x TnTBoard. 
-# #' @describeIn tntboard TnTBoard associated methods
-# #' @return GRanges.
-# #' 
+#' Range of TnTBoard
+#' 
+#' Get combined range of all tracks in a TnTBoard, used internally.
+#'
+#' @param x TnTBoard. 
+#' 
+#' @return GRanges.
 setMethod(range, signature = c(x = "TnTBoard"),
     function (x, ..., with.revmap=FALSE, ignore.strand=FALSE, na.rm=FALSE) {
         if (length(list(...)))
@@ -464,26 +465,16 @@ setMethod("show", signature = c("TnTBoard"),
     }
 )
 
+#' Printing TnTBoard in Rmarkdown
+#' 
+#' S3 method to automatically render a TnTBoard with knitr.
+#' 
+#' @param x A TnTBoard or TnTGenome object.
+#' @param ...,options Passed to \code{htmlwidget:::knit_print}.
 #' @export
 knit_print.TnTBoard <- function (x, ..., options = NULL) {
     # Redirect method to htmlwidget
     x <- trackWidget(x, elementId = NULL)
     knitr::knit_print(x, ..., options = options)
 }
-
-## EXAMPLE      ====
-if (FALSE) local({
-    data("cpgIslands", package = "Gviz")
-    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
-    viewrg <- range(cpgIslands)
-    ct <- BlockTrack(cpgIslands, color= "blue", height = 30)
-    gt <- GeneTrack(txdb, color = "grey")
-    txt <- TxTrack(txdb, color = "red", height = 300)
-    TnTBoard(tracklist = list(ct), viewrange = viewrg)
-    TnTBoard(tracklist = list(txt), viewrange = viewrg)
-    TnTBoard(tracklist = list(gt, ct), viewrange = viewrg)
-})
-
-
-
 
