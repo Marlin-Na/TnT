@@ -4,6 +4,7 @@
 \name{composite-track}
 \alias{composite-track}
 \alias{merge-track}
+\alias{merge,TnTTrack,TnTTrack-method}
 \alias{merge,TnTTrack,missing-method}
 \title{Composite Track}
 \usage{

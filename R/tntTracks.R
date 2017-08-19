@@ -576,6 +576,7 @@ setClass("AreaTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrack
 #' @param x A TnTTrack or TnTBoard object. 
 #' @param new2old,force,pruning.mode,value Passed to seqinfo method for GenomicRanges.
 #' @name seqinfo
+#' @aliases seqinfo<-,RangeTrack-method
 #' @examples
 #' btrack1 <- BlockTrack(GRanges("chr1", IRanges(1, 123)))
 #' btrack2 <- BlockTrack(GRanges("chr2", IRanges(3, 599)))
@@ -762,26 +763,44 @@ trackSpec <- function (track, which = c("background", "height", "label")) {
 
 #### Track Tooltip          ========
 
+#' Access Track Tooltips
+#'
+#' @param x A TnTTrack object.
+#'
+#' @export
+#' @examples
+#' gr <- GRanges("chr12", IRanges(c(6, 69), c(42, 135)), Name = c("my range 1", "my range 2"))
+#' track <- BlockTrack(gr)
+#' tooltip(track)
+#' tooltip(track)$Width <- width(gr)
+#' tooltip(track)
 setGeneric("tooltip", function (x) standardGeneric("tooltip"))
 
+#' @rdname tooltip
+#' @export
+#' @param value A data frame to replace, its row number should equal to length of data.
 setGeneric("tooltip<-", function (x, value) standardGeneric("tooltip<-"))
 
+#' @rdname tooltip
 setMethod("tooltip", signature = "TrackData",
     function (x) {
         x$tooltip
     }
 )
+#' @rdname tooltip
 setMethod("tooltip", signature = "TnTTrack",
     function (x) {
         tooltip(trackData(x))
     }
 )
+#' @rdname tooltip
 setMethod("tooltip<-", signature = c(x = "TrackData", value = "data.frame"),
     function (x, value) {
         x$tooltip <- value
         x
     }
 )
+#' @rdname tooltip
 setMethod("tooltip<-", signature = c(x = "TnTTrack", value = "data.frame"),
     function (x, value) {
         tooltip(trackData(x)) <- value
@@ -791,7 +810,6 @@ setMethod("tooltip<-", signature = c(x = "TnTTrack", value = "data.frame"),
 
 # EXAMPLE
 if (FALSE) local({
-    # TODO: to fix this error when deparse produce non-scalar character
     t <- BlockTrack(GRanges("chr12", IRanges(1:15 * 100, width = 10), label = paste("range", 1:15)))
     gr <- GRanges("chr12", IRanges(1:15 * 100, width = 10), label = paste("range", 1:15))
     t <- BlockTrack(gr)
@@ -806,7 +824,7 @@ if (FALSE) local({
     tooltip(t) <- data.frame(start = start(gr))
     
     compileTrack(t)
-    TnTBoard(list(t), viewrange = range(trackData(t)))
+    TnTBoard(list(t), view.range = range(trackData(t)))
 })
 
 

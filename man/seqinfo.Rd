@@ -4,6 +4,7 @@
 \docType{methods}
 \name{seqinfo}
 \alias{seqinfo}
+\alias{seqinfo<-,RangeTrack-method}
 \alias{seqinfo,RangeTrack-method}
 \alias{seqlevelsInUse,RangeTrack-method}
 \alias{seqinfo,TnTBoard-method}

@@ -23,7 +23,7 @@ CompositeTrackData <- function (tracklist) {
 #' different features can be shown in the same track.
 #' 
 #' @name composite-track
-#' @aliases merge-track
+#' @aliases merge-track  merge,TnTTrack,TnTTrack-method
 #' @param x,y,... Track constructed with \link{track-constructors} or composite track.
 #'
 #' @return
@@ -195,33 +195,40 @@ setMethod("seqlevelsInUse", signature = c(x = "CompositeTrack"),
 
 #### range Methods          ========
 
-setMethods("range",
-           signature = list(c(x = "RangeTrack"), c(x = "CompositeTrack")),
-    function (x, ..., with.revmap = FALSE, ignore.strand=FALSE, na.rm=FALSE) {
-        li.tracks <- list(x, ...)
-        stopifnot(all(sapply(li.tracks, inherits, c("RangeTrack", "CompositeTrack"))))
-        
-        joingr <- function (li.gr) {
-            li.gr <- lapply(unname(li.gr), granges)
-            do.call(c, li.gr)
-        }
-        
-        li.gr <- lapply(unname(li.tracks), function (track) {
-            if (inherits(track, "RangeTrack"))
-                return(granges(trackData(track)))
-            if (inherits(track, "CompositeTrack")) {
-                lgr <- lapply(trackData(track), trackData)
-                return(joingr(lgr))
-            }
-            stop()
-        })
-        
-        inner_call <- function (...) {
-            range(..., with.revmap = with.revmap, ignore.strand = ignore.strand, na.rm = na.rm)
-        }
-        do.call(inner_call, unname(li.gr))
+.range.track <- function (x, ..., with.revmap = FALSE, ignore.strand=FALSE, na.rm=FALSE) {
+    li.tracks <- list(x, ...)
+    stopifnot(all(sapply(li.tracks, inherits, c("RangeTrack", "CompositeTrack"))))
+    
+    joingr <- function (li.gr) {
+        li.gr <- lapply(unname(li.gr), granges)
+        do.call(c, li.gr)
     }
-)
+    
+    li.gr <- lapply(unname(li.tracks), function (track) {
+        if (inherits(track, "RangeTrack"))
+            return(granges(trackData(track)))
+        if (inherits(track, "CompositeTrack")) {
+            lgr <- lapply(trackData(track), trackData)
+            return(joingr(lgr))
+        }
+        stop()
+    })
+    
+    inner_call <- function (...) {
+        range(..., with.revmap = with.revmap, ignore.strand = ignore.strand, na.rm = na.rm)
+    }
+    do.call(inner_call, unname(li.gr))
+}
+
+#' Range of Tracks
+#' 
+#' @param x A TnTTrack object.
+#' @param ...,with.revmap,ignore.strand,na.rm
+#'     Passed to \code{\link[GenomicRanges]{range,GenomicRanges-method}}.
+setMethod("range", signature = c(x = "RangeTrack"), .range.track)
+
+#' @rdname range-RangeTrack-method
+setMethod("range", signature = c(x = "CompositeTrack"), .range.track)
 
 
 
