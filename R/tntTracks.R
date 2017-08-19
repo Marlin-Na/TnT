@@ -700,7 +700,30 @@ setMethod("$<-", signature = c(x = "TnTTrack"),
 .mkScalarOrNull <- function (x)
     if (is.null(x)) x else Biobase::mkScalar(x)
 
+#' Track Spec
+#' 
+#' Height, background and label are common options of all tracks, use these functions
+#' to get and set them.
+#' 
+#' @name trackSpec
+#'
+#' @param track A TnTTrack object.
+#' @param which Character vector, can be "background", "height" or "label".
+#' @param value Value to set: background should be character, height should be numeric,
+#'     label should be character. If length of \code{which} is bigger than one, \code{value}
+#'     should be a list with the same length.
+#' @return
+#'     For \code{trackSpec}, if length of \code{which} equals to one, return a
+#'     scalar character or numeric, if length of \code{which} is bigger than one,
+#'     return as a list.
 #' @export
+#' @examples
+#' track <- BlockTrack(GRanges("chr13", IRanges(6, 9)))
+#' trackSpec(track, "background")
+#' trackSpec(track, c("height", "label"))
+#' trackSpec(track, c("height", "label")) <- list(100, "my range")
+#' trackSpec(track, "background") <- "green"
+#' trackSpec(track)
 trackSpec <- function (track, which = c("background", "height", "label")) {
     if (length(which) == 1)
         switch(which,
@@ -713,6 +736,8 @@ trackSpec <- function (track, which = c("background", "height", "label")) {
         `names<-`(lapply(which, trackSpec, track = track), which)
 }
 
+
+#' @rdname trackSpec
 #' @export
 `trackSpec<-` <- function (track, which = c("background", "height", "label"), value) {
     if (length(which) == 1) {
