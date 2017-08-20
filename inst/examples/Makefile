@@ -7,6 +7,7 @@ help:
 	@echo "... serve"
 
 build:
+	Rscript -e "rmarkdown::render('about.Rmd', output_file = 'README.md', rmarkdown::github_document(toc = TRUE, html_preview = FALSE))"
 	Rscript -e "rmarkdown::render_site()"
 
 cp:

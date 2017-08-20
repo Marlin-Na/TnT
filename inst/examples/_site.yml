@@ -6,9 +6,16 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
+  right:
+    - icon: fa-home fa-lg
+      href: ../index.html
+    - icon: fa-github fa-lg
+      href: https://github.com/Marlin-Na/TnT/tree/master/inst/examples
+
 output:
   html_document:
-    theme: cosmo
+#   theme: cosmo
+    toc: true
     highlight: textmate
 #   include:
 #     after_body: footer.html

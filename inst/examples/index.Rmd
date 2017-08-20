@@ -2,13 +2,29 @@
 title: "TnT Examples"
 ---
 
+<div class="row">
+ <div class="col-md-5">
+
+```{r, echo=FALSE}
+knitr::kable(data.frame(check.names = FALSE,
+    "~" = c("R", "Bioc", "TnT"),
+    "Version" = c(
+        sub(x = sub(x = R.Version()$version.string, "R version ", ""), " ",
+            paste0(" ", R.Version()$nickname, " ")),
+        paste(as.character(BiocInstaller::biocVersion()),
+              sprintf("(bioc-%s)", if (BiocInstaller::isDevel()) "devel" else "release")),
+        Biobase::package.version("TnT")
+    )
+))
+```
+
+ </div>
+ <div class="col-md-7">
+ </div>
+
+</div>
+
 This site contains examples of visualization created with TnT R package.
-
-R version: <code>`r sub(x = sub(x = R.Version()$version.string, "R version ", ""), " ", paste0(" ", R.Version()$nickname, " "))`</code>
-
-Bioc version: <code>`r BiocInstaller::biocVersion()`</code>
-
-TnT version: <code>`r Biobase::package.version("TnT")`</code>
 
 
 ```{r, include=FALSE}
@@ -21,28 +37,47 @@ suppressPackageStartupMessages({
 
 ------
 
-## TnT Board and TnT Genome
+## TnT Board and TnT Genome (TODO)
 
-### [View Range, Coordinate Limit and Allowed Zoom Range]()
-
-
-------
+### [View Range, Coordinate Limit and Allowed Zoom Range]
 
 ## Different Track Types and Their Constructors
 
-### [Block Track](tracktype-BlockTrack.html)
 
+The following table shows available track types and their instances.
+
+
+<table class="table table-bordered">
+
+<thead>
+<tr>
+<th>Link</th>
+<th>Example</th>
+</tr>
+</thead>
+
+
+<tbody>
+
+<tr>
+<td class="col-md-2">
+<strong> [Block Track](tracktype-BlockTrack.html) </strong>
+</td>
+<td class="col-md-9">
 ```{r, echo=FALSE}
 ir <- IRanges(c(100, 400, 800), width = c(100, 150, 250))
 gr <- GRanges("na", ir)
 bt <- BlockTrack(gr, color = "salmon2", label = NULL)
 TnTBoard(bt, view.range = range(gr) * .7, coord.range = ranges(range(gr)) * .5)
 ```
+</td>
+</tr>
 
-<br> </br>
-
-### [Pin Track](tracktype-PinTrack.html)
-
+<tr>
+<td class="col-md-2">
+<strong> [Pin Track](tracktype-PinTrack.html) </strong>
+</td>
+<td class="col-md-9">
 ```{r, echo=FALSE}
 ir <- IRanges(start = c(100, 200, 300, 400), width = 1)
 gpos <- GRanges("na", ir)
@@ -51,11 +86,14 @@ gpos$value <- 1:4
 ptrack <- PinTrack(gpos, color = c("green", "blue", "yellow", "red"), label = NULL)
 TnTBoard(ptrack, view.range = GRanges("na", IRanges(0, 500)), coord.range = IRanges(0, 500))
 ```
+</td>
+</tr>
 
-<br> </br>
-
-### [Line Track and Area Track](tracktype-LineTrack-AreaTrack.html)
-
+<tr>
+<td class="col-md-2">
+<strong> [Line Track and Area Track](tracktype-LineTrack-AreaTrack.html) </strong>
+</td>
+<td class="col-md-9">
 ```{r, echo=FALSE}
 pos <- IRanges(seq(0, 500, by = 10), width = 1)
 pos <- GRanges("na", pos)
@@ -65,41 +103,86 @@ at <- AreaTrack(pos, domain = c(0, 1), label = NULL, color = "orange", height = 
 TnTBoard(c(lt, at), view.range = GRanges("na", IRanges(0, 500)), coord.range = IRanges(0, 500),
          zoom.allow = IRanges(70, 500))
 ```
+</td>
+</tr>
 
-<br> </br>
 
-### [Vline Track](tracktype-VlineTrack.html)
-
+<tr>
+<td class="col-md-2">
+<strong> [Vline Track](tracktype-VlineTrack.html) </strong>
+</td>
+<td class="col-md-9">
 ```{r, echo=FALSE}
+set.seed(42)
+pos <- IRanges(start = sample(1:1000, 6), width = 1)
+colors <- c("red", "yellow", "green", "cyan", "blue", "magenta")
+vltrack <- VlineTrack(pos,tooltip = data.frame(Position = start(pos), Color = colors),
+                      color = colors, label = NULL)
+TnTBoard(vltrack, view.range = GRanges("UnKnown", IRanges(1, 1000)) , coord.range = c(1, 1000))
 ```
+</td>
+</tr>
 
-<br> </br>
 
-### [Gene Track and Feature Track](tracktype-GeneTrack.html)
-
+<tr>
+<td class="col-md-2">
+<strong> [Gene Track and Feature Track](tracktype-GeneTrack.html) </strong>
+</td>
+<td class="col-md-9">
 ```{r, echo=FALSE}
 gene <- genes(EnsDb.Hsapiens.v75)
 genetrack <- FeatureTrack(gene, tooltip = as.data.frame(gene),
                           names = paste(gene$symbol, " (", gene$gene_biotype, ")", sep = ""),
                           height = 100,
                           color = mapcol(gene$gene_biotype, palette.fun = grDevices::rainbow))
-TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .7)
+TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .8)
 ```
+</td>
+</tr>
 
-<br> </br>
 
-### [Tx Track and FeatureGroup Track](tracktype-TxTrack.html)
-
+<tr>
+<td class="col-md-2">
+<strong> [Tx Track and FeatureGroup Track](tracktype-TxTrack.html) </strong>
+</td>
+<td class="col-md-9">
 ```{r, echo=FALSE}
+suppressMessages({
+    gr <- biovizBase::crunch(EnsDb.Hsapiens.v75, ~ symbol == "BRCA2")
+})
+brca2tx <- TxTrackFromGRanges(gr, label = "BRCA2, transcripts", color = "grey2", height = 300)
+brca2tx$tooltip <- select(EnsDb.Hsapiens.v75,
+    keys = brca2tx$tooltip$tx_id, keytype = "TXID", columns = c("GENEID", "SYMBOL", "TXBIOTYPE")
+)
+brca2tx$color         <- mapcol(brca2tx$tooltip$TXBIOTYPE)
+brca2tx$display_label <- strandlabel(
+    paste(brca2tx$tooltip$SYMBOL, brca2tx$tooltip$TXBIOTYPE), strand(trackData(brca2tx))
+)
+trackSpec(brca2tx, "height") <- 150
+TnTGenome(brca2tx, view.range = GRanges("13",IRanges(32879087, 32984329)))
 ```
+</td>
+</tr>
 
-<br> </br>
 
-
-### [Composite Track](track-CompositeTrack.html)
-
+<tr>
+<td class="col-md-2">
+<strong> [Composite Track](track-CompositeTrack.html) </strong>
+</td>
+<td class="col-md-9">
 ```{r, echo=FALSE}
+gr <- GRanges("chr1", IRanges(c(11000, 20000, 60000), width = 2000))
+gpos <- GRanges("chr1", IRanges(c(14000, 23000, 63000), width = 1), value = c(1, 2, 3))
+btrack <- BlockTrack(gr, label = "Block Track", tooltip = as.data.frame(gr), color = "lightblue4")
+ptrack <- PinTrack(gpos, label = "Pin Track", tooltip = as.data.frame(gpos), background = "beige")
+ctrack <- merge(btrack, ptrack)
+TnTBoard(ctrack, view.range = GRanges("chr1", IRanges(4500, 69500)), coord.range = c(0, 75000))
 ```
+</td>
+</tr>
+
+</tbody>
+</table>
 
 <br> </br>
 
@@ -109,26 +192,15 @@ TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .7)
 
 ### [Feature colors](track-colors.html)
 
-
-```{r, echo=FALSE}
-colors <- colors()
-data <- GRanges("Unknown", IRanges(seq_along(colors), width = 2), "Color Name" = colors)
-track <- BlockTrack(data, color = data$"Color Name", label = NULL)
-TnTBoard(track, view.range = range(track), coord.range = ranges(range(track)))
-```
-
-<br> </br>
-
-
 ------
 
 ## Track Manipulation (TODO)
 
-### [Background, Height and Label (`trackSpec`)]()
+### [Background, Height and Label (`trackSpec`)]
 
-### [Track Data (`trackData`)]()
+### [Track Data (`trackData`)]
 
-### [Methods Passed to Track Data (`[`, `$`, `seqinfo`, `range`)]()
+### [Methods Passed to Track Data (`[`, `$`, `seqinfo`, `range`)]
 
 ------
 
