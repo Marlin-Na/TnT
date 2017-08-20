@@ -13,8 +13,8 @@
 \alias{seqlevelsInUse,CompositeTrack-method}
 \title{Seqinfo of TnTTrack and TnTBoard}
 \usage{
-\S4method{seqinfo}{RangeTrack}(x, new2old = NULL, force = FALSE,
-  pruning.mode = c("error", "coarse", "fine", "tidy")) <- value
+\S4method{seqinfo}{RangeTrack}(x, new2old = NULL, pruning.mode = c("error",
+  "coarse", "fine", "tidy")) <- value
 
 \S4method{seqinfo}{RangeTrack}(x)
 
@@ -24,7 +24,7 @@
 
 \S4method{seqinfo}{CompositeTrack}(x)
 
-\S4method{seqinfo}{CompositeTrack}(x, new2old = NULL, force = FALSE,
+\S4method{seqinfo}{CompositeTrack}(x, new2old = NULL,
   pruning.mode = c("error", "coarse", "fine", "tidy")) <- value
 
 \S4method{seqlevelsInUse}{CompositeTrack}(x)
@@ -32,7 +32,7 @@
 \arguments{
 \item{x}{A TnTTrack or TnTBoard object.}
 
-\item{new2old, force, pruning.mode, value}{Passed to seqinfo method for GenomicRanges.}
+\item{new2old, pruning.mode, value}{Passed to seqinfo method for GenomicRanges.}
 }
 \description{
 Seqinfo of TnTTrack and TnTBoard

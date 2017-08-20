@@ -173,10 +173,10 @@ setMethod("seqinfo", signature = "CompositeTrack",
 
 #' @rdname seqinfo
 setMethod("seqinfo<-", signature = c(x = "CompositeTrack"),
-    function (x, new2old, force, pruning.mode, value) {
+    function (x, new2old, pruning.mode, value) {
         li.tracks <- trackData(x)
         for (i in seq_along(li.tracks)) {
-            seqinfo(li.tracks[[i]], new2old, force, pruning.mode) <- value
+            seqinfo(li.tracks[[i]], new2old, pruning.mode) <- value
         }
         trackData(x) <- li.tracks
         x

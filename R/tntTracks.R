@@ -574,7 +574,7 @@ setClass("AreaTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrack
 #' Seqinfo of TnTTrack and TnTBoard
 #' 
 #' @param x A TnTTrack or TnTBoard object. 
-#' @param new2old,force,pruning.mode,value Passed to seqinfo method for GenomicRanges.
+#' @param new2old,pruning.mode,value Passed to seqinfo method for GenomicRanges.
 #' @name seqinfo
 #' @aliases seqinfo<-,RangeTrack-method
 #' @examples
@@ -588,9 +588,9 @@ setClass("AreaTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrack
 #' seqinfo(ctrack)
 #' seqinfo(board)
 setMethod("seqinfo<-", signature = c(x = "RangeTrack"),
-    function (x, new2old, force, pruning.mode, value) {
+    function (x, new2old, pruning.mode, value) {
         trackData(x) <- `seqinfo<-`(x = trackData(x), new2old = new2old,
-                                    force = force, pruning.mode = pruning.mode, value = value)
+                                    pruning.mode = pruning.mode, value = value)
         x
     }
 )
