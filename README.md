@@ -1,6 +1,8 @@
 
 # TnT
 
+[![Travis-CI Build Status](https://travis-ci.org/Marlin-Na/TnT.svg?branch=master)](https://travis-ci.org/Marlin-Na/TnT)
+
 ## Introduction
 
 
