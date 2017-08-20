@@ -3,7 +3,7 @@
 \docType{methods}
 \name{range-TnTTrack}
 \alias{range-TnTTrack}
-\alias{range-RangeTrack-method}
+\alias{range,RangeTrack-method}
 \alias{range,CompositeTrack-method}
 \title{Range of Tracks}
 \usage{
