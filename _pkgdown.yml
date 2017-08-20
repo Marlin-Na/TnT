@@ -1,35 +1,55 @@
 
-articles:
-
 
 navbar:
-  title: ~
+  title: TnT
   type: default
   left:
-  - text: Home
+  - icon: fa-home fa-lg
     href: index.html
   - text: Articles
     href: articles/index.html
   - text: Reference
     href: reference/index.html
-  - text: Misc
-    menu:
-    - text: "Some Technical Notes"
-      href: notes.html
+  - text: Examples
+    href: examples/index.html
+ #- text: Misc
+ #  menu:
+ #  - text: "Some Technical Notes"
+ #    href: notes.html
   right:
     - icon: fa-github fa-lg
       href: https://github.com/marlin-na/TnT
 
+# TODO
+articles:
+  - title: All vignettes
+    desc: ~
+    contents: '``'
+
 
 reference:
-  - title: All functions
-    desc: ~
+  - title: Tracks
+    desc: Track constructors and accessors.
     contents:
-      - asJS
-      - JScascade
-      - TnT-shiny
-      - TnT
-
+    - '`track-constructors`'
+    - '`composite-track`'
+    - '`tooltip`'
+    - '`trackdata`'
+    - '`trackSpec`'
+    - '`range-TnTTrack`'
+    - '`seqinfo`'
+  - title: TnT Board
+    desc: TnT Board and TnT Genome.
+    contents:
+    - '`tntboard`'
+    - '`tracklist`'
+    - '`knit_print.TnTBoard`'
+    - '`range,TnTBoard-method`'
+  - title: Utils
+    desc: Some small util functions.
+    contents:
+    - '`mapcol`'
+    - '`strandlabel`'
 
 templates:
   params:

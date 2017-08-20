@@ -1,7 +1,11 @@
 Package: TnT
 Title: Tree- and Track- Based Interactive Visualizations
 Version: 0.0.0.9016
-Authors@R: person("Jialin", "Ma", email = "marlin-@gmx.cn", role = c("aut", "cre"))
+Authors@R: personList(
+            person("Jialin", "Ma", email="marlin-@gmx.cn", role = c("aut", "cre")),
+            person("Miguel", "Pignatelli", email="emepyc@gmail.com", role=c("aut")),
+            person("Toby", "Hocking", email="tdhock5@gmail.com", role = c("aut"))
+        )
 Description: A R interface to the TnT javascript library (https://github.com/
     tntvis).
 Depends:
@@ -27,7 +31,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat
-License: AGPL-3 + file LICENSE
+License: AGPL-3
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr

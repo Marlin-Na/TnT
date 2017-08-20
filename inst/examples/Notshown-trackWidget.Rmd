@@ -5,7 +5,14 @@ title: "trackWidget"
 This is the low-level util to create visualizations.
 
 ```{r}
-suppressMessages(TnT:::expose_all("TnT"))
+expose_all <- function (package) {
+    attachname <- paste0(package, "_all")
+    while (attachname %in% search()) detach(attachname, character.only = TRUE)
+    pkgns <- loadNamespace(package)
+    attach(pkgns, name = attachname)
+    invisible(pkgns)
+}
+suppressMessages(expose_all("TnT"))
 ```
 
 
