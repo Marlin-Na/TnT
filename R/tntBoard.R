@@ -477,16 +477,25 @@ setMethod("show", signature = c("TnTBoard"),
     }
 )
 
+
 #' Printing TnTBoard in Rmarkdown
 #' 
 #' S3 method to automatically render a TnTBoard with knitr.
 #' 
 #' @param x A TnTBoard or TnTGenome object.
 #' @param ...,options Passed to \code{htmlwidget:::knit_print}.
+#' @references \code{\link[knitr]{knit_print}}
 #' @export
+#' @examples
+#' track <- BlockTrack(GRanges("chr12", IRanges(c(100, 400, 700), width = 100)),
+#'                     color = c("green", "red", "blue"))
+#' tntboard <- TnTGenome(track)
+#' knitr::knit_print(tntboard)
 knit_print.TnTBoard <- function (x, ..., options = NULL) {
     # Redirect method to htmlwidget
     x <- trackWidget(x, elementId = NULL)
     knitr::knit_print(x, ..., options = options)
 }
 
+
+# setMethod("knit_print", signature = c(x = "TnTBoard"), knit_print.TnTBoard)

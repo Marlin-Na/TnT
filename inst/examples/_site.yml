@@ -15,7 +15,7 @@ navbar:
 output:
   html_document:
 #   theme: cosmo
-    toc: true
+#   toc: true
     highlight: textmate
 #   include:
 #     after_body: footer.html

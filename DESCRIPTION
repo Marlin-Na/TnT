@@ -1,6 +1,6 @@
 Package: TnT
-Title: Tree- and Track- Based Interactive Visualizations
-Version: 0.0.0.9016
+Title: Interactive Visualization for Genomic Features
+Version: 0.0.1
 Authors@R: personList(
             person("Jialin", "Ma", email="marlin-@gmx.cn", role = c("aut", "cre")),
             person("Miguel", "Pignatelli", email="emepyc@gmail.com", role=c("aut")),

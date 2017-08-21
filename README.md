@@ -3,48 +3,16 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/Marlin-Na/TnT.svg?branch=master)](https://travis-ci.org/Marlin-Na/TnT)
 
-## Introduction
+TnT is a R package that wraps the [TnT javascript libraries](https://github.com/tntvis)
+to provide track-based visulizations from R. It depends on a number of bioconductor
+packages and is useful for displaying genomic features (as a simple genome browser).
 
+To get started, please read [Introduction to TnT](https://marlin-na.github.io/TnT/articles/Introduction to TnT.html)
+and see various [examples](https://marlin-na.github.io/TnT/examples).
 
-`TnT` is a R package that wraps the tnt javascript library (https://github.com/tntvis).
-It can provide tree- and track-based visulizations, including a simple genome browser.
-
-For detail, see https://marlin-na.github.io/TnT .
-
-### Install
-
-You can install it with:
-
-```r
-if (!requireNamespace('devtools')) {
-    install.packages('devtools')
-}
-devtools::install_github("marlin-na/TnT")
-```
-
-
-### Usage
-
-
-This package is currently in development, but the following snippet of code may
-illustrate the way of using:
-
-
-```r
-library(TnT)
-mydata1 <- data.frame (
-    start = c(42, 69, 233),
-    end = c(54, 99, 250)
-)
-mydata2 <- data.frame(
-    start = c(23, 66, 300),
-    end = c(38, 74, 318)
-)
-tnt_board(from = 14, to = 114, min = -100, max = 500) %>%
-    add_track_block(mydata1, label = "My Track 1") %>%
-    add_track_block(mydata2, label = "My Track 2", color.feature = "green") %>%
-    TnT()
-```
-
-
+This package is a
+[GSoC 2017 project](https://summerofcode.withgoogle.com/dashboard/project/5521605556961280/overview/) by
+Jialin Ma, kindly mentored by Toby Hocking and Miguel Pignatelli,
+under the organization of R project for statistical computing. Miguel Pignatelli
+is also the author of TnT javascript libraries which the R package relies on.
 

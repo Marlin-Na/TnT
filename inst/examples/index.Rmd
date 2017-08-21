@@ -24,7 +24,11 @@ knitr::kable(data.frame(check.names = FALSE,
 
 </div>
 
+
 This site contains examples of visualization created with TnT R package.
+
+Overall, the package works by constructing tracks from data (GRanges, TxDb, EnsDb, etc.),
+then constructing tnt board from a list of tracks.
 
 
 ```{r, include=FALSE}
@@ -37,12 +41,24 @@ suppressPackageStartupMessages({
 
 ------
 
-## TnT Board and TnT Genome (TODO)
+#### [TnT Board and TnT Genome](tntboard.html)
 
-### [View Range, Coordinate Limit and Allowed Zoom Range]
+Given a list of tracks, 
 
-## Different Track Types and Their Constructors
+The page provided examples of how to construct a TnTBoard or TnTGenome and set
+view range, coordinate range, etc. 
 
+
+#### Different Track Types and Their Constructors
+
+There are different track types and constructors in TnT.
+The constructors are provided to construct a track from distinct sources which are
+generally standard format used in many bioconductor packages (e.g. GRanges that represents
+genomic positions and possible annotations; TxDb that represents gene and transcript information).
+
+Further
+
+To construct a track, the first to
 
 The following table shows available track types and their instances.
 

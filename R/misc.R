@@ -20,6 +20,8 @@ biovizBase::crunch
 #' @importFrom gplots col2hex
 #' @importFrom stats na.fail setNames
 #' @importFrom utils capture.output
+#' @importFrom knitr knit_print
+#' @import htmlwidgets
 NULL
 
 

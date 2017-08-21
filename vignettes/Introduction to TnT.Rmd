@@ -1,0 +1,262 @@
+---
+title: "Introduction to TnT"
+author: "Jialin Ma"
+date: "August 22, 2017"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Motivation
+
+A common task in bioinformatics is to create visualization of genomic data along genomic
+coordinates, together with necessary genomic annotation features like genes and transcripts
+on the same coordinate, in order to make sense of those data.
+
+Typically, this can be accomplished with a browser-based genome browser like
+UCSC genome browser or IGV, which requires to export the data from R.
+There are also R packages developed to address this issue but using static graphs, e.g. `Gviz` and `ggbio`.
+
+While bioconductor have packages that excel at representing and analyzing such genomic data,
+there lacks a flexible and interactive way to view them. Sometimes there is no need for
+a full-functional genome browser but a fast and convenient way to view the data which
+are typically represented by a R object. It should also be interactive to aid exploration,
+for example it may be dragable and it may enable tooltips to get detailed information about
+a separate feature quickly.
+
+This is just the motivation of TnT: it aims to provide an interactive and flexible approach
+to visualize genomic data right in R. In order to accomplish this goal, TnT wraps the
+[TnT javascript libraries](https://github.com/tntvis/) and provides bindings
+to common bioconductor classes (e.g. GRanges, TxDb) that represent genomic data.
+The [TnT javascript libraries](https://github.com/tntvis/) which the R package is based on
+are a set of javascript libraries for visualizing trees- and track-based annotations, which
+can be used to create a simple genome browser.
+
+TnT is a new package, any feedback or suggestion would appreciated,
+please email to Jialin Ma < marlin-@gmx.cn >. You can also find the source repository
+at https://github.com/marlin-na/TnT and the documentation site at https://marlin-na.github.io/TnT/ .
+This vignette will also be extended in the future to include more details.
+
+
+## Install
+
+TnT is currently not on Bioconductor or CRAN, please install with
+
+```{r, eval=FALSE}
+devtools::install_github("marlin-na/TnT")
+```
+
+If not successful, try to install a few dependencies from bioconductor.
+
+```{r, eval=FALSE}
+source("https://bioconductor.org/biocLite.R")
+biocLite(c("Biobase", "GenomeInfoDb", "IRanges", "GenomicRanges", "S4Vectors", "biovizBase"))
+```
+
+Then attach the package.
+
+```{r}
+suppressPackageStartupMessages(library(TnT))
+```
+
+This vignette will assume readers have experience with common data structures in bioconductor,
+especially `GRanges` class from `GenomicRanges` package.
+
+
+## Track Constructors
+
+Overall, the package works by constructing tracks from data (GRanges, TxDb, EnsDb, etc.),
+and then constructing a tnt board from a list of tracks.
+
+So the first step is to choose a track constructor and use it to construct tracks from
+data. Different constructors have been provided by the package for different features and
+data types.
+
+As a simple example, to construct a block track from GRanges object
+
+```{r}
+gr <- GRanges("chr7",
+    ranges = IRanges(
+        start = c(26549019L, 26564119L, 26585667L, 26591772L, 26594192L, 26623835L,
+                  26659284L, 26721294L, 26821518L, 26991322L),
+        end =   c(26550183L, 26564500L, 26586158L, 26593309L, 26594570L, 26624150L,
+                  26660352L, 26721717L, 26823297L, 26991841L)),
+    ID = 1:10,
+    Name = paste("My Range", 1:10)
+)
+btrack <- BlockTrack(gr)
+btrack
+```
+
+As you can see, meta-columns of GRanges have been converted to the tooltip column in
+track data. This is the default argument behavior, see
+
+```{r}
+args(BlockTrack)
+```
+
+The `tooltip` can be given as a data frame parallel to the data, the `color` argument can
+also be a character vector parallel to the data setting colors for each individual range.
+
+In order to view track, simply put that track into a TnTBoard/TnTGenome:
+
+```{r}
+TnTGenome(btrack)
+```
+
+Similarly, tracks of different features could be constructed with other constructors.
+Here is a table showing these constructors and their data sources.
+Links to examples of each track type are also provided and you are recommended to go
+through them.
+
+```{r, echo=FALSE}
+df <- data.frame(stringsAsFactors = FALSE,
+    Constructor = c("BlockTrack", "VlineTrack", "PinTrack", "LineTrack", "AreaTrack",
+                    "GeneTrackFromTxDb", "FeatureTrack", "GroupFeatureTrack",
+                    "TxTrackFromTxDb", "TxTrackFromGRanges", "merge")
+)
+map.source <- c(
+    BlockTrack   = "GRanges",
+    FeatureTrack = "GRanges",
+    VlineTrack   = "Width-one GRanges",
+    PinTrack     = "Width-one GRanges paired with values",
+    LineTrack    = "Width-one GRanges paired with values",
+    AreaTrack    = "Width-one GRanges paired with values",
+    GeneTrackFromTxDb  = "TxDb",
+    TxTrackFromTxDb    = "TxDb",
+    TxTrackFromGRanges = "GRanges paired with 'type' and 'tx_id'",
+    GroupFeatureTrack  = "GRangesList",
+    merge = "Two or more tracks"
+)
+map.feature <- c(
+    BlockTrack   = "block",
+    VlineTrack   = "vline",
+    PinTrack     = "pin",
+    LineTrack    = "line",
+    AreaTrack    = "area",
+    GeneTrackFromTxDb  = "gene",
+    FeatureTrack       = "gene",
+    GroupFeatureTrack  = "tx",
+    TxTrackFromTxDb    = "tx",
+    TxTrackFromGRanges = "tx",
+    merge = "composite"
+)
+map.link <- c(
+    BlockTrack   = "tracktype-BlockTrack.html",
+    VlineTrack   = "tracktype-VlineTrack.html",
+    PinTrack     = "tracktype-PinTrack.html",
+    LineTrack    = "tracktype-LineTrack-AreaTrack.html",
+    AreaTrack    = "tracktype-LineTrack-AreaTrack.html",
+    GeneTrackFromTxDb  = "tracktype-GeneTrack.html",
+    FeatureTrack       = "tracktype-GeneTrack.html",
+    GroupFeatureTrack  = "tracktype-TxTrack.html",
+    TxTrackFromTxDb    = "tracktype-TxTrack.html",
+    TxTrackFromGRanges = "tracktype-TxTrack.html",
+    merge = "track-CompositeTrack.html"
+)
+genlink <- function (base) {
+    sprintf("[link](%s)", paste0("https://marlin-na/TnT/examples/", base))
+}
+df$Source <- map.source[df$Constructor]
+df$`Feature type` <- map.feature[df$Constructor]
+df$`Example` <- genlink(map.link[df$Constructor])
+knitr::kable(df)
+```
+
+It is worthwhile to mention CompositeTrack here: you can `merge` multiple tracks
+to construct a CompositeTrack so that different types of features can be shown
+within one track. See example [here](https://marlin-na/TnT/examples/track-CompositeTrack.html).
+
+## Track Manipulation
+
+Given a constructed track, we may want to access or modify its data and options.
+
+There are three common options for all types of tracks, they are `background`,
+`height` and `label`. These three options can be accessed and modified via
+`trackSpec` and `trackSpec<-`. For example:
+
+```{r}
+trackSpec(btrack, "background")
+btrack2 <- btrack
+trackSpec(btrack2, "background") <- "blanchedalmond"
+trackSpec(btrack2, "label")      <- "My Ranges"
+trackSpec(btrack2, "height")     <- 50
+```
+
+Data of tracks are normally stored with a class that inherits `GRanges` (except CompositeTrack,
+in which the data is stored as a list of tracks), and can be accessed or modified via
+`trackData` or `trackData<-`. There are also convenience shortcuts
+`track$name` and `track$name <- value` for `trackData(track)$name` and `trackData(track)$name <- value`,
+respectively. As an example:
+
+```{r}
+btrack2$color                     # Equivalent to `trackData(btrack2)$color`
+btrack2$color <- "darkseagreen4"  # Equivalent to `trackData(btrack2)$color <- "darkseagreen4"`
+```
+
+As an example, let's also modify the data:
+
+```{r}
+trackData(btrack2) <- shift(trackData(btrack2), 10000)
+```
+
+Finally, we put the modified track and the original track together to see the
+difference.
+
+```{r}
+TnTBoard(list(btrack, btrack2))
+```
+
+Another thing we may want to modify is tooltip. By constructing the track via
+constructors (except those constructed from TxDb), tooltip can be given as a
+data frame parallel to the data. After the track is constructed, the tooltip
+can accessed via `tooltip(track)` which is an shortcut to `trackData(track)$tooltip`.
+For example:
+
+```{r}
+tooltip(btrack2) <- cbind(tooltip(btrack2), as.data.frame(trackData(btrack2)))
+TnTGenome(btrack2, view.range = trackData(btrack2)[4] * .05)
+```
+
+Try to click on the block to see the tooltip.
+
+## TnTBoard and TnTGenome
+
+In previous examples, we have already seen how to show tracks with a TnTBoard or TnTGenome.
+A TnTBoard stores a list of tracks and show them with the same coordinate.
+You may already have noticed the difference between TnTBoard and TnTGenome: TnTGenome
+is just a TnTBoard with axis and location label.
+
+In this part, I will introduce some arguments that can be optionally provided to
+control the board. They are:
+
+- `view.range`: GRanges, to set the initial view range.
+- `coord.range`: IRanges or numeric, to set the cooordinate limit.
+- `zoom.allow`:  IRanges or numeric, to set the limit of extent when zooming in and out.
+- `allow.drag`:  Logical, if FALSE, the board will not be able to move or zoom.
+
+In case that `view.range`, `coord.range` and `zoom.allow` not provided, TnT will take a guess
+on them. Some considerations are:
+
+- `view.range`: Try to use the seqlevel on which all tracks have features and try to
+                use intersection of ranges of all tracks.
+- `coord.range`: If `seqinfo` of the tracks have `seqlengths` available, then use
+                 1 to seqlength as coordinate range. If not, try to find based on
+                 ranges of features (i.e. to cover all features on that seqlevel).
+
+An example using these arguments:
+
+```{r}
+set.seed(6)
+pintrack <- PinTrack(GRanges("chr7", IRanges(start = sample(26300000:27000000, 4), width = 1)),
+                     value = c(1,3,2,4), color = c("blue", "yellow", "green", "red"))
+TnTGenome(
+    list(pintrack, btrack2),
+    view.range = GRanges("chr7", IRanges(26550000, 26600000)),
+    coord.range = IRanges(26350000, 27050000),
+    zoom.allow = IRanges(50000, 200000)
+)
+```
+

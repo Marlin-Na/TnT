@@ -4,7 +4,7 @@
 \alias{knit_print.TnTBoard}
 \title{Printing TnTBoard in Rmarkdown}
 \usage{
-knit_print.TnTBoard(x, ..., options = NULL)
+\method{knit_print}{TnTBoard}(x, ..., options = NULL)
 }
 \arguments{
 \item{x}{A TnTBoard or TnTGenome object.}
@@ -13,4 +13,13 @@ knit_print.TnTBoard(x, ..., options = NULL)
 }
 \description{
 S3 method to automatically render a TnTBoard with knitr.
+}
+\examples{
+track <- BlockTrack(GRanges("chr12", IRanges(c(100, 400, 700), width = 100)),
+                    color = c("green", "red", "blue"))
+tntboard <- TnTGenome(track)
+knitr::knit_print(tntboard)
+}
+\references{
+\code{\link[knitr]{knit_print}}
 }

@@ -7,7 +7,9 @@ navbar:
   - icon: fa-home fa-lg
     href: index.html
   - text: Articles
-    href: articles/index.html
+    menu:
+    - text: Introduction to TnT
+      href: articles/Introduction_to_TnT.html
   - text: Reference
     href: reference/index.html
   - text: Examples
@@ -20,11 +22,10 @@ navbar:
     - icon: fa-github fa-lg
       href: https://github.com/marlin-na/TnT
 
-# TODO
 articles:
   - title: All vignettes
     desc: ~
-    contents: '``'
+    contents: '`Introduction to TnT`'
 
 
 reference:
