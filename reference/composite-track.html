@@ -133,10 +133,9 @@ different features can be shown in the same track.</p>
 <span class='no'>btrack</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='track-constructors.html'>BlockTrack</a></span>(<span class='no'>gr</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"Block Track"</span>, <span class='kw'>tooltip</span> <span class='kw'>=</span> <span class='fu'>as.data.frame</span>(<span class='no'>gr</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"lightblue4"</span>)
 <span class='no'>ptrack</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='track-constructors.html'>PinTrack</a></span>(<span class='no'>gpos</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='st'>"Pin Track"</span>, <span class='kw'>tooltip</span> <span class='kw'>=</span> <span class='fu'>as.data.frame</span>(<span class='no'>gpos</span>), <span class='kw'>background</span> <span class='kw'>=</span> <span class='st'>"beige"</span>)
 
-<span class='no'>ctrack</span> <span class='kw'>&lt;-</span> <span class='fu'>merge</span>(<span class='no'>btrack</span>, <span class='no'>ptrack</span>)
-<span class='fu'><a href='tntboard.html'>TnTBoard</a></span>(<span class='no'>ctrack</span>)</div><div class='output co'>#&gt; <span class='message'>- View range is not specified:</span>
-#&gt; <span class='message'>  automatically select 4625..68374 on seqlevel chr1 ...</span></div><div class='output co'>#&gt; <span class='message'>- Coordinate limit is not specified and seqlength is unknown:</span>
-#&gt; <span class='message'>  automatically set coordinate range to 71..72927 ...</span></div><div class='output co'>#&gt; <span class='warning'>Warning: file("") only supports open = "w+" and open = "w+b": using the former</span></div><div class='output co'>#&gt; <span class='error'>Error in dirname(to): a character vector argument expected</span></div></pre>
+<span class='no'>ctrack</span> <span class='kw'>&lt;-</span> <span class='fu'>merge</span>(<span class='no'>btrack</span>, <span class='no'>ptrack</span>)</div><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='tntboard.html'>TnTBoard</a></span>(<span class='no'>ctrack</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

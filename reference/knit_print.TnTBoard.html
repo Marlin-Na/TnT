@@ -126,10 +126,9 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>track</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='track-constructors.html'>BlockTrack</a></span>(<span class='fu'>GRanges</span>(<span class='st'>"chr12"</span>, <span class='fu'>IRanges</span>(<span class='fu'>c</span>(<span class='fl'>100</span>, <span class='fl'>400</span>, <span class='fl'>700</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>100</span>)),
                     <span class='kw'>color</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"green"</span>, <span class='st'>"red"</span>, <span class='st'>"blue"</span>))
-<span class='no'>tntboard</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tntboard.html'>TnTGenome</a></span>(<span class='no'>track</span>)
-<span class='kw pkg'>knitr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/knitr/topics/knit_print'>knit_print</a></span>(<span class='no'>tntboard</span>)</div><div class='output co'>#&gt; <span class='message'>- View range is not specified:</span>
-#&gt; <span class='message'>  automatically select 12..886 on seqlevel chr12 ...</span></div><div class='output co'>#&gt; <span class='message'>- Coordinate limit is not specified and seqlength is unknown:</span>
-#&gt; <span class='message'>  automatically set coordinate range to -50..949 ...</span></div><div class='output co'>#&gt; <span class='error'>Error in switch(options$dev, pdf = ".pdf", jpeg = ".jpeg", ".png"): EXPR must be a length 1 vector</span></div></pre>
+<span class='no'>tntboard</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tntboard.html'>TnTGenome</a></span>(<span class='no'>track</span>)</div><span class='co'># NOT RUN {</span>
+<span class='kw pkg'>knitr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/knitr/topics/knit_print'>knit_print</a></span>(<span class='no'>tntboard</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
