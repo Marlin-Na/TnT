@@ -39,5 +39,7 @@ shown in an interactive R session or in rmarkdown output.
 }
 \examples{
 track <- BlockTrack(GRanges("chr1", IRanges(start = c(100, 300, 500), width = c(10, 100, 200))))
+\dontrun{
 TnTGenome(track)
+}
 }

@@ -38,7 +38,9 @@ CompositeTrackData <- function (tracklist) {
 #' ptrack <- PinTrack(gpos, label = "Pin Track", tooltip = as.data.frame(gpos), background = "beige")
 #' 
 #' ctrack <- merge(btrack, ptrack)
+#' \dontrun{
 #' TnTBoard(ctrack)
+#' }
 setMethod("merge", signature = c(x = "TnTTrack", y = "TnTTrack"),
     function (x, y, ...) {
         tracklist <- list(x, y, ...)

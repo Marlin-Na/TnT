@@ -23,7 +23,11 @@ bt <- BlockTrack(GRanges("chr21", IRanges(100, 1200)))
 li.tracks <- list(bt, bt)
 board <- TnTBoard(li.tracks)
 tracklist(board)
-if (interactive()) show(board)
+\dontrun{
+show(board)
+}
 tracklist(board) <- list(bt)
-if (interactive()) show(board)
+\dontrun{
+show(board)
+}
 }

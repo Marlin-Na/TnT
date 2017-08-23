@@ -29,7 +29,9 @@ btrack <- BlockTrack(gr, label = "Block Track", tooltip = as.data.frame(gr), col
 ptrack <- PinTrack(gpos, label = "Pin Track", tooltip = as.data.frame(gpos), background = "beige")
 
 ctrack <- merge(btrack, ptrack)
+\dontrun{
 TnTBoard(ctrack)
+}
 }
 \seealso{
 \url{https://marlin-na.github.io/TnT/examples/track-CompositeTrack.html}

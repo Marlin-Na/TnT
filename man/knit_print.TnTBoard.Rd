@@ -18,7 +18,9 @@ S3 method to automatically render a TnTBoard with knitr.
 track <- BlockTrack(GRanges("chr12", IRanges(c(100, 400, 700), width = 100)),
                     color = c("green", "red", "blue"))
 tntboard <- TnTGenome(track)
+\dontrun{
 knitr::knit_print(tntboard)
+}
 }
 \references{
 \code{\link[knitr]{knit_print}}

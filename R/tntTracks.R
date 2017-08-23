@@ -43,10 +43,6 @@
 # (see function compileBoard):
 #   1. Drop trackdata that are not on the seqlevel (chromosome) of ViewRange.
 #   2. Determine the coordinate range and maximal limit of zooming
-#   3. Consolidate background color:
-#       If background color for any track is set as NULL, then replace it with
-#       default value -- the background color from other tracks Or "white" if none
-#       of them is available.
 #   Finally, the TnTBoard object can be compiled to a valid definition of TnT instance.
 
 

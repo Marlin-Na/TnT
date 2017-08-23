@@ -51,7 +51,9 @@ setClass("TnTGenome", contains = "TnTBoard",
 #' 
 #' @examples
 #' track <- BlockTrack(GRanges("chr1", IRanges(start = c(100, 300, 500), width = c(10, 100, 200))))
+#' \dontrun{
 #' TnTGenome(track)
+#' }
 TnTBoard <- function (tracklist, view.range = GRanges(),
                       coord.range = IRanges(), zoom.allow = IRanges(), allow.drag = TRUE,
                       use.tnt.genome = FALSE) {
@@ -142,9 +144,13 @@ setMethod(range, signature = c(x = "TnTBoard"),
 #' li.tracks <- list(bt, bt)
 #' board <- TnTBoard(li.tracks)
 #' tracklist(board)
-#' if (interactive()) show(board)
+#' \dontrun{
+#' show(board)
+#' }
 #' tracklist(board) <- list(bt)
-#' if (interactive()) show(board)
+#' \dontrun{
+#' show(board)
+#' }
 tracklist <- function (tntboard) {
     tntboard@TrackList
 }
@@ -490,7 +496,9 @@ setMethod("show", signature = c("TnTBoard"),
 #' track <- BlockTrack(GRanges("chr12", IRanges(c(100, 400, 700), width = 100)),
 #'                     color = c("green", "red", "blue"))
 #' tntboard <- TnTGenome(track)
+#' \dontrun{
 #' knitr::knit_print(tntboard)
+#' }
 knit_print.TnTBoard <- function (x, ..., options = NULL) {
     # Redirect method to htmlwidget
     x <- trackWidget(x, elementId = NULL)
