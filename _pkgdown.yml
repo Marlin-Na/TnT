@@ -11,24 +11,26 @@ navbar:
   - text: Reference
     href: reference/index.html
   - text: Examples
-    href: examples/index.html
     menu:
+    - text: Index
+      href: examples/index.html
+    - text: "------------------"
     - text: Track Types
-      menu:
-      - text: BlockTrack
-        href: examples/tracktype-BlockTrack.html
-      - text: PinTrack
-        href: examples/tracktype-PinTrack.html
-      - text: LineTrack and AreaTrack
-        href: examples/tracktype-LineTrack-AreaTrack.html
-      - text: VlineTrack
-        href: examples/tracktype-VlineTrack.html
-      - text: GeneTrack and FeatureTrack
-        href: examples/tracktype-GeneTrack.html
-      - text: TxTrack and GroupFeatureTrack
-        href: examples/tracktype-TxTrack.html
-      - text: CompositeTrack
-        href: examples/track-CompositeTrack.html
+    - text: BlockTrack
+      href: examples/tracktype-BlockTrack.html
+    - text: PinTrack
+      href: examples/tracktype-PinTrack.html
+    - text: LineTrack and AreaTrack
+      href: examples/tracktype-LineTrack-AreaTrack.html
+    - text: VlineTrack
+      href: examples/tracktype-VlineTrack.html
+    - text: GeneTrack and FeatureTrack
+      href: examples/tracktype-GeneTrack.html
+    - text: TxTrack and GroupFeatureTrack
+      href: examples/tracktype-TxTrack.html
+    - text: CompositeTrack
+      href: examples/track-CompositeTrack.html
+    - text: "------------------"
     - text: Feature Colors
       href: examples/track-colors.html
     - text: Tooltip display
