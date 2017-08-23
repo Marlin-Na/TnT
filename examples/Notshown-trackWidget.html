@@ -259,8 +259,8 @@ suppressMessages(expose_all(&quot;TnT&quot;))</code></pre>
         .add_track(blockTrack);
     board
 &#39;)</code></pre>
-<div id="htmlwidget-4a3ca18c51fa08d67f4e" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4a3ca18c51fa08d67f4e">{"x":{"tntdef":"\n    var axisTrack = tnt.board.track()\n        .height(20)\n        .color(\"white\")\n        .display(tnt.board.track.feature.axis());\n\n    var blockTrack = tnt.board.track()\n        .height(30)\n        .color(\"grey\")\n        .data(tnt.board.track.data.sync()\n            .retriever(function () {\n                return [\n                    {start: 200, end: 350},\n                    {start: 400, end: 450}\n                ]\n            })\n        )\n        .display(\n            tnt.board.track.feature.block()\n            .color(\"red\")\n        );\n\n    var board = tnt.board()\n        .from(100)\n        .to(500)\n        .min(0)\n        .max(1000)\n        .add_track(axisTrack)\n        .add_track(blockTrack);\n    board\n"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-f8a339bd362a884f8ca8" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f8a339bd362a884f8ca8">{"x":{"tntdef":"\n    var axisTrack = tnt.board.track()\n        .height(20)\n        .color(\"white\")\n        .display(tnt.board.track.feature.axis());\n\n    var blockTrack = tnt.board.track()\n        .height(30)\n        .color(\"grey\")\n        .data(tnt.board.track.data.sync()\n            .retriever(function () {\n                return [\n                    {start: 200, end: 350},\n                    {start: 400, end: 450}\n                ]\n            })\n        )\n        .display(\n            tnt.board.track.feature.block()\n            .color(\"red\")\n        );\n\n    var board = tnt.board()\n        .from(100)\n        .to(500)\n        .min(0)\n        .max(1000)\n        .add_track(axisTrack)\n        .add_track(blockTrack);\n    board\n"},"evals":[],"jsHooks":[]}</script>
 <p><br/> <br/></p>
 </div>
 <div id="create-a-tnt-board-with-jscascade-util-functions" class="section level2">
@@ -300,8 +300,8 @@ tntdef &lt;- jc(
     add_track = blockTrack
 )
 trackWidget(tntdef)</code></pre>
-<div id="htmlwidget-df8445b702d789756a7d" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-df8445b702d789756a7d">{"x":{"tntdef":"tnt.board()\n.from(0)\n.to(500)\n.min(0)\n.max(1000)\n.add_track(tnt.board.track()\n.height(20)\n.color(\"white\")\n.display(tnt.board.track.feature.axis()))\n.add_track(tnt.board.track()\n.height(30)\n.color(\"green\")\n.data(tnt.board.track.data.sync()\n.retriever(function() {\n            return [\n                {start: 200, end: 350},\n                {start: 550, end: 770}\n            ];\n        }))\n.display(tnt.board.track.feature.block()\n.color(\"red\")\n.index(function (d) {return d.start})))"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-26c7c83cd49031c634d5" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-26c7c83cd49031c634d5">{"x":{"tntdef":"tnt.board()\n.from(0)\n.to(500)\n.min(0)\n.max(1000)\n.add_track(tnt.board.track()\n.height(20)\n.color(\"white\")\n.display(tnt.board.track.feature.axis()))\n.add_track(tnt.board.track()\n.height(30)\n.color(\"green\")\n.data(tnt.board.track.data.sync()\n.retriever(function() {\n            return [\n                {start: 200, end: 350},\n                {start: 550, end: 770}\n            ];\n        }))\n.display(tnt.board.track.feature.block()\n.color(\"red\")\n.index(function (d) {return d.start})))"},"evals":[],"jsHooks":[]}</script>
 <p><br/> <br/></p>
 </div>
 <div id="session-info" class="section level2">
@@ -339,7 +339,7 @@ trackWidget(tntdef)</code></pre>
 ## loaded via a namespace (and not attached):
 ##  [1] ProtGenerics_1.8.0            bitops_1.0-6                 
 ##  [3] matrixStats_0.52.2            bit64_0.9-7                  
-##  [5] RColorBrewer_1.1-2            httr_1.3.0                   
+##  [5] RColorBrewer_1.1-2            httr_1.3.1                   
 ##  [7] rprojroot_1.2                 tools_3.4.1                  
 ##  [9] backports_1.1.0               R6_2.2.2                     
 ## [11] rpart_4.1-11                  KernSmooth_2.23-15           
@@ -377,7 +377,7 @@ trackWidget(tntdef)</code></pre>
 ## [75] httpuv_1.3.3                  gtable_0.2.0                 
 ## [77] ggplot2_2.2.1                 mime_0.5                     
 ## [79] xtable_1.8-2                  survival_2.41-3              
-## [81] tibble_1.3.3                  GenomicAlignments_1.13.5     
+## [81] tibble_1.3.4                  GenomicAlignments_1.13.5     
 ## [83] memoise_1.1.0                 cluster_2.0.6                
 ## [85] interactiveDisplayBase_1.14.0</code></pre>
 </div>
