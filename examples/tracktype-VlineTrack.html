@@ -179,15 +179,69 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">TnT Examples</a>
+      <a class="navbar-brand" href="index.html">TnT</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="index.html">Index</a>
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introduction.html">Introduction to TnT</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="about.html">About</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Examples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+        Track Types
+         
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="tracktype-BlockTrack.html">BlockTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-PinTrack.html">PinTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-LineTrack-AreaTrack.html">LineTrack and AreaTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-VlineTrack.html">VlineTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-GeneTrack.html">GeneTrack and FeatureTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-TxTrack.html">TxTrack and GroupFeatureTrack</a>
+        </li>
+        <li>
+          <a href="track-CompositeTrack.html">CompositeTrack</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="track-colors.html">Feature Colors</a>
+    </li>
+    <li>
+      <a href="track-tooltip-display.html">Tooltip display</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -234,8 +288,8 @@ TnTBoard(vltrack)</code></pre>
 ##   automatically select 204..1018 on seqlevel UnKnown ...</code></pre>
 <pre><code>## - Coordinate limit is not specified and seqlength is unknown:
 ##   automatically set coordinate range to 146..1076 ...</code></pre>
-<div id="htmlwidget-ca65a10cbcd09253e19e" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ca65a10cbcd09253e19e">{"x":{"tntdef":"tnt.board()\n.from(204)\n.to(1018)\n.min(146)\n.max(1076)\n.zoom_out(1031)\n.zoom_in(10)\n.allow_drag(true)\n.add_track(tnt.board.track()\n.label(\"\")\n.color(\"white\")\n.height(40)\n.display(tnt.board.track.feature.vline()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.on(\"click\", tnr.tooltip_callback(\"\", [\"Position\",\"Color\"])))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.pos_data_retriever([\n  {\n    \"pos\": 915,\n    \"tooltip\": {\n      \"Position\": 915,\n      \"Color\": \"red\"\n    },\n    \"color\": \"#FF0000\",\n    \"key\": 915\n  },\n  {\n    \"pos\": 937,\n    \"tooltip\": {\n      \"Position\": 937,\n      \"Color\": \"yellow\"\n    },\n    \"color\": \"#FFFF00\",\n    \"key\": 937\n  },\n  {\n    \"pos\": 286,\n    \"tooltip\": {\n      \"Position\": 286,\n      \"Color\": \"green\"\n    },\n    \"color\": \"#00FF00\",\n    \"key\": 286\n  },\n  {\n    \"pos\": 828,\n    \"tooltip\": {\n      \"Position\": 828,\n      \"Color\": \"cyan\"\n    },\n    \"color\": \"#00FFFF\",\n    \"key\": 828\n  },\n  {\n    \"pos\": 640,\n    \"tooltip\": {\n      \"Position\": 640,\n      \"Color\": \"blue\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 640\n  },\n  {\n    \"pos\": 517,\n    \"tooltip\": {\n      \"Position\": 517,\n      \"Color\": \"magenta\"\n    },\n    \"color\": \"#FF00FF\",\n    \"key\": 517\n  }\n]\n))))"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-115947186ce9dfbcc01f" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-115947186ce9dfbcc01f">{"x":{"tntdef":"tnt.board()\n.from(204)\n.to(1018)\n.min(146)\n.max(1076)\n.zoom_out(1031)\n.zoom_in(10)\n.allow_drag(true)\n.add_track(tnt.board.track()\n.label(\"\")\n.color(\"white\")\n.height(40)\n.display(tnt.board.track.feature.vline()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.on(\"click\", tnr.tooltip_callback(\"\", [\"Position\",\"Color\"])))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.pos_data_retriever([\n  {\n    \"pos\": 915,\n    \"tooltip\": {\n      \"Position\": 915,\n      \"Color\": \"red\"\n    },\n    \"color\": \"#FF0000\",\n    \"key\": 915\n  },\n  {\n    \"pos\": 937,\n    \"tooltip\": {\n      \"Position\": 937,\n      \"Color\": \"yellow\"\n    },\n    \"color\": \"#FFFF00\",\n    \"key\": 937\n  },\n  {\n    \"pos\": 286,\n    \"tooltip\": {\n      \"Position\": 286,\n      \"Color\": \"green\"\n    },\n    \"color\": \"#00FF00\",\n    \"key\": 286\n  },\n  {\n    \"pos\": 828,\n    \"tooltip\": {\n      \"Position\": 828,\n      \"Color\": \"cyan\"\n    },\n    \"color\": \"#00FFFF\",\n    \"key\": 828\n  },\n  {\n    \"pos\": 640,\n    \"tooltip\": {\n      \"Position\": 640,\n      \"Color\": \"blue\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 640\n  },\n  {\n    \"pos\": 517,\n    \"tooltip\": {\n      \"Position\": 517,\n      \"Color\": \"magenta\"\n    },\n    \"color\": \"#FF00FF\",\n    \"key\": 517\n  }\n]\n))))"},"evals":[],"jsHooks":[]}</script>
 <p><br/> <br/></p>
 </div>
 <div id="session-info" class="section level2">

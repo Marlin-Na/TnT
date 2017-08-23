@@ -179,15 +179,69 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">TnT Examples</a>
+      <a class="navbar-brand" href="index.html">TnT</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="index.html">Index</a>
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introduction.html">Introduction to TnT</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="about.html">About</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Examples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+        Track Types
+         
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="tracktype-BlockTrack.html">BlockTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-PinTrack.html">PinTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-LineTrack-AreaTrack.html">LineTrack and AreaTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-VlineTrack.html">VlineTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-GeneTrack.html">GeneTrack and FeatureTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-TxTrack.html">TxTrack and GroupFeatureTrack</a>
+        </li>
+        <li>
+          <a href="track-CompositeTrack.html">CompositeTrack</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="track-colors.html">Feature Colors</a>
+    </li>
+    <li>
+      <a href="track-tooltip-display.html">Tooltip display</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -259,8 +313,8 @@ suppressMessages(expose_all(&quot;TnT&quot;))</code></pre>
         .add_track(blockTrack);
     board
 &#39;)</code></pre>
-<div id="htmlwidget-f8a339bd362a884f8ca8" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-f8a339bd362a884f8ca8">{"x":{"tntdef":"\n    var axisTrack = tnt.board.track()\n        .height(20)\n        .color(\"white\")\n        .display(tnt.board.track.feature.axis());\n\n    var blockTrack = tnt.board.track()\n        .height(30)\n        .color(\"grey\")\n        .data(tnt.board.track.data.sync()\n            .retriever(function () {\n                return [\n                    {start: 200, end: 350},\n                    {start: 400, end: 450}\n                ]\n            })\n        )\n        .display(\n            tnt.board.track.feature.block()\n            .color(\"red\")\n        );\n\n    var board = tnt.board()\n        .from(100)\n        .to(500)\n        .min(0)\n        .max(1000)\n        .add_track(axisTrack)\n        .add_track(blockTrack);\n    board\n"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-357d4bd7ecc110af6a0c" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-357d4bd7ecc110af6a0c">{"x":{"tntdef":"\n    var axisTrack = tnt.board.track()\n        .height(20)\n        .color(\"white\")\n        .display(tnt.board.track.feature.axis());\n\n    var blockTrack = tnt.board.track()\n        .height(30)\n        .color(\"grey\")\n        .data(tnt.board.track.data.sync()\n            .retriever(function () {\n                return [\n                    {start: 200, end: 350},\n                    {start: 400, end: 450}\n                ]\n            })\n        )\n        .display(\n            tnt.board.track.feature.block()\n            .color(\"red\")\n        );\n\n    var board = tnt.board()\n        .from(100)\n        .to(500)\n        .min(0)\n        .max(1000)\n        .add_track(axisTrack)\n        .add_track(blockTrack);\n    board\n"},"evals":[],"jsHooks":[]}</script>
 <p><br/> <br/></p>
 </div>
 <div id="create-a-tnt-board-with-jscascade-util-functions" class="section level2">
@@ -300,8 +354,8 @@ tntdef &lt;- jc(
     add_track = blockTrack
 )
 trackWidget(tntdef)</code></pre>
-<div id="htmlwidget-26c7c83cd49031c634d5" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-26c7c83cd49031c634d5">{"x":{"tntdef":"tnt.board()\n.from(0)\n.to(500)\n.min(0)\n.max(1000)\n.add_track(tnt.board.track()\n.height(20)\n.color(\"white\")\n.display(tnt.board.track.feature.axis()))\n.add_track(tnt.board.track()\n.height(30)\n.color(\"green\")\n.data(tnt.board.track.data.sync()\n.retriever(function() {\n            return [\n                {start: 200, end: 350},\n                {start: 550, end: 770}\n            ];\n        }))\n.display(tnt.board.track.feature.block()\n.color(\"red\")\n.index(function (d) {return d.start})))"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-ca0b1896924086af7bc2" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ca0b1896924086af7bc2">{"x":{"tntdef":"tnt.board()\n.from(0)\n.to(500)\n.min(0)\n.max(1000)\n.add_track(tnt.board.track()\n.height(20)\n.color(\"white\")\n.display(tnt.board.track.feature.axis()))\n.add_track(tnt.board.track()\n.height(30)\n.color(\"green\")\n.data(tnt.board.track.data.sync()\n.retriever(function() {\n            return [\n                {start: 200, end: 350},\n                {start: 550, end: 770}\n            ];\n        }))\n.display(tnt.board.track.feature.block()\n.color(\"red\")\n.index(function (d) {return d.start})))"},"evals":[],"jsHooks":[]}</script>
 <p><br/> <br/></p>
 </div>
 <div id="session-info" class="section level2">

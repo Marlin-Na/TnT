@@ -179,15 +179,69 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">TnT Examples</a>
+      <a class="navbar-brand" href="index.html">TnT</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="index.html">Index</a>
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introduction.html">Introduction to TnT</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="about.html">About</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Examples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+        Track Types
+         
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="tracktype-BlockTrack.html">BlockTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-PinTrack.html">PinTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-LineTrack-AreaTrack.html">LineTrack and AreaTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-VlineTrack.html">VlineTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-GeneTrack.html">GeneTrack and FeatureTrack</a>
+        </li>
+        <li>
+          <a href="tracktype-TxTrack.html">TxTrack and GroupFeatureTrack</a>
+        </li>
+        <li>
+          <a href="track-CompositeTrack.html">CompositeTrack</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="track-colors.html">Feature Colors</a>
+    </li>
+    <li>
+      <a href="track-tooltip-display.html">Tooltip display</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -234,8 +288,8 @@ gpos$score &lt;- c(0.1, 0.5, 1)</code></pre>
 TnTBoard(ptrack, GRanges(&quot;chr12&quot;, IRanges(1, 1200)))</code></pre>
 <pre><code>## - Coordinate limit is not specified and seqlength is unknown:
 ##   automatically set coordinate range to -202..1212 ...</code></pre>
-<div id="htmlwidget-eea61e17be302b6e1937" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-eea61e17be302b6e1937">{"x":{"tntdef":"tnt.board()\n.from(1)\n.to(1200)\n.min(-202)\n.max(1212)\n.zoom_out(1515)\n.zoom_in(10)\n.allow_drag(true)\n.add_track(tnt.board.track()\n.label(\"gpos\")\n.color(\"white\")\n.height(40)\n.display(tnt.board.track.feature.pin()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.domain([0,1])\n.on(\"click\", tnr.tooltip_callback(\"gpos\", \"score\")))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.pos_data_retriever([\n  {\n    \"pos\": 10,\n    \"tooltip\": {\n      \"score\": 0.1\n    },\n    \"color\": \"#FFFF00\",\n    \"key\": 1,\n    \"val\": 0.1\n  },\n  {\n    \"pos\": 100,\n    \"tooltip\": {\n      \"score\": 0.5\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 2,\n    \"val\": 0.5\n  },\n  {\n    \"pos\": 1000,\n    \"tooltip\": {\n      \"score\": 1\n    },\n    \"color\": \"#FF0000\",\n    \"key\": 3,\n    \"val\": 1\n  }\n]\n))))"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-87601390ddfb548ad306" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-87601390ddfb548ad306">{"x":{"tntdef":"tnt.board()\n.from(1)\n.to(1200)\n.min(-202)\n.max(1212)\n.zoom_out(1515)\n.zoom_in(10)\n.allow_drag(true)\n.add_track(tnt.board.track()\n.label(\"gpos\")\n.color(\"white\")\n.height(40)\n.display(tnt.board.track.feature.pin()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.domain([0,1])\n.on(\"click\", tnr.tooltip_callback(\"gpos\", \"score\")))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.pos_data_retriever([\n  {\n    \"pos\": 10,\n    \"tooltip\": {\n      \"score\": 0.1\n    },\n    \"color\": \"#FFFF00\",\n    \"key\": 1,\n    \"val\": 0.1\n  },\n  {\n    \"pos\": 100,\n    \"tooltip\": {\n      \"score\": 0.5\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 2,\n    \"val\": 0.5\n  },\n  {\n    \"pos\": 1000,\n    \"tooltip\": {\n      \"score\": 1\n    },\n    \"color\": \"#FF0000\",\n    \"key\": 3,\n    \"val\": 1\n  }\n]\n))))"},"evals":[],"jsHooks":[]}</script>
 <p><br/> <br/></p>
 </div>
 <div id="session-info" class="section level2">
