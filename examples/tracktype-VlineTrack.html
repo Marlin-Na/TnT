@@ -15,20 +15,21 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
-<script src="site_libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="site_libs/htmlwidgets-0.9/htmlwidgets.js"></script>
 <script src="site_libs/d3-3.5.17/d3.v3.min.js"></script>
 <link href="site_libs/tnt.genome-0.1.6/tnt.genome.css" rel="stylesheet" />
 <script src="site_libs/tnt.genome-0.1.6/tnt.genome.min.js"></script>
 <link href="site_libs/tnt.tooltip-0.2.0/tnt.tooltip.css" rel="stylesheet" />
 <script src="site_libs/tnt.tooltip-0.2.0/tnt.tooltip.js"></script>
-<script src="site_libs/trackWidget-binding-0.0.0.9016/trackWidget.js"></script>
+<script src="site_libs/trackWidget-binding-0.0.1/trackWidget.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -190,7 +191,18 @@ $(document).ready(function () {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/Marlin-Na/TnT/tree/master/inst/examples">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -222,8 +234,8 @@ TnTBoard(vltrack)</code></pre>
 ##   automatically select 204..1018 on seqlevel UnKnown ...</code></pre>
 <pre><code>## - Coordinate limit is not specified and seqlength is unknown:
 ##   automatically set coordinate range to 146..1076 ...</code></pre>
-<div id="htmlwidget-85183575b0c3a0e57783" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-85183575b0c3a0e57783">{"x":{"tntdef":"tnt.board()\n.from(204)\n.to(1018)\n.min(146)\n.max(1076)\n.zoom_out(1031)\n.zoom_in(10)\n.allow_drag(true)\n.add_track(tnt.board.track()\n.label(\"\")\n.color(\"white\")\n.height(40)\n.display(tnt.board.track.feature.vline()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.on(\"click\", tnr.tooltip_callback(\"\", [\"Position\",\"Color\"])))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.pos_data_retriever([\n  {\n    \"pos\": 915,\n    \"tooltip\": {\n      \"Position\": 915,\n      \"Color\": \"red\"\n    },\n    \"color\": \"#FF0000\",\n    \"key\": 915\n  },\n  {\n    \"pos\": 937,\n    \"tooltip\": {\n      \"Position\": 937,\n      \"Color\": \"yellow\"\n    },\n    \"color\": \"#FFFF00\",\n    \"key\": 937\n  },\n  {\n    \"pos\": 286,\n    \"tooltip\": {\n      \"Position\": 286,\n      \"Color\": \"green\"\n    },\n    \"color\": \"#00FF00\",\n    \"key\": 286\n  },\n  {\n    \"pos\": 828,\n    \"tooltip\": {\n      \"Position\": 828,\n      \"Color\": \"cyan\"\n    },\n    \"color\": \"#00FFFF\",\n    \"key\": 828\n  },\n  {\n    \"pos\": 640,\n    \"tooltip\": {\n      \"Position\": 640,\n      \"Color\": \"blue\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 640\n  },\n  {\n    \"pos\": 517,\n    \"tooltip\": {\n      \"Position\": 517,\n      \"Color\": \"magenta\"\n    },\n    \"color\": \"#FF00FF\",\n    \"key\": 517\n  }\n]\n))))"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-6fb7f7d44d8b19f04057" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6fb7f7d44d8b19f04057">{"x":{"tntdef":"tnt.board()\n.from(204)\n.to(1018)\n.min(146)\n.max(1076)\n.zoom_out(1031)\n.zoom_in(10)\n.allow_drag(true)\n.add_track(tnt.board.track()\n.label(\"\")\n.color(\"white\")\n.height(40)\n.display(tnt.board.track.feature.vline()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.on(\"click\", tnr.tooltip_callback(\"\", [\"Position\",\"Color\"])))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.pos_data_retriever([\n  {\n    \"pos\": 915,\n    \"tooltip\": {\n      \"Position\": 915,\n      \"Color\": \"red\"\n    },\n    \"color\": \"#FF0000\",\n    \"key\": 915\n  },\n  {\n    \"pos\": 937,\n    \"tooltip\": {\n      \"Position\": 937,\n      \"Color\": \"yellow\"\n    },\n    \"color\": \"#FFFF00\",\n    \"key\": 937\n  },\n  {\n    \"pos\": 286,\n    \"tooltip\": {\n      \"Position\": 286,\n      \"Color\": \"green\"\n    },\n    \"color\": \"#00FF00\",\n    \"key\": 286\n  },\n  {\n    \"pos\": 828,\n    \"tooltip\": {\n      \"Position\": 828,\n      \"Color\": \"cyan\"\n    },\n    \"color\": \"#00FFFF\",\n    \"key\": 828\n  },\n  {\n    \"pos\": 640,\n    \"tooltip\": {\n      \"Position\": 640,\n      \"Color\": \"blue\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 640\n  },\n  {\n    \"pos\": 517,\n    \"tooltip\": {\n      \"Position\": 517,\n      \"Color\": \"magenta\"\n    },\n    \"color\": \"#FF00FF\",\n    \"key\": 517\n  }\n]\n))))"},"evals":[],"jsHooks":[]}</script>
 <p><br/> <br/></p>
 </div>
 <div id="session-info" class="section level2">
@@ -250,71 +262,74 @@ TnTBoard(vltrack)</code></pre>
 ## [8] methods   base     
 ## 
 ## other attached packages:
-##  [1] ggbio_1.24.0                           
+##  [1] ggbio_1.25.3                           
 ##  [2] ggplot2_2.2.1                          
 ##  [3] org.Hs.eg.db_3.4.1                     
-##  [4] AnnotationHub_2.8.0                    
+##  [4] AnnotationHub_2.9.9                    
 ##  [5] EnsDb.Hsapiens.v86_2.1.0               
 ##  [6] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2
 ##  [7] EnsDb.Hsapiens.v75_2.1.0               
 ##  [8] ensembldb_2.0.0                        
-##  [9] AnnotationFilter_1.0.0                 
-## [10] GenomicFeatures_1.28.0                 
-## [11] AnnotationDbi_1.38.0                   
-## [12] Biobase_2.36.0                         
-## [13] GenomicRanges_1.28.0                   
-## [14] GenomeInfoDb_1.12.0                    
-## [15] IRanges_2.10.0                         
-## [16] S4Vectors_0.14.3                       
-## [17] BiocGenerics_0.22.0                    
-## [18] TnT_0.0.0.9016                         
+##  [9] AnnotationFilter_1.1.3                 
+## [10] TnT_0.0.1                              
+## [11] GenomicFeatures_1.29.8                 
+## [12] AnnotationDbi_1.39.2                   
+## [13] Biobase_2.37.2                         
+## [14] GenomicRanges_1.29.12                  
+## [15] GenomeInfoDb_1.13.4                    
+## [16] IRanges_2.11.12                        
+## [17] S4Vectors_0.15.5                       
+## [18] BiocGenerics_0.22.0                    
 ## [19] jsonlite_1.5                           
 ## [20] magrittr_1.5                           
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] ProtGenerics_1.8.0            bitops_1.0-6                 
-##  [3] matrixStats_0.52.2            RColorBrewer_1.1-2           
-##  [5] httr_1.2.1                    rprojroot_1.2                
-##  [7] tools_3.4.1                   backports_1.0.5              
-##  [9] R6_2.2.2                      rpart_4.1-11                 
-## [11] KernSmooth_2.23-15            Hmisc_4.0-2                  
-## [13] DBI_0.7                       lazyeval_0.2.0               
-## [15] colorspace_1.3-2              nnet_7.3-12                  
-## [17] gridExtra_2.2.1               GGally_1.3.0                 
-## [19] curl_2.5                      compiler_3.4.1               
-## [21] ulimit_0.0-3                  graph_1.54.0                 
-## [23] htmlTable_1.9                 DelayedArray_0.2.0           
-## [25] labeling_0.3                  rtracklayer_1.36.0           
-## [27] caTools_1.17.1                scales_0.4.1                 
-## [29] checkmate_1.8.2               RBGL_1.52.0                  
-## [31] stringr_1.2.0                 digest_0.6.12                
-## [33] Rsamtools_1.28.0              foreign_0.8-69               
-## [35] rmarkdown_1.6                 XVector_0.16.0               
-## [37] base64enc_0.1-3               dichromat_2.0-0              
-## [39] htmltools_0.3.6               BSgenome_1.44.0              
-## [41] htmlwidgets_0.8               rlang_0.1.2                  
-## [43] RSQLite_1.1-2                 BiocInstaller_1.26.0         
-## [45] shiny_1.0.3                   BiocParallel_1.10.0          
-## [47] gtools_3.5.0                  acepack_1.4.1                
-## [49] VariantAnnotation_1.22.0      RCurl_1.95-4.8               
-## [51] GenomeInfoDbData_0.99.0       Formula_1.2-1                
-## [53] Matrix_1.2-10                 Rcpp_0.12.11                 
-## [55] munsell_0.4.3                 stringi_1.1.5                
-## [57] yaml_2.1.14                   SummarizedExperiment_1.6.0   
-## [59] zlibbioc_1.22.0               gplots_3.0.1                 
-## [61] plyr_1.8.4                    grid_3.4.1                   
-## [63] gdata_2.18.0                  lattice_0.20-35              
-## [65] Biostrings_2.44.0             splines_3.4.1                
-## [67] knitr_1.17                    reshape2_1.4.2               
-## [69] biomaRt_2.32.0                XML_3.98-1.6                 
-## [71] evaluate_0.10.1               biovizBase_1.24.0            
-## [73] latticeExtra_0.6-28           data.table_1.10.4            
-## [75] httpuv_1.3.3                  gtable_0.2.0                 
-## [77] reshape_0.8.6                 mime_0.5                     
-## [79] xtable_1.8-2                  survival_2.41-3              
-## [81] OrganismDbi_1.18.0            tibble_1.3.3                 
-## [83] GenomicAlignments_1.12.0      memoise_1.1.0                
-## [85] cluster_2.0.6                 interactiveDisplayBase_1.14.0</code></pre>
+##  [3] matrixStats_0.52.2            bit64_0.9-7                  
+##  [5] RColorBrewer_1.1-2            httr_1.3.0                   
+##  [7] rprojroot_1.2                 tools_3.4.1                  
+##  [9] backports_1.1.0               R6_2.2.2                     
+## [11] rpart_4.1-11                  KernSmooth_2.23-15           
+## [13] Hmisc_4.0-2                   DBI_0.7                      
+## [15] lazyeval_0.2.0                colorspace_1.3-2             
+## [17] nnet_7.3-12                   GGally_1.3.0                 
+## [19] gridExtra_2.2.1               curl_2.8.1                   
+## [21] bit_1.1-12                    compiler_3.4.1               
+## [23] ulimit_0.0-3                  graph_1.54.0                 
+## [25] htmlTable_1.9                 DelayedArray_0.3.19          
+## [27] labeling_0.3                  rtracklayer_1.36.0           
+## [29] caTools_1.17.1                scales_0.4.1                 
+## [31] checkmate_1.8.2               RBGL_1.52.0                  
+## [33] stringr_1.2.0                 digest_0.6.12                
+## [35] Rsamtools_1.28.0              foreign_0.8-69               
+## [37] rmarkdown_1.6                 XVector_0.16.0               
+## [39] base64enc_0.1-3               dichromat_2.0-0              
+## [41] pkgconfig_2.0.1               htmltools_0.3.6              
+## [43] BSgenome_1.44.0               highr_0.6                    
+## [45] htmlwidgets_0.9               rlang_0.1.2.9000             
+## [47] RSQLite_2.0                   BiocInstaller_1.27.3         
+## [49] shiny_1.0.3                   BiocParallel_1.10.0          
+## [51] gtools_3.5.0                  acepack_1.4.1                
+## [53] VariantAnnotation_1.22.0      RCurl_1.95-4.8               
+## [55] GenomeInfoDbData_0.99.0       Formula_1.2-1                
+## [57] Matrix_1.2-10                 Rcpp_0.12.12                 
+## [59] munsell_0.4.3                 stringi_1.1.5                
+## [61] yaml_2.1.14                   SummarizedExperiment_1.6.0   
+## [63] zlibbioc_1.22.0               gplots_3.0.1                 
+## [65] plyr_1.8.4                    grid_3.4.1                   
+## [67] blob_1.1.0                    gdata_2.18.0                 
+## [69] lattice_0.20-35               Biostrings_2.44.0            
+## [71] splines_3.4.1                 knitr_1.17                   
+## [73] reshape2_1.4.2                biomaRt_2.32.0               
+## [75] XML_3.98-1.6                  evaluate_0.10.1              
+## [77] biovizBase_1.24.0             latticeExtra_0.6-28          
+## [79] data.table_1.10.4             httpuv_1.3.3                 
+## [81] gtable_0.2.0                  reshape_0.8.6                
+## [83] mime_0.5                      xtable_1.8-2                 
+## [85] survival_2.41-3               OrganismDbi_1.18.0           
+## [87] tibble_1.3.3                  GenomicAlignments_1.13.5     
+## [89] memoise_1.1.0                 cluster_2.0.6                
+## [91] interactiveDisplayBase_1.14.0</code></pre>
 </div>
 
 

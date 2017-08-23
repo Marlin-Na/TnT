@@ -11,8 +11,8 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -23,14 +23,17 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
-<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
   </head>
 
   <body>
@@ -49,25 +52,28 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
-  <a href="../articles/index.html">Articles</a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Misc
+    Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../notes.html">Some Technical Notes</a>
+      <a href="../articles/Introduction_to_TnT.html">Introduction to TnT</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../examples/index.html">Examples</a>
 </li>
       </ul>
       
@@ -89,49 +95,140 @@
       <div class="row">
   <div class="col-md-9">
     <div class="page-header">
-      <h1>Function reference</h1>
-      <h4>version&nbsp;0.0.0.9016</h4>
+      <h1>
+        Reference
+        <small>version&nbsp;0.0.1</small>
+      </h1>
     </div>
 
     <div class="contents">
-      <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-      <p class="section-desc"></p>
+      <table class="ref-index">
 
-      
-      <p><a href="asJS.html">Parse </a></p>
-      <ul>
-        <li><code><a href="asJS.html">asJS</a></code></li>
-      </ul>
-      
-      <p><a href="JScascade.html">Construct a Javascript Function Cascade</a></p>
-      <ul>
-        <li><code><a href="JScascade.html">JScascade</a></code></li><li><code><a href="JScascade.html">jc</a></code></li>
-      </ul>
-      
-      <p><a href="TnT-shiny.html">Shiny bindings for TnT</a></p>
-      <ul>
-        <li><code><a href="TnT-shiny.html">TnT-shiny</a></code></li><li><code><a href="TnT-shiny.html">TnTOutput</a></code></li><li><code><a href="TnT-shiny.html">renderTnT</a></code></li>
-      </ul>
-      
-      <p><a href="TnT.html">&lt;Add Title&gt;</a></p>
-      <ul>
-        <li><code><a href="TnT.html">TnT</a></code></li>
-      </ul>
-    
+      <colgroup>
+        <col class="alias" />
+        <col class="title" />
+      </colgroup>
+
+      <tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-tracks" class="hasAnchor"><a href="#section-tracks" class="anchor"></a>Tracks</h2>
+            <p class="section-desc"><p>Track constructors and accessors.</p></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="track-constructors.html">BlockTrack</a></code> <code><a href="track-constructors.html">VlineTrack</a></code> <code><a href="track-constructors.html">PinTrack</a></code> <code><a href="track-constructors.html">LineTrack</a></code> <code><a href="track-constructors.html">AreaTrack</a></code> <code><a href="track-constructors.html">GeneTrackFromTxDb</a></code> <code><a href="track-constructors.html">FeatureTrack</a></code> <code><a href="track-constructors.html">GroupFeatureTrack</a></code> <code><a href="track-constructors.html">TxTrackFromTxDb</a></code> <code><a href="track-constructors.html">TxTrackFromGRanges</a></code> </p>
+          </td>
+          <td><p>Track Constructors</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="composite-track.html">merge</a></code> </p>
+          </td>
+          <td><p>Composite Track</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="tooltip.html">tooltip</a></code> <code><a href="tooltip.html">tooltip<-</a></code> </p>
+          </td>
+          <td><p>Access Track Tooltips</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p></p>
+          </td>
+          <td><p>Access Track Data</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="trackSpec.html">trackSpec</a></code> <code><a href="trackSpec.html">trackSpec<-</a></code> </p>
+          </td>
+          <td><p>Track Spec</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="range-TnTTrack.html">range</a></code> </p>
+          </td>
+          <td><p>Range of Tracks</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="seqinfo.html">seqinfo<-</a></code> <code><a href="seqinfo.html">seqinfo</a></code> <code><a href="seqinfo.html">seqlevelsInUse</a></code> </p>
+          </td>
+          <td><p>Seqinfo of TnTTrack and TnTBoard</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-tnt-board" class="hasAnchor"><a href="#section-tnt-board" class="anchor"></a>TnT Board</h2>
+            <p class="section-desc"><p>TnT Board and TnT Genome.</p></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="tntboard.html">TnTBoard</a></code> <code><a href="tntboard.html">TnTGenome</a></code> </p>
+          </td>
+          <td><p>TnTBoard</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="tracklist.html">tracklist</a></code> <code><a href="tracklist.html">tracklist<-</a></code> </p>
+          </td>
+          <td><p>Track List in TnTBoard</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="knit_print.TnTBoard.html">knit_print</a></code> </p>
+          </td>
+          <td><p>Printing TnTBoard in Rmarkdown</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="range-TnTBoard-method.html">range</a></code> </p>
+          </td>
+          <td><p>Range of TnTBoard</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-utils" class="hasAnchor"><a href="#section-utils" class="anchor"></a>Utils</h2>
+            <p class="section-desc"><p>Some small util functions.</p></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="mapcol.html">mapcol</a></code> </p>
+          </td>
+          <td><p>Scale Qualitative Values to Color</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="strandlabel.html">strandlabel</a></code> </p>
+          </td>
+          <td><p>Display Labels with Strand</p></td>
+        </tr>
+      </tbody>
+      </table>
     </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-tracks">Tracks</a></li>
+      <li><a href="#section-tnt-board">TnT Board</a></li>
+      <li><a href="#section-utils">Utils</a></li>
     </ul>
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jialin Ma.</p>
+  <p>Developed by Jialin Ma, Miguel Pignatelli, Toby Hocking.</p>
 </div>
 
 <div class="pkgdown">
