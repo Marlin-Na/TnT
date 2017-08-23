@@ -7,7 +7,7 @@ TnT is a R package that wraps the [TnT javascript libraries](https://github.com/
 to provide track-based visulizations from R. It depends on a number of bioconductor
 packages and is useful for displaying genomic features (as a simple genome browser).
 
-To get started, please read [Introduction to TnT](https://marlin-na.github.io/TnT/articles/Introduction to TnT.html)
+To get started, please read [Introduction to TnT](https://marlin-na.github.io/TnT/articles/introduction.html)
 and see various [examples](https://marlin-na.github.io/TnT/examples).
 
 This package is a
