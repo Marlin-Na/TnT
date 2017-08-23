@@ -1,11 +1,36 @@
 name: "tnt-examples"
 navbar:
-  title: "TnT Examples"
+  title: TnT
   left:
-    - text: "Index"
+    - text: Articles
+      menu:
+      - text: Introduction to TnT
+        href: ../articles/introduction.html
+    - text: Reference
+      href: ../reference/index.html
+    - text: Examples
       href: index.html
-    - text: "About"
-      href: about.html
+      menu:
+      - text: Track Types
+        menu:
+        - text: BlockTrack
+          href: tracktype-BlockTrack.html
+        - text: PinTrack
+          href: tracktype-PinTrack.html
+        - text: LineTrack and AreaTrack
+          href: tracktype-LineTrack-AreaTrack.html
+        - text: VlineTrack
+          href: tracktype-VlineTrack.html
+        - text: GeneTrack and FeatureTrack
+          href: tracktype-GeneTrack.html
+        - text: TxTrack and GroupFeatureTrack
+          href: tracktype-TxTrack.html
+        - text: CompositeTrack
+          href: track-CompositeTrack.html
+      - text: Feature Colors
+        href: track-colors.html
+      - text: Tooltip display
+        href: track-tooltip-display.html
   right:
     - icon: fa-home fa-lg
       href: ../index.html

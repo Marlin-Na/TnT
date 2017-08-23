@@ -4,8 +4,6 @@ navbar:
   title: TnT
   type: default
   left:
-  - icon: fa-home fa-lg
-    href: index.html
   - text: Articles
     menu:
     - text: Introduction to TnT
@@ -14,11 +12,30 @@ navbar:
     href: reference/index.html
   - text: Examples
     href: examples/index.html
- #- text: Misc
- #  menu:
- #  - text: "Some Technical Notes"
- #    href: notes.html
+    menu:
+    - text: Track Types
+      menu:
+      - text: BlockTrack
+        href: examples/tracktype-BlockTrack.html
+      - text: PinTrack
+        href: examples/tracktype-PinTrack.html
+      - text: LineTrack and AreaTrack
+        href: examples/tracktype-LineTrack-AreaTrack.html
+      - text: VlineTrack
+        href: examples/tracktype-VlineTrack.html
+      - text: GeneTrack and FeatureTrack
+        href: examples/tracktype-GeneTrack.html
+      - text: TxTrack and GroupFeatureTrack
+        href: examples/tracktype-TxTrack.html
+      - text: CompositeTrack
+        href: examples/track-CompositeTrack.html
+    - text: Feature Colors
+      href: examples/track-colors.html
+    - text: Tooltip display
+      href: examples/track-tooltip-display.html
   right:
+    - icon: fa-home fa-lg
+      href: index.html
     - icon: fa-github fa-lg
       href: https://github.com/marlin-na/TnT
 

@@ -25,12 +25,6 @@ knitr::kable(data.frame(check.names = FALSE,
 </div>
 
 
-This site contains examples of visualization created with TnT R package.
-
-Overall, the package works by constructing tracks from data (GRanges, TxDb, EnsDb, etc.),
-then constructing tnt board from a list of tracks.
-
-
 ```{r, include=FALSE}
 suppressPackageStartupMessages({
     library(TnT)
@@ -41,26 +35,17 @@ suppressPackageStartupMessages({
 
 ------
 
-#### [TnT Board and TnT Genome](tntboard.html)
 
-Given a list of tracks, 
-
-The page provided examples of how to construct a TnTBoard or TnTGenome and set
-view range, coordinate range, etc. 
-
-
-#### Different Track Types and Their Constructors
+## Different Track Types and Their Constructors
 
 There are different track types and constructors in TnT.
 The constructors are provided to construct a track from distinct sources which are
 generally standard format used in many bioconductor packages (e.g. GRanges that represents
 genomic positions and possible annotations; TxDb that represents gene and transcript information).
 
-Further
-
-To construct a track, the first to
-
-The following table shows available track types and their instances.
+Track constructors are provided in TnT to construct tracks with different types and from
+different sources. The following table shows available track types and their instances.
+Links in the table have further description and examples for the track types and constructors.
 
 
 <table class="table table-bordered">
@@ -159,7 +144,7 @@ TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .8)
 
 <tr>
 <td class="col-md-2">
-<strong> [Tx Track and FeatureGroup Track](tracktype-TxTrack.html) </strong>
+<strong> [Tx Track and GroupFeature Track](tracktype-TxTrack.html) </strong>
 </td>
 <td class="col-md-9">
 ```{r, echo=FALSE}
@@ -204,26 +189,8 @@ TnTBoard(ctrack, view.range = GRanges("chr1", IRanges(4500, 69500)), coord.range
 
 ------
 
-## Colors
+## Misc
 
-### [Feature colors](track-colors.html)
+#### [Feature colors](track-colors.html)
 
-------
-
-## Track Manipulation (TODO)
-
-### [Background, Height and Label (`trackSpec`)]
-
-### [Track Data (`trackData`)]
-
-### [Methods Passed to Track Data (`[`, `$`, `seqinfo`, `range`)]
-
-------
-
-## Tooltip
-
-### [Tooltip display for tracks](track-tooltip-display.html)
-
-
-------
-
+#### [Tooltip display for tracks](track-tooltip-display.html)
