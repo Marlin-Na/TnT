@@ -25,10 +25,10 @@ Imports:
     IRanges,
     S4Vectors,
     GenomicRanges,
-    biovizBase
+    biovizBase,
+    knitr
 Suggests:
     shiny,
-    knitr,
     rmarkdown,
     testthat
 License: AGPL-3
