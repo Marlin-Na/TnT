@@ -157,7 +157,7 @@ map.link <- c(
     merge = "track-CompositeTrack.html"
 )
 genlink <- function (base) {
-    sprintf("[link](%s)", paste0("https://marlin-na/TnT/examples/", base))
+    sprintf("[link](%s)", paste0("https://marlin-na.github.io/TnT/examples/", base))
 }
 df$Source <- map.source[df$Constructor]
 df$`Feature type` <- map.feature[df$Constructor]
