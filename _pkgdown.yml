@@ -9,7 +9,7 @@ navbar:
   - text: Articles
     menu:
     - text: Introduction to TnT
-      href: articles/Introduction_to_TnT.html
+      href: articles/introduction.html
   - text: Reference
     href: reference/index.html
   - text: Examples
@@ -25,7 +25,7 @@ navbar:
 articles:
   - title: All vignettes
     desc: ~
-    contents: '`Introduction to TnT`'
+    contents: '`introduction`'
 
 
 reference:
