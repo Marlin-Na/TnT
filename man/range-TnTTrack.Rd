@@ -18,6 +18,9 @@
 
 \item{..., with.revmap, ignore.strand, na.rm}{Passed to \code{\link[GenomicRanges]{range,GenomicRanges-method}}.}
 }
+\value{
+Returns a GRanges object.
+}
 \description{
 Range of Tracks
 }

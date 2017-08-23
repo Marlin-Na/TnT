@@ -9,7 +9,11 @@
 \arguments{
 \item{x}{A TnTBoard or TnTGenome object.}
 
-\item{..., options}{Passed to \code{htmlwidget:::knit_print}.}
+\item{..., options}{Passed to \code{htmlwidget:::knit_print.htmlwidget}.}
+}
+\value{
+\code{htmlwidget:::knit_print.htmlwidget} invisibly returns a character
+    vector with "browsable_html" S3 class.
 }
 \description{
 S3 method to automatically render a TnTBoard with knitr.

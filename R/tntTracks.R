@@ -573,6 +573,7 @@ setClass("AreaTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrack
 #' @param new2old,pruning.mode,value Passed to seqinfo method for GenomicRanges.
 #' @name seqinfo
 #' @aliases seqinfo<-,RangeTrack-method
+#' @return \code{seqinfo} returns a SeqInfo object.
 #' @examples
 #' btrack1 <- BlockTrack(GRanges("chr1", IRanges(1, 123)))
 #' btrack2 <- BlockTrack(GRanges("chr2", IRanges(3, 599)))
@@ -614,6 +615,10 @@ setMethod("seqlevelsInUse", signature = c(x = "RangeTrack"),
 #' 
 #' @name trackdata
 #' @param x A TnTTrack object.
+#' 
+#' @return \code{trackData} on all track types except "CompositeTrack" returns an
+#'     object that inherits GRanges class, which means they should behave like a GRanges.
+#'     While \code{trackData} on "CompositeTrack" returns a list of tracks.
 #'
 #' @export
 #' @examples
@@ -762,6 +767,8 @@ trackSpec <- function (track, which = c("background", "height", "label")) {
 #' Access Track Tooltips
 #'
 #' @param x A TnTTrack object.
+#' 
+#' @return \code{tooltip} returns a data frame.
 #'
 #' @export
 #' @examples

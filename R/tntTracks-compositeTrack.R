@@ -228,6 +228,7 @@ setMethod("seqlevelsInUse", signature = c(x = "CompositeTrack"),
 #' @param ...,with.revmap,ignore.strand,na.rm
 #'     Passed to \code{\link[GenomicRanges]{range,GenomicRanges-method}}.
 #' @aliases range,RangeTrack-method
+#' @return Returns a GRanges object.
 #' @name range-TnTTrack
 setMethod("range", signature = c(x = "RangeTrack"), .range.track)
 

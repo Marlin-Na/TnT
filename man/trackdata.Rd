@@ -24,6 +24,11 @@ trackData(x) <- value
 
 \item{name}{Passed to the inner method for track data.}
 }
+\value{
+\code{trackData} on all track types except "CompositeTrack" returns an
+    object that inherits GRanges class, which means they should behave like a GRanges.
+    While \code{trackData} on "CompositeTrack" returns a list of tracks.
+}
 \description{
 Access and modify the track data. \code{x$name} and \code{x$name <- value} are
 just shortcuts for \code{trackData(x)$name} and \code{trackData(x)$name <- value},

@@ -34,6 +34,9 @@
 
 \item{new2old, pruning.mode, value}{Passed to seqinfo method for GenomicRanges.}
 }
+\value{
+\code{seqinfo} returns a SeqInfo object.
+}
 \description{
 Seqinfo of TnTTrack and TnTBoard
 }

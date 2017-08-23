@@ -14,6 +14,9 @@ tracklist(tntboard) <- value
 
 \item{value}{A list of tracks}
 }
+\value{
+\code{tracklist} returns a list of tracks.
+}
 \description{
 The tracks of a TnTBoard are stored as a list which can be accessed or modified
 with these functions.

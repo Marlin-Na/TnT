@@ -27,6 +27,9 @@ tooltip(x) <- value
 
 \item{value}{A data frame to replace, its row number should equal to length of data.}
 }
+\value{
+\code{tooltip} returns a data frame.
+}
 \description{
 Access Track Tooltips
 }

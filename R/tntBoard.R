@@ -137,7 +137,7 @@ setMethod(range, signature = c(x = "TnTBoard"),
 #' @param tntboard A TnTBoard or TnTGenome object
 #' 
 #' @name tracklist
-#'
+#' @return \code{tracklist} returns a list of tracks.
 #' @export
 #' @examples
 #' bt <- BlockTrack(GRanges("chr21", IRanges(100, 1200)))
@@ -489,7 +489,10 @@ setMethod("show", signature = c("TnTBoard"),
 #' S3 method to automatically render a TnTBoard with knitr.
 #' 
 #' @param x A TnTBoard or TnTGenome object.
-#' @param ...,options Passed to \code{htmlwidget:::knit_print}.
+#' @param ...,options Passed to \code{htmlwidget:::knit_print.htmlwidget}.
+#' 
+#' @return \code{htmlwidget:::knit_print.htmlwidget} invisibly returns a character
+#'     vector with "browsable_html" S3 class.
 #' @references \code{\link[knitr]{knit_print}}
 #' @export
 #' @examples
