@@ -9,24 +9,22 @@ Description: A R interface to the TnT javascript library (https://github.com/
     genomic data.
 Depends:
     R (>= 3.3.2),
-    GenomicFeatures
+    GenomicRanges
 Imports:
     methods,
     stats,
     utils,
     htmlwidgets,
-    gplots,
+    grDevices,
     jsonlite,
-    magrittr,
     data.table,
     Biobase,
     GenomeInfoDb,
     IRanges,
     S4Vectors,
-    GenomicRanges,
-    biovizBase,
     knitr
 Suggests:
+    GenomicFeatures,
     shiny,
     rmarkdown,
     testthat

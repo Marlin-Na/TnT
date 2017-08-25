@@ -1,12 +1,12 @@
 
 
-#' @importFrom magrittr %>%
-#' @export
-magrittr::`%>%`
+# #' @importFrom magrittr %>%
+# #' @export
+# magrittr::`%>%`
 
-#' @importFrom biovizBase crunch
-#' @export
-biovizBase::crunch
+# #' @importFrom biovizBase crunch
+# #' @export
+# biovizBase::crunch
 
 
 #' @import methods
@@ -17,7 +17,6 @@ biovizBase::crunch
 #' @import S4Vectors
 #' @import Biobase
 #' @import jsonlite
-#' @importFrom gplots col2hex
 #' @importFrom stats na.fail setNames
 #' @importFrom utils capture.output
 #' @importFrom knitr knit_print
@@ -70,9 +69,10 @@ strandlabel <- function (labels, strands) {
 }
 
 
-
-
-
+col2hex <- function (colors) {
+    mat <- grDevices::col2rgb(colors)
+    grDevices::rgb(mat[1, ], mat[2, ], mat[3, ], maxColorValue = 255)
+}
 
 splitdf <- function (df, f) {
     # We need to speed up this function

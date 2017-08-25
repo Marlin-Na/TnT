@@ -71,6 +71,6 @@ reference:
     - '`mapcol`'
     - '`strandlabel`'
 
-templates:
-  params:
-    bootswatch: flatly
+# template:
+#   params:
+#     bootswatch: flatly

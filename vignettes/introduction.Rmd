@@ -52,7 +52,7 @@ If not successful, try to install a few dependencies from bioconductor.
 
 ```{r, eval=FALSE}
 source("https://bioconductor.org/biocLite.R")
-biocLite(c("Biobase", "GenomeInfoDb", "IRanges", "GenomicRanges", "S4Vectors", "biovizBase"))
+biocLite(c("GenomicRanges"))
 ```
 
 Then attach the package.

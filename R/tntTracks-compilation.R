@@ -71,7 +71,7 @@
     col <- trackData(track)$color
     if (length(col) == 0)
         return(track)
-    col <- gplots::col2hex(col)
+    col <- col2hex(col)
     trackData(track)$color <- col
     track
 }
@@ -140,7 +140,7 @@ compileTrack <- function (tntTrack, wakeup = TRUE) {
     label <- if (is.null(label)) "" else label
     
     background <- trackSpec(tntTrack, "background")
-    background <- if (is.null(background)) "white" else gplots::col2hex(background)
+    background <- if (is.null(background)) "white" else col2hex(background)
     
     height <- trackSpec(tntTrack, "height")
     height <- if (is.null(height)) 100 else height
