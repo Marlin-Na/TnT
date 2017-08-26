@@ -10,7 +10,6 @@
 
 
 #' @import methods
-#' @import GenomicFeatures
 #' @import GenomicRanges
 #' @import GenomeInfoDb
 #' @import IRanges
