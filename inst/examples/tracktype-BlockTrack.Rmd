@@ -26,8 +26,9 @@ gr <- GRanges("chr12", ir)
 To construct the track and create the visualization.
 
 ```{r}
-btrack <- BlockTrack(gr, tooltip = as.data.frame(gr), label = "My GRanges", color = "yellow")
-TnTBoard(btrack, range(gr))
+btrack <- TnT::BlockTrack(gr, tooltip = as.data.frame(gr),
+                          label = "My GRanges", color = "yellow")
+TnT::TnTBoard(btrack, range(gr))
 ```
 
 <br/> <br/>

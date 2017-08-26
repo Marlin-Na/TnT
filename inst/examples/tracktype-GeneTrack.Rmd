@@ -20,7 +20,7 @@ A GeneTrack can be easily constructed from a TxDb.
 
 ```{r}
 txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-gtrack <- GeneTrackFromTxDb(txdb)
+gtrack <- TnT::GeneTrackFromTxDb(txdb)
 gtrack
 ```
 
@@ -54,9 +54,9 @@ Then we construct the GeneTrack using this GRanges object with `FeatureTrack`, s
 our custom feature labels, feature colors and tooltips. Finally show the track with `TnTGenome`.
 
 ```{r}
-ensGeneTrack <- FeatureTrack(gene, tooltip = as.data.frame(gene),
+ensGeneTrack <- TnT::FeatureTrack(gene, tooltip = as.data.frame(gene),
                        names = paste(gene$symbol, " (", gene$gene_biotype, ")", sep = ""),
-                       color = mapcol(gene$gene_biotype, palette.fun = grDevices::rainbow))
+                       color = TnT::mapcol(gene$gene_biotype, palette.fun = grDevices::rainbow))
 TnTGenome(ensGeneTrack, view.range = gene[gene$symbol == "BRCA2"][1] * .7)
 ```
 

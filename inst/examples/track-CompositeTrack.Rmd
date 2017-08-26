@@ -27,14 +27,14 @@ First to construct a block track and a pin track from data.
 gr <- GRanges("chr1", IRanges(c(11000, 20000, 60000), width = 2000))
 gpos <- GRanges("chr1", IRanges(c(12000, 21000, 61000), width = 1), value = c(1, 2, 3))
 
-btrack <- BlockTrack(gr, label = "Block Track", tooltip = as.data.frame(gr), color = "lightblue4")
-ptrack <- PinTrack(gpos, label = "Pin Track", tooltip = as.data.frame(gpos), background = "beige")
+btrack <- TnT::BlockTrack(gr, label = "Block Track", tooltip = as.data.frame(gr), color = "lightblue4")
+ptrack <- TnT::PinTrack(gpos, label = "Pin Track", tooltip = as.data.frame(gpos), background = "beige")
 ```
 
 Then use `merge` to construct a composite track and showing it.
 
 ```{r}
-ctrack <- merge(btrack, ptrack)
+ctrack <- TnT::merge(btrack, ptrack)
 TnTBoard(ctrack)
 ```
 
@@ -64,14 +64,15 @@ TnTGenome(list(ctrack, ptrack, btrack))
 ```{r}
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
-gtrack <- GeneTrackFromTxDb(txdb, label = "Gene", color = "burlywood3")
+gtrack <- TnT::GeneTrackFromTxDb(txdb, label = "Gene", color = "burlywood3")
 
 ah <- AnnotationHub()
 ah <- query(ah, "cpgisland")
 cpg <- ah[[names(ah[ah$genome == "hg19"])]]
-cpgtrack <- BlockTrack(cpg, label = "CpG Islands", tooltip = as.data.frame(cpg),
-                       color = "lightblue")
-TnTGenome(merge(cpgtrack, gtrack), view.range = GRanges("chr1", IRanges(84884317, 85205497)))
+cpgtrack <- TnT::BlockTrack(cpg, label = "CpG Islands", tooltip = as.data.frame(cpg),
+                            color = "lightblue")
+TnTGenome(merge(cpgtrack, gtrack),
+          view.range = GRanges("chr1", IRanges(84884317, 85205497)))
 ```
 
 <br/> <br/>

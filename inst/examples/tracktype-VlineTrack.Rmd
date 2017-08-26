@@ -19,7 +19,7 @@ set.seed(42)
 ```{r}
 pos <- IRanges(start = sample(1:1000, 6), width = 1)
 colors <- c("red", "yellow", "green", "cyan", "blue", "magenta")
-vltrack <- VlineTrack(pos,tooltip = data.frame(Position = start(pos), Color = colors),
+vltrack <- TnT::VlineTrack(pos,tooltip = data.frame(Position = start(pos), Color = colors),
                       color = colors, label = NULL)
 TnTBoard(vltrack)
 ```

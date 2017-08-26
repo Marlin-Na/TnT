@@ -27,7 +27,7 @@ Click on the block to see the tooltip.
 ```{r}
 myIRanges <- IRanges(c(10, 100, 1000), width = c(30, 50, 500))
 mytooltip <- as.data.frame(myIRanges)
-myTrack <- BlockTrack(myIRanges, tooltip = mytooltip)
+myTrack <- TnT::BlockTrack(myIRanges, tooltip = mytooltip)
 #TnTBoard(myTrack, IRanges(1, 2000))
 TnTBoard(myTrack, GRanges("UnKnown", IRanges(1, 2000)))
 ```
@@ -39,7 +39,7 @@ TnTBoard(myTrack, GRanges("UnKnown", IRanges(1, 2000)))
 First, construct a gene track from the TxDb object.
 
 ```{r}
-geneTrack <- GeneTrackFromTxDb(txdb, height = 300)
+geneTrack <- TnT::GeneTrackFromTxDb(txdb, height = 300)
 ```
 
 We can extract and replace the tooltip with `tooltip` and `tooltip<-`.
@@ -47,19 +47,20 @@ In this case, we use the organism database to find the corresponding gene names 
 every gene, then add them to the tooltip.
 
 ```{r}
-head(df.tooltip <- tooltip(geneTrack))
+head(df.tooltip <- TnT::tooltip(geneTrack))
 
 genename <- AnnotationDbi::select(org.Hs.eg.db, as.character(df.tooltip$`Gene ID`),
                       columns = "SYMBOL", keytype = "ENTREZID")
 df.tooltip$`Gene Name` <- genename$SYMBOL[match(df.tooltip$`Gene ID`, genename$ENTREZID)]
-tooltip(geneTrack) <- df.tooltip
-head(tooltip(geneTrack))
+TnT::tooltip(geneTrack) <- df.tooltip
+head(TnT::tooltip(geneTrack))
 ```
 
 We can also modify the label to show gene symbol instead of entrez ID.
 
 ```{r}
-geneTrack$display_label <- strandlabel(tooltip(geneTrack)$`Gene Name`, strand(trackData(geneTrack)))
+geneTrack$display_label <- TnT::strandlabel(TnT::tooltip(geneTrack)$`Gene Name`,
+                                            strand(TnT::trackData(geneTrack)))
 ```
 
 Click to see the tooltip.
@@ -86,7 +87,7 @@ df.tooltip <- cbind(
 Click to see.
 
 ```{r}
-tooltip(geneTrack) <- df.tooltip
+TnT::tooltip(geneTrack) <- df.tooltip
 TnTGenome(geneTrack, GRanges("chrX", IRanges(100000, 10000000)))
 ```
 

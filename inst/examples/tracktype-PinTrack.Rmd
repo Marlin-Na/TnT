@@ -27,7 +27,7 @@ gpos$score <- c(0.1, 0.5, 1)
 To construct the track and create the visualization.
 
 ```{r}
-ptrack <- PinTrack(gpos, value = gpos$score, domain = c(0, 1), color = c("yellow", "blue", "red"))
+ptrack <- TnT::PinTrack(gpos, value = gpos$score, domain = c(0, 1), color = c("yellow", "blue", "red"))
 TnTBoard(ptrack, GRanges("chr12", IRanges(1, 1200)))
 ```
 

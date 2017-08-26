@@ -24,8 +24,8 @@ This example shows all available color names in R with a block track.
 ```{r}
 colors <- colors()
 data <- GRanges("Unknown", IRanges(seq_along(colors), width = 2), "Color Name" = colors)
-track <- BlockTrack(data, color = data$"Color Name", label = NULL)
-TnTBoard(track)
+track <- TnT::BlockTrack(data, color = data$"Color Name", label = NULL)
+TnT::TnTBoard(track)
 ```
 
 <br/> <br/>
@@ -39,8 +39,8 @@ can be mapped to colors, e.g. the `rainbow` function.
 # A helper function
 showCols <- function (colors) {
     data <- GRanges("Unknown", IRanges(seq_along(colors), width = 2), "Color" = colors)
-    track <- BlockTrack(data, color = data$"Color", label = NULL)
-    TnTBoard(track, view.range = range(data))
+    track <- TnT::BlockTrack(data, color = data$"Color", label = NULL)
+    TnT::TnTBoard(track, view.range = range(data))
 }
 showCols(rainbow(6))
 showCols(heat.colors(6))
@@ -64,9 +64,10 @@ TnT has defined a helper function `mapcol` to scale qualitative values to colors
 We supply the scaled color to the track constructor.
 
 ```{r}
-genetrack <- FeatureTrack(gene, tooltip = as.data.frame(gene),
-                          color = mapcol(gene$gene_biotype, palette.fun = grDevices::rainbow))
-TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .5)
+genetrack <- TnT::FeatureTrack(gene, tooltip = as.data.frame(gene),
+                               color = TnT::mapcol(gene$gene_biotype,
+                                                   palette.fun = grDevices::rainbow))
+TnT::TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .5)
 ```
 
 

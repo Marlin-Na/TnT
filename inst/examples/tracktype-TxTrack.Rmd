@@ -41,7 +41,7 @@ txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 
 
 ```{r}
-txtrack <- TxTrackFromTxDb(txdb, height = 400)
+txtrack <- TnT::TxTrackFromTxDb(txdb, height = 400)
 TnTGenome(txtrack, view.range = GRanges("chr17", IRanges(41190000, 41290000)))
 ```
 
@@ -65,7 +65,7 @@ gr
 Then we use this GRanges object to construct the TxTrack.
 
 ```{r}
-brca2tx <- TxTrackFromGRanges(gr, label = "BRCA2, transcripts", color = "grey2", height = 300)
+brca2tx <- TnT::TxTrackFromGRanges(gr, label = "BRCA2, transcripts", color = "grey2", height = 300)
 TnTGenome(brca2tx)
 ```
 
@@ -87,9 +87,9 @@ the colors.
 brca2tx$tooltip <- select(EnsDb.Hsapiens.v75,
     keys = brca2tx$tooltip$tx_id, keytype = "TXID", columns = c("GENEID", "SYMBOL", "TXBIOTYPE")
 )
-brca2tx$color         <- mapcol(brca2tx$tooltip$TXBIOTYPE)
-brca2tx$display_label <- strandlabel(
-    paste(brca2tx$tooltip$SYMBOL, brca2tx$tooltip$TXBIOTYPE), strand(trackData(brca2tx))
+brca2tx$color         <- TnT::mapcol(brca2tx$tooltip$TXBIOTYPE)
+brca2tx$display_label <- TnT::strandlabel(
+    paste(brca2tx$tooltip$SYMBOL, brca2tx$tooltip$TXBIOTYPE), strand(TnT::trackData(brca2tx))
 )
 TnTGenome(brca2tx)
 ```
@@ -110,7 +110,7 @@ grl <- GRangesList(
     GRanges()
 )
 names(grl) <- LETTERS[1:7]
-grltrack <- GroupFeatureTrack(grl, color = "steelblue")
+grltrack <- TnT::GroupFeatureTrack(grl, color = "steelblue")
 TnTGenome(grltrack)
 ```
 

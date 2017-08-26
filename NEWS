@@ -1,0 +1,7 @@
+TODOS
+
+    o Support domain setting for LineTrack and AreaTrack
+    
+    o Alternative constructors to create GeneTrack and TxTrack from EnsDb
+    
+    o Alternative constructors for LineTrack and AreaTrack showing coverage of GRanges
