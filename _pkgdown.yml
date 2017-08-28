@@ -13,28 +13,28 @@ navbar:
   - text: Examples
     menu:
     - text: Index
-      href: examples/index.html
+      href: articles/examples/index.html
     - text: "------------------"
     - text: Track Types
     - text: BlockTrack
-      href: examples/tracktype-BlockTrack.html
+      href: articles/examples/tracktype-BlockTrack.html
     - text: PinTrack
-      href: examples/tracktype-PinTrack.html
+      href: articles/examples/tracktype-PinTrack.html
     - text: LineTrack and AreaTrack
-      href: examples/tracktype-LineTrack-AreaTrack.html
+      href: articles/examples/tracktype-LineTrack-AreaTrack.html
     - text: VlineTrack
-      href: examples/tracktype-VlineTrack.html
+      href: articles/examples/tracktype-VlineTrack.html
     - text: GeneTrack and FeatureTrack
-      href: examples/tracktype-GeneTrack.html
+      href: articles/examples/tracktype-GeneTrack.html
     - text: TxTrack and GroupFeatureTrack
-      href: examples/tracktype-TxTrack.html
+      href: articles/examples/tracktype-TxTrack.html
     - text: CompositeTrack
-      href: examples/track-CompositeTrack.html
+      href: articles/examples/track-CompositeTrack.html
     - text: "------------------"
     - text: Feature Colors
-      href: examples/track-colors.html
+      href: articles/examples/track-colors.html
     - text: Tooltip display
-      href: examples/track-tooltip-display.html
+      href: articles/examples/track-tooltip-display.html
   right:
     - icon: fa-home fa-lg
       href: index.html
@@ -45,6 +45,21 @@ articles:
   - title: All vignettes
     desc: ~
     contents: '`introduction`'
+  - title: Examples
+    desc: >
+      Examples of TnT, including different track constructors.
+    content:
+    - '`index`'
+    - '`tracktype-BlockTrack`'
+    - '`tracktype-GeneTrack`'
+    - '`tracktype-LineTrack-AreaTrack`'
+    - '`tracktype-PinTrack`'
+    - '`tracktype-TxTrack`'
+    - '`tracktype-VlineTrack`'
+    - '`track-CompositeTrack`'
+    - '`track-tooltip-display`'
+    - '`track-colors`'
+
 
 
 reference:
