@@ -15,4 +15,6 @@ This package is a
 Jialin Ma, kindly mentored by Toby Hocking and Miguel Pignatelli,
 under the organization of R project for statistical computing. Miguel Pignatelli
 is also the author of TnT javascript libraries which the R package relies on.
+See the [blog post](http://weblog.marlin.pub/post/tnt/tnt-gsoc17/) for a summary of the project.
+
 
