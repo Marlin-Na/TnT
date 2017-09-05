@@ -11,7 +11,6 @@ if not test (count $argv) -eq 1
     echo "    check     -- Check package"
     echo "    biocheck  -- Bioc Check"
     echo "    site      -- Build documentation site"
-    echo "    example   -- Build example site"
     echo "    serve     -- Serve site"
     exit 0
 end
@@ -45,11 +44,11 @@ switch $argv
         echo ------------  Start building documentation site  ----------
         Rscript -e "pkgdown::build_site(pkg = '$pkgdir', path = '$pkgdir/gh-pages', examples = TRUE)"
         or exit 1
-    case example
-        echo ------------  Start building example site  ----------------
-        cd $pkgdir/inst/examples/
-        make build; and make cp
-        or exit 1
+#   case example
+#       echo ------------  Start building example site  ----------------
+#       cd $pkgdir/inst/examples/
+#       make build; and make cp
+#       or exit 1
     case serve
         cd $pkgdir/gh-pages
         and python3 -m http.server 1313
