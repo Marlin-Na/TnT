@@ -44,6 +44,12 @@ switch $argv
         echo ------------  Start building documentation site  ----------
         Rscript -e "pkgdown::build_site(pkg = '$pkgdir', path = '$pkgdir/gh-pages', examples = TRUE)"
         or exit 1
+
+        cd gh-pages
+        and if test ! -L examples
+            ln -sv articles/examples examples; or exit 1
+            set_color green; echo "Link examples -> articles/examples"
+        end
 #   case example
 #       echo ------------  Start building example site  ----------------
 #       cd $pkgdir/inst/examples/
