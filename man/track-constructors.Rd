@@ -95,6 +95,6 @@ BlockTrack(range = GRanges("chr1", IRanges(199, 4000)),
            color = "green", background = "red", height = 100)
 }
 \seealso{
-You can find various examples at \url{https://marlin-na.github.io/TnT/examples/},
+You can find various examples at \url{http://tnt.marlin.pub/articles/examples/},
     also see \code{\link{composite-track}} on how to create a composite track.
 }

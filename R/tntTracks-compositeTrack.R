@@ -29,7 +29,7 @@ CompositeTrackData <- function (tracklist) {
 #' @return
 #'     Returns a "CompositeTrack" object.
 #' 
-#' @seealso \url{https://marlin-na.github.io/TnT/examples/track-CompositeTrack.html}
+#' @seealso \url{http://tnt.marlin.pub/articles/examples/track-CompositeTrack.html}
 #' @export
 #' @examples
 #' gr <- GRanges("chr1", IRanges(c(11000, 20000, 60000), width = 2000))

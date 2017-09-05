@@ -36,7 +36,7 @@ can be used to create a simple genome browser.
 
 TnT is a new package, any feedback or suggestion would appreciated,
 please email to Jialin Ma < marlin-@gmx.cn >. You can also find the source repository
-at https://github.com/marlin-na/TnT and the documentation site at https://marlin-na.github.io/TnT/ .
+at https://github.com/marlin-na/TnT and the documentation site at http://tnt.marlin.pub .
 This vignette will also be extended in the future to include more details.
 
 
@@ -166,7 +166,7 @@ genlink <- function (li.pairs) {
             stopifnot(length(pairs) == 1)
             name <- names(pairs)
             base.link <- unname(pairs)
-            sprintf("[%s](https://marlin-na.github.io/TnT/examples/%s)", name, base.link)
+            sprintf("[%s](http://tnt.marlin.pub/articles/examples/%s)", name, base.link)
         }
     )
 }

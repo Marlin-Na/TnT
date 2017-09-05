@@ -34,5 +34,5 @@ TnTBoard(ctrack)
 }
 }
 \seealso{
-\url{https://marlin-na.github.io/TnT/examples/track-CompositeTrack.html}
+\url{http://tnt.marlin.pub/articles/examples/track-CompositeTrack.html}
 }
