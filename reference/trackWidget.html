@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • TnT</title>
+<title>Convert a TnTBoard to htmlwidget — trackWidget • TnT</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@
   </head>
 
   <body>
-    <div class="container template-vignette-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -131,37 +131,55 @@
       
       </header>
 
-      <div class="page-header">
-  <h1>Articles <small>version&nbsp;0.0.1</small></h1>
-</div>
-
-<div class="row">
-  <div class="col-md-9">
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="introduction.html">Introduction to TnT</a></li>
-      </ul>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Convert a TnTBoard to htmlwidget</h1>
     </div>
-    <div class="section ">
-      <h3>Examples</h3>
-      <p class="section-desc"><p>Examples of TnT, including different track constructors.</p></p>
 
-      <ul>
-        <li><a href="examples/index.html">TnT Examples</a></li>
-        <li><a href="examples/tracktype-BlockTrack.html">Block Track</a></li>
-        <li><a href="examples/tracktype-GeneTrack.html">Gene Track and Feature Track</a></li>
-        <li><a href="examples/tracktype-LineTrack-AreaTrack.html">Line Track and Area Track</a></li>
-        <li><a href="examples/tracktype-PinTrack.html">Pin Track</a></li>
-        <li><a href="examples/tracktype-TxTrack.html">TxTrack and GroupFeatureTrack</a></li>
-        <li><a href="examples/tracktype-VlineTrack.html">Vline Track</a></li>
-        <li><a href="examples/track-CompositeTrack.html">Composite Track</a></li>
-        <li><a href="examples/track-tooltip-display.html">Tooltip Display in Tracks</a></li>
-        <li><a href="examples/track-colors.html">Colors of Track</a></li>
-      </ul>
-    </div>
+    
+    <p>This function is only provided for users who are familiar with the concept of
+<a href='http://www.rdocumentation.org/packages/htmlwidgets/topics/htmlwidgets-package'>htmlwidgets-package</a>. It explicitly convets a TnTBoard or
+TnTGenome object to a htmlwidget object. You do not need it in most cases.</p>
+    
+
+    <pre class="usage"><span class='fu'>trackWidget</span>(<span class='no'>tntdef</span>, <span class='kw'>elementId</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>tntdef</th>
+      <td><p>A TnTBoard/TnTGenome object or a htmlwidget object. If it is
+a htmlwidget object, the function will return it as is.</p></td>
+    </tr>
+    <tr>
+      <th>elementId</th>
+      <td><p>An id for the htmlwidget (random by default).</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>The function returns a htmlwidget object.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>b</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tntboard.html'>TnTBoard</a></span>(<span class='fu'><a href='track-constructors.html'>BlockTrack</a></span>(<span class='fu'>GRanges</span>(<span class='st'>"chr12"</span>, <span class='fu'>IRanges</span>(<span class='fl'>1</span>, <span class='fl'>123</span>))))
+<span class='no'>widget</span> <span class='kw'>&lt;-</span> <span class='fu'>trackWidget</span>(<span class='no'>b</span>)</div><div class='output co'>#&gt; <span class='message'>- Missing argument `view.range`:</span>
+#&gt; <span class='message'>  automatically select -14..138 on seqlevel chr12...</span></div><div class='output co'>#&gt; <span class='message'>- Missing argument `coord.range` and seqlength is unknown:</span>
+#&gt; <span class='message'>  automatically set coordinate limit to -25..149 ...</span></div><div class='input'><span class='fu'>class</span>(<span class='no'>widget</span>)</div><div class='output co'>#&gt; [1] "trackWidget" "htmlwidget" </div><div class='input'><span class='fu'>identical</span>(<span class='no'>widget</span>, <span class='fu'>trackWidget</span>(<span class='no'>widget</span>))</div><div class='output co'>#&gt; [1] TRUE</div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 

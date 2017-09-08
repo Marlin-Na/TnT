@@ -171,7 +171,7 @@ txdb &lt;-<span class="st"> </span>TxDb.Hsapiens.UCSC.hg19.knownGene
 gtrack &lt;-<span class="st"> </span>TnT<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/TnT/topics/track-constructors">GeneTrackFromTxDb</a></span>(txdb, <span class="dt">label =</span> <span class="st">"Gene"</span>, <span class="dt">color =</span> <span class="st">"burlywood3"</span>)
 
 ah &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/AnnotationHub/topics/AnnotationHub-class">AnnotationHub</a></span>()</code></pre></div>
-<pre><code>## snapshotDate(): 2017-08-31</code></pre>
+<pre><code>## snapshotDate(): 2017-09-07</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ah &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/AnnotationHub/topics/AnnotationHub-class">query</a></span>(ah, <span class="st">"cpgisland"</span>)
 cpg &lt;-<span class="st"> </span>ah[[<span class="kw">names</span>(ah[ah<span class="op">$</span>genome <span class="op">==</span><span class="st"> "hg19"</span>])]]</code></pre></div>
 <pre><code>## loading from cache '/home/jialin//.AnnotationHub/5086'</code></pre>

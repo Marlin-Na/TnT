@@ -132,7 +132,7 @@
 <div id="create-a-tnt-board-with-literal-javascript" class="section level2">
 <h2 class="hasAnchor">
 <a href="#create-a-tnt-board-with-literal-javascript" class="anchor"></a>Create a TnT Board with Literal JavaScript</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">trackWidget</span>(<span class="st">'</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/trackWidget.html">trackWidget</a></span>(<span class="st">'</span>
 <span class="st">    var axisTrack = tnt.board.track()</span>
 <span class="st">        .height(20)</span>
 <span class="st">        .color("white")</span>
@@ -163,8 +163,8 @@
 <span class="st">        .add_track(blockTrack);</span>
 <span class="st">    board</span>
 <span class="st">'</span>)</code></pre></div>
-<div id="htmlwidget-507eb163157f24bf5106" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-507eb163157f24bf5106">{"x":{"tntdef":"\n    var axisTrack = tnt.board.track()\n        .height(20)\n        .color(\"white\")\n        .display(tnt.board.track.feature.axis());\n\n    var blockTrack = tnt.board.track()\n        .height(30)\n        .color(\"grey\")\n        .data(tnt.board.track.data.sync()\n            .retriever(function () {\n                return [\n                    {start: 200, end: 350},\n                    {start: 400, end: 450}\n                ]\n            })\n        )\n        .display(\n            tnt.board.track.feature.block()\n            .color(\"red\")\n        );\n\n    var board = tnt.board()\n        .from(100)\n        .to(500)\n        .min(0)\n        .max(1000)\n        .add_track(axisTrack)\n        .add_track(blockTrack);\n    board\n"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
+<div id="htmlwidget-949fc687ab62ecae4b34" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-949fc687ab62ecae4b34">{"x":{"tntdef":"\n    var axisTrack = tnt.board.track()\n        .height(20)\n        .color(\"white\")\n        .display(tnt.board.track.feature.axis());\n\n    var blockTrack = tnt.board.track()\n        .height(30)\n        .color(\"grey\")\n        .data(tnt.board.track.data.sync()\n            .retriever(function () {\n                return [\n                    {start: 200, end: 350},\n                    {start: 400, end: 450}\n                ]\n            })\n        )\n        .display(\n            tnt.board.track.feature.block()\n            .color(\"red\")\n        );\n\n    var board = tnt.board()\n        .from(100)\n        .to(500)\n        .min(0)\n        .max(1000)\n        .add_track(axisTrack)\n        .add_track(blockTrack);\n    board\n"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
 </div>
 <div id="create-a-tnt-board-with-jscascade-util-functions" class="section level2">
 <h2 class="hasAnchor">
@@ -203,9 +203,9 @@ tntdef &lt;-<span class="st"> </span><span class="kw">jc</span>(
     <span class="dt">add_track =</span> axisTrack,
     <span class="dt">add_track =</span> blockTrack
 )
-<span class="kw">trackWidget</span>(tntdef)</code></pre></div>
-<div id="htmlwidget-b9724d32bd3f393f1caa" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b9724d32bd3f393f1caa">{"x":{"tntdef":"tnt.board()\n.from(0)\n.to(500)\n.min(0)\n.max(1000)\n.add_track(tnt.board.track()\n.height(20)\n.color(\"white\")\n.display(tnt.board.track.feature.axis()))\n.add_track(tnt.board.track()\n.height(30)\n.color(\"green\")\n.data(tnt.board.track.data.sync()\n.retriever(function() {\n            return [\n                {start: 200, end: 350},\n                {start: 550, end: 770}\n            ];\n        }))\n.display(tnt.board.track.feature.block()\n.color(\"red\")\n.index(function (d) {return d.start})))"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
+<span class="kw"><a href="../../reference/trackWidget.html">trackWidget</a></span>(tntdef)</code></pre></div>
+<div id="htmlwidget-9b8226eb257cb8090dbe" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9b8226eb257cb8090dbe">{"x":{"tntdef":"tnt.board()\n.from(0)\n.to(500)\n.min(0)\n.max(1000)\n.add_track(tnt.board.track()\n.height(20)\n.color(\"white\")\n.display(tnt.board.track.feature.axis()))\n.add_track(tnt.board.track()\n.height(30)\n.color(\"green\")\n.data(tnt.board.track.data.sync()\n.retriever(function() {\n            return [\n                {start: 200, end: 350},\n                {start: 550, end: 770}\n            ];\n        }))\n.display(tnt.board.track.feature.block()\n.color(\"red\")\n.index(function (d) {return d.start})))"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
 </div>
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
