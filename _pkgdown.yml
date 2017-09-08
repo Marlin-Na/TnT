@@ -80,11 +80,13 @@ reference:
     - '`tracklist`'
     - '`knit_print.TnTBoard`'
     - '`range,TnTBoard-method`'
+    - '`TnT-shiny`'
   - title: Utils
     desc: Some small util functions.
     contents:
     - '`mapcol`'
     - '`strandlabel`'
+    - '`trackWidget`'
 
 # template:
 #   params:
