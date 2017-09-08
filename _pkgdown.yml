@@ -48,7 +48,7 @@ articles:
   - title: Examples
     desc: >
       Examples of TnT, including different track constructors.
-    content:
+    contents:
     - '`index`'
     - '`tracktype-BlockTrack`'
     - '`tracktype-GeneTrack`'
