@@ -92,6 +92,44 @@ splitdf <- function (df, f) {
 
 
 
+.consolidateSeqinfo <- function (li.tracks) {
+    # The function accepts a list of tracks,
+    # returns a list of tracks with the same Seqinfo
+    stopifnot(is.list(li.tracks))
+    
+    if (length(li.tracks) == 0)
+        return(li.tracks)
+    s <- .mergeSeqinfo(li.tracks)
+    for (i in seq_along(li.tracks))
+        if (!identical(seqinfo(li.tracks[[i]]), s))
+            seqinfo(li.tracks[[i]]) <- s
+    li.tracks
+}
+
+.mergeSeqinfo <- function (li.seqinfo) {
+    # It accepts a list of Seqinfo object or a list of tracks, returns the merged Seqinfo.
+    # It checks whether the objects are identical before applying `merge`,
+    # so that it is fast in some cases.
+    if (length(li.seqinfo) == 0)
+        return(Seqinfo())
+    for (i in seq_along(li.seqinfo))
+        if (!inherits(li.seqinfo[[i]], "Seqinfo"))
+            li.seqinfo[[i]] <- seqinfo(li.seqinfo[[i]])
+
+    target <- li.seqinfo[[1]]
+    is.mod <- FALSE
+    for (i in seq_along(li.seqinfo)) {
+        new <- li.seqinfo[[i]]
+        if (identical(target, new))
+            target <- new
+        else {
+            target <- merge(target, new)
+            is.mod <- TRUE
+        }
+    }
+    target
+}
+
 
 
 
