@@ -1,7 +1,8 @@
 
 context("Test seqinfo and seqinfo<-")
 
-testthat("seqinfo of CompositeTrack", {
+library(testthat)
+test_that("seqinfo of CompositeTrack", {
     
     gr <- GRanges("chr2", IRanges(1,2),
                   seqinfo = Seqinfo(seqnames = c("chr1", "chr2"), seqlengths = c(100, 200)))
