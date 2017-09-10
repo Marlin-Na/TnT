@@ -57,12 +57,15 @@ HTMLWidgets.widget({
         //    return d;
         //};
         
-        tnr.range_data_retriever = function (data) {
+        tnr.range_data_retriever = function (data, full = false) {
             // TODO:  We may sort the data here and provide fast search
             var rangeData = data;
             
             // Return a closure as the data retriever
             var ans = function (loc) {
+                if (full) {
+                    return rangeData;
+                }
                 var min = loc.from;
                 var max = loc.to;
                 var ans = [];
@@ -77,9 +80,12 @@ HTMLWidgets.widget({
             return ans;
         };
         
-        tnr.pos_data_retriever = function (data) {
+        tnr.pos_data_retriever = function (data, full = false) {
             var posData = data;
             var ans = function (loc) {
+                if (full) {
+                    return posData;
+                }
                 var min = loc.from;
                 var max = loc.to;
                 var ans = [];

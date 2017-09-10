@@ -456,7 +456,7 @@ setValidity("TxTrackData",
 #### TrackData Compilation  ========
 
 setGeneric("compileTrackData",
-           function (trackData) standardGeneric("compileTrackData"))
+           function (trackData, ...) standardGeneric("compileTrackData"))
 
 setMethod("compileTrackData", signature = "NoTrackData",
     function (trackData)
@@ -464,7 +464,7 @@ setMethod("compileTrackData", signature = "NoTrackData",
 )
 
 setMethod("compileTrackData", signature = "RangeTrackData",
-    function (trackData) {
+    function (trackData, full = FALSE) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
         df <- as.data.frame(trackData, optional = TRUE) [
             c("start", "end", colnames(mcols(trackData)))]
@@ -477,7 +477,8 @@ setMethod("compileTrackData", signature = "RangeTrackData",
         else
             jc.data <- jc(
                 tnt.board.track.data.sync = ma(),
-                retriever = jc(tnr.range_data_retriever = df)
+                retriever = jc(tnr.range_data_retriever =
+                                   if (full) ma(df, TRUE) else df)
             )
         jc.data
     }
@@ -490,7 +491,7 @@ if (FALSE) local({
 })
 
 setMethod("compileTrackData", signature = "PosTrackData",
-    function (trackData) {
+    function (trackData, full = FALSE) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
         stopifnot(all(width(trackData) == 1))
         
@@ -499,7 +500,8 @@ setMethod("compileTrackData", signature = "PosTrackData",
         
         jc.data <- jc(
             tnt.board.track.data.sync = ma(),
-            retriever = jc(tnr.pos_data_retriever = df)
+            retriever = jc(tnr.pos_data_retriever =
+                               if (full) ma(df, TRUE) else df)
         )
         jc.data
     }
