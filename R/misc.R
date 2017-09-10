@@ -102,7 +102,9 @@ splitdf <- function (df, f) {
     s <- .mergeSeqinfo(li.tracks)
     for (i in seq_along(li.tracks))
         if (!identical(seqinfo(li.tracks[[i]]), s))
-            seqinfo(li.tracks[[i]]) <- s
+            # The merged Seqinfo should be a superset of individual Seqinfo
+            seqinfo(li.tracks[[i]], new2old = match(seqlevels(s), seqlevels(li.tracks[[i]])),
+                    pruning.mode = "error") <- s
     li.tracks
 }
 
@@ -117,15 +119,12 @@ splitdf <- function (df, f) {
             li.seqinfo[[i]] <- seqinfo(li.seqinfo[[i]])
 
     target <- li.seqinfo[[1]]
-    is.mod <- FALSE
     for (i in seq_along(li.seqinfo)) {
         new <- li.seqinfo[[i]]
         if (identical(target, new))
             target <- new
-        else {
+        else
             target <- merge(target, new)
-            is.mod <- TRUE
-        }
     }
     target
 }

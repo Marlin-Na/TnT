@@ -63,6 +63,7 @@ merge_tracklist <- function (tracklist) {
     which.comp <- sapply(tracklist, inherits, what = "CompositeTrack")
     tracklist[which.comp] <- lapply(tracklist[which.comp], trackData)
     tracklist <- c(tracklist, recursive = TRUE, use.names = FALSE)
+    tracklist <- .consolidateSeqinfo(tracklist)
     
     .merge_tracklist <- function (tracklist) {
         spec <- .mergeSpec(tracklist)
@@ -166,20 +167,19 @@ setMethod("wakeupTrack", signature = c(track = "CompositeTrack"),
 
 #' @rdname seqinfo
 setMethod("seqinfo", signature = "CompositeTrack",
-    function (x) {
-        li.tracks <- trackData(x)
-        li.seqinfo <- lapply(li.tracks, seqinfo)
-        do.call(merge, unname(li.seqinfo))
-    }
+    function (x) .mergeSeqinfo(trackData(x))
 )
 
 #' @rdname seqinfo
 setMethod("seqinfo<-", signature = c(x = "CompositeTrack"),
     function (x, new2old, pruning.mode, value) {
+        ## We need to make sure the sub-tracks have the same seqinfo, otherwise
+        ## functions like `seqlevels<-` will not work correctly.
+        trackData(x) <- .consolidateSeqinfo(trackData(x))
+        
         li.tracks <- trackData(x)
-        for (i in seq_along(li.tracks)) {
+        for (i in seq_along(li.tracks))
             seqinfo(li.tracks[[i]], new2old, pruning.mode) <- value
-        }
         trackData(x) <- li.tracks
         x
     }
