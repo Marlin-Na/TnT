@@ -88,19 +88,29 @@ setGeneric("wakeupTrack", function (track) standardGeneric("wakeupTrack"))
 setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
     function (track) {
         class <- class(track)
-        feaname <- switch(class,
-            BlockTrack = "tnt.board.track.feature.block",
-            GeneTrack = "tnt.board.track.feature.genome.gene",
-            TxTrack = "tnt.board.track.feature.genome.transcript",
-            VlineTrack = "tnt.board.track.feature.vline",
-            PinTrack = "tnt.board.track.feature.pin",
-            LineTrack = "tnt.board.track.feature.line",
-            AreaTrack = "tnt.board.track.feature.area",
+        
+        # Simulate a method dispatch
+        super.classes <- getAllSuperClasses(getClass(class))
+        use.classes <- c("BlockTrack", "GeneTrack", "TxTrack", "VlineTrack",
+                         "PinTrack", "LineTrack", "AreaTrack")
+        use.class <- use.classes[which.min(match(use.classes, super.classes))]
+        
+        if (length(use.class) == 0)
+            stop(sprintf("Method for %s class not implemented", class))
+        
+        feaname <- switch(use.class,
+            BlockTrack   = "tnt.board.track.feature.block",
+            GeneTrack    = "tnt.board.track.feature.genome.gene",
+            TxTrack      = "tnt.board.track.feature.genome.transcript",
+            VlineTrack   = "tnt.board.track.feature.vline",
+            PinTrack     = "tnt.board.track.feature.pin",
+            LineTrack    = "tnt.board.track.feature.line",
+            AreaTrack    = "tnt.board.track.feature.area",
             stop()
         )
         
         ### TEMP: TO REMOVE IN FUTURE
-        if (class(track) == "VlineTrack") {
+        if (use.class == "VlineTrack") {
             trackData(track)$key <- start(trackData(track))
         }
         ### TEMP: TO REMOVE IN FUTURE
