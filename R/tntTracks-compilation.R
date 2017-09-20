@@ -90,7 +90,7 @@ setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
         class <- class(track)
         
         # Simulate a method dispatch
-        super.classes <- getAllSuperClasses(getClass(class))
+        super.classes <- c(class, getAllSuperClasses(getClass(class)))
         use.classes <- c("BlockTrack", "GeneTrack", "TxTrack", "VlineTrack",
                          "PinTrack", "LineTrack", "AreaTrack")
         use.class <- use.classes[which.min(match(use.classes, super.classes))]
