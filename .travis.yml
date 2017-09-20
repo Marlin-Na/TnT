@@ -6,5 +6,4 @@ cache: packages
 
 # test
 sudo: true
-group: deprecated-2017Q3
 
