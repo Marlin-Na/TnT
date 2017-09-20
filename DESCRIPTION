@@ -8,7 +8,7 @@ Description: A R interface to the TnT javascript library (https://github.com/
     tntvis) to provide interactive and flexible visualization of track-based
     genomic data.
 Depends:
-    R (>= 3.3.2),
+    R (>= 3.4),
     GenomicRanges
 Imports:
     methods,
