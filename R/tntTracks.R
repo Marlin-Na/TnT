@@ -216,6 +216,9 @@ GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "bl
     # We must restore the seqlevel of the txdb since it is a reference class
     on.exit(seqlevels(txdb) <- seqlevel.ori)
     
+    if (!requireNamespace("GenomicFeatures", quietly = TRUE))
+        stop("GenomicFeatures package is not available, ",
+             "please install with \"BiocInstaller::biocLite('GenomicFeatures')\"")
     # TODO: use "single.strand.genes.only = FALSE" ?
     gr <- GenomicFeatures::genes(txdb)
     labels <- gr$gene_id
@@ -372,10 +375,13 @@ TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "red"
     on.exit(seqlevels(txdb) <- seqlevel.ori)
     
     ## Extract features from txdb
-    gr.txs <- transcripts(txdb, columns = c("tx_id", "tx_name", "gene_id"))
+    if (!requireNamespace("GenomicFeatures", quietly = TRUE))
+        stop("GenomicFeatures package is not available, ",
+             "please install with \"BiocInstaller::biocLite('GenomicFeatures')\"")
+    gr.txs <- GenomicFeatures::transcripts(txdb, columns = c("tx_id", "tx_name", "gene_id"))
     gr.txs$gene_id <- as.character(gr.txs$gene_id) # contain NA values
-    gr.cds <- cds(txdb, columns = c("tx_id"))
-    gr.exons <- exons(txdb, columns = c("tx_id"))
+    gr.cds <- GenomicFeatures::cds(txdb, columns = c("tx_id"))
+    gr.exons <- GenomicFeatures::exons(txdb, columns = c("tx_id"))
     
     ## Unlist tx_id column of gr.cds and gr.exons
     flatGRByTxID <- function (gr) {
