@@ -56,8 +56,17 @@ HTMLWidgets.widget({
         //    }
         //    return d;
         //};
+
+        tnr.scale_val = function (data, domain) {
+            var scalefun = d3.scale.linear().domain(domain).range([0, 1]);
+            for (var i = 0; i < data.length; i++) {
+                data[i].val = scalefun(data[i].val);
+            }
+            console.log(data); // temporary
+            return data;
+        };
         
-        tnr.range_data_retriever = function (data, full = false) {
+        tnr.range_data_retriever = function (data, full) {
             // TODO:  We may sort the data here and provide fast search
             var rangeData = data;
             
@@ -80,7 +89,7 @@ HTMLWidgets.widget({
             return ans;
         };
         
-        tnr.pos_data_retriever = function (data, full = false) {
+        tnr.pos_data_retriever = function (data, full) {
             var posData = data;
             var ans = function (loc) {
                 if (full) {

@@ -148,8 +148,8 @@ setValidity("MultiArgs",
             message("The names will be ignored at present.")
       # Only allow certain types of element
         isAllowed <- vapply(lst, inherits, FUN.VALUE = logical(1),
-            what = c("JSCascade", "JavaScript",
-                     "integer", "numeric", "logical", "character")
+            what = c("JSCascade", "JavaScript", "json",
+                     "integer", "numeric", "logical", "character", "data.frame")
         )
         if (!all(isAllowed)) {
             classes <- vapply(lst[!isAllowed], FUN.VALUE = character(1),

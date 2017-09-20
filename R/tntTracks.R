@@ -121,16 +121,68 @@ PosTrackData <- function (pos, color = "black", tooltip = mcols(pos)) {
     trackdata
 }
 
-PosValTrackData <- function (pos, val, color = "black", tooltip = mcols(pos)) {
+PosValTrackData <- function (pos, val, domain = numeric(), color = "black", tooltip = mcols(pos)) {
     mcols(pos) <- NULL
     
     trackdata <- RangeTrackData(range = pos, color = color, tooltip = tooltip)
     trackdata$val <- val
+    metadata(trackdata)$domain <- domain
     
     trackdata <- as(trackdata, "PosValTrackData")
     validObject(trackdata)
     trackdata
 }
+
+.is.nodomain <- function (t) {
+    if (inherits(t, "TnTTrack"))
+        t <- trackData(t)
+    d <- metadata(t)$domain
+    return(is.null(d) || length(d) == 0)
+}
+getdomain <- function (t) {
+    if (inherits(t, "TnTTrack"))
+        t <- trackData(t)
+    
+    if (!inherits(t, "PosValTrackData"))
+        return(NULL)
+    
+    if (.is.nodomain(t)) {
+        # Domain is not specified, automatically generate one
+        val <- t$val
+        if (length(na.omit(val)) == 0) {
+            min <- 0L
+            max <- 1L
+        }
+        else if (length(na.omit(val)) == 1) {
+            a <- na.omit(val)[1]
+            min <- min(c(a, 0))
+            max <- max(c(a, 0))
+        }
+        else if (all(val >= 0, na.rm = TRUE)) {
+            min <- 0L
+            max <- max(val, na.rm = TRUE)
+        }
+        else {
+            min <- min(val, na.rm = TRUE)
+            max <- max(val, na.rm = TRUE)
+        }
+        
+        return(c(min, max))
+    }
+    else
+        return(metadata(t)$domain)
+}
+
+setMethod("show", signature = "PosValTrackData",
+    function (object) {
+        out <- capture.output(callNextMethod())
+        domain <- getdomain(object)
+        add <- sprintf("  domain: %s %s to %s",
+                       if (.is.nodomain(object)) "not specified, use" else "", domain[1], domain[2])
+        cat(out, add, sep = "\n")
+        invisible(object)
+    }
+)
 
 
 GeneTrackData <- function (range, labels = paste("Gene", mcols(range)$gene_id),
@@ -394,9 +446,31 @@ setValidity("PosTrackData",
 
 setValidity("PosValTrackData",
     function (object) {
-        if (is.null(mcols(object)$val))
+        val <- mcols(object)$val
+        domain <- metadata(object)$domain
+        if (is.null(val))
             return("Missing 'val' meta-column in PosValTrackData")
-        else TRUE
+        if (!is.numeric(val))
+            return("'val' meta-column should be a numeric vector")
+        
+        if (is.null(domain) || length(domain) == 0)
+            NULL # Domain is not specified, but it's okay
+        else {
+            if (!is.numeric(domain) || length(domain) != 2)
+                return("Domain is not a length-two numeric vector")
+            if (domain[1] > min(val)) # only give warnings
+                warning(
+                    sprintf("The minimum value (%s) of track data is smaller than domain boundary %s-%s",
+                            min(val), domain[1], domain[2])
+                )
+            if (domain[2] < max(val))
+                warning(
+                    sprintf("The maximum value (%s) of track data is larger than domain boundary %s-%s",
+                            max(val), domain[1], domain[2])
+                )
+        }
+        
+        return(TRUE)
     }
 )
 
@@ -478,7 +552,7 @@ setMethod("compileTrackData", signature = "RangeTrackData",
             jc.data <- jc(
                 tnt.board.track.data.sync = ma(),
                 retriever = jc(tnr.range_data_retriever =
-                                   if (full) ma(df, TRUE) else df)
+                                   ma(df, if (full) TRUE else FALSE))
             )
         jc.data
     }
@@ -488,6 +562,7 @@ if (FALSE) local({
     data <- RangeTrackData(range = IRanges::IRanges(1:4, 5:8),
                            tooltip = data.frame(start = 1:4, width = 5))
     compileTrackData(data)
+    compileTrackData(data, full = TRUE)
 })
 
 setMethod("compileTrackData", signature = "PosTrackData",
@@ -501,12 +576,35 @@ setMethod("compileTrackData", signature = "PosTrackData",
         jc.data <- jc(
             tnt.board.track.data.sync = ma(),
             retriever = jc(tnr.pos_data_retriever =
-                               if (full) ma(df, TRUE) else df)
+                               ma(df, if (full) TRUE else FALSE))
         )
         jc.data
     }
 )
 
+setMethod("compileTrackData", signature = "PosValTrackData",
+    function (trackData, full = FALSE) {
+        stopifnot(length(unique(seqnames(trackData))) == 1)
+        stopifnot(all(width(trackData) == 1))
+        validObject(trackData)
+        
+        df <- as.data.frame(trackData, optional = TRUE)[c("start", colnames(mcols(trackData)))]
+        df <- S4Vectors::rename(df, c(start = "pos"))
+        
+        domain <- getdomain(trackData)
+        
+        jc.data <- jc(
+            tnt.board.track.data.sync = ma(),
+            retriever = jc(
+                tnr.pos_data_retriever = ma(
+                    jc(tnr.scale_val = ma(df, domain)), # scale data from domain to [0, 1]
+                    if (full) TRUE else FALSE  # return full data or not
+                )
+            )
+        )
+        jc.data
+    }
+)
 
 ##EXAMPLE
 if (FALSE) {
@@ -514,9 +612,10 @@ if (FALSE) {
     mcols(gpos) <- as.data.frame(gpos)
     pt <- PosTrackData(gpos)
     compileTrackData(pt)
-    pt <- PosValTrackData(gpos)
+    compileTrackData(pt, full = TRUE)
     pt <- PosValTrackData(gpos, val = start(gpos))
     compileTrackData(pt)
+    compileTrackData(pt, full = TRUE)
 }
 
 
@@ -554,11 +653,7 @@ setClass("TxTrack", contains = "RangeTrack", slots = c(Data = "TxTrackData"))
 
 setClass("VlineTrack", contains = "RangeTrack", slots = c(Data = "PosTrackData"))
 
-setClass("DomainValTrack", contains = "RangeTrack", slots = c(Domain = "numeric"))
-setValidity("DomainValTrack",
-    function (object) if (length(object@Domain) != 2)
-        "Domain must be a length-two numeric vector" else TRUE
-)
+setClass("DomainValTrack", contains = "RangeTrack")
 
 setClass("PinTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrackData"))
 setClass("LineTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrackData"))
@@ -636,7 +731,7 @@ trackData <- function (x) {
 #' @param value Replaced value.
 #' @export
 `trackData<-` <- function (x, value) {
-    # TODO: convert value to the needed class
+    # TODO: convert value to the needed class?
     x@Data <- value
     validObject(x)
     x
@@ -845,8 +940,6 @@ setMethod("show", signature = "RangeTrack",
         cat("| Label:\t", label, "\n", sep="")
         cat("| Background:\t", background, "\n", sep="")
         cat("| Height:\t", height, "\n", sep="")
-        if (inherits(object, "DomainValTrack"))
-            cat("| Domain:\t", object@Domain, "\n", sep="")
         cat("| Data:\t")
         dout <- capture.output(show(trackData(object)))
         dout[-1] <- paste0("|  ", dout[-1])

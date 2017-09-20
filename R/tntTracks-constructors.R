@@ -3,8 +3,8 @@
 
 
 
-new_track <- function (class, data, display = list(), background = NULL, height = NULL, label = NULL, ...) {
-    t <- new(Class = class, Data = data, Display = display, ...)
+new_track <- function (class, data, display = list(), background = NULL, height = NULL, label = NULL) {
+    t <- new(Class = class, Data = data, Display = display)
     if (length(label) > 1L)
         label <- paste(label, collapse = " ")
     trackSpec(t, "background") <- background
@@ -61,38 +61,38 @@ VlineTrack <- function (pos, label = deparse(substitute(pos)), tooltip = mcols(p
 
 #' @rdname track-constructors
 #' @export
-PinTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
+PinTrack <- function (pos, value = mcols(pos)$value, domain = numeric(),
                       label = deparse(substitute(pos)),
                       tooltip = mcols(pos), color = "red", background = NULL,
                       height = 40) {
     
     if (is.null(value))
         stop("Value (i.e. height) at each position not specified.")
-    stopifnot(length(domain) == 2)
+    #stopifnot(length(domain) == 2)
     
-    data <- PosValTrackData(pos = pos, val = value, tooltip = tooltip, color = color)
+    data <- PosValTrackData(pos = pos, val = value, domain = domain, tooltip = tooltip, color = color)
     new_track("PinTrack", background = background, height = height,
-              label = label, data = data, display = list(), Domain = domain)
+              label = label, data = data, display = list())
 }
 
 #' @rdname track-constructors
 #' @export
-LineTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
+LineTrack <- function (pos, value = mcols(pos)$value, domain = numeric(),
                        label = deparse(substitute(pos)), color = "yellow", background = NULL,
                        height = 70) {
     if (is.null(value))
         stop("Value (i.e. height) at each position not specified.")
-    stopifnot(length(domain) == 2)
+    #stopifnot(length(domain) == 2)
     
     ## Do not need tooltip
-    data <- PosValTrackData(pos = pos, val = value, tooltip = NULL, color = color)
+    data <- PosValTrackData(pos = pos, val = value, domain = domain, tooltip = NULL, color = color)
     new_track("LineTrack", background = background, height = height,
-              label = label, data = data, display = list(), Domain = domain)
+              label = label, data = data, display = list())
 }
 
 #' @rdname track-constructors
 #' @export
-AreaTrack <- function (pos, value = mcols(pos)$value, domain = c(0, max(value)),
+AreaTrack <- function (pos, value = mcols(pos)$value, domain = numeric(),
                        label = deparse(substitute(pos)), color = "pink", background = NULL,
                        height = 70) {
     arglist <- as.list(environment())

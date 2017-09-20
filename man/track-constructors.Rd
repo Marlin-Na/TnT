@@ -21,15 +21,15 @@ BlockTrack(range, label = deparse(substitute(range)),
 VlineTrack(pos, label = deparse(substitute(pos)), tooltip = mcols(pos),
   color = "green", background = NULL, height = 40)
 
-PinTrack(pos, value = mcols(pos)$value, domain = c(0, max(value)),
+PinTrack(pos, value = mcols(pos)$value, domain = numeric(),
   label = deparse(substitute(pos)), tooltip = mcols(pos), color = "red",
   background = NULL, height = 40)
 
-LineTrack(pos, value = mcols(pos)$value, domain = c(0, max(value)),
+LineTrack(pos, value = mcols(pos)$value, domain = numeric(),
   label = deparse(substitute(pos)), color = "yellow", background = NULL,
   height = 70)
 
-AreaTrack(pos, value = mcols(pos)$value, domain = c(0, max(value)),
+AreaTrack(pos, value = mcols(pos)$value, domain = numeric(),
   label = deparse(substitute(pos)), color = "pink", background = NULL,
   height = 70)
 

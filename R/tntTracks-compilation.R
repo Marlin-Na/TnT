@@ -31,17 +31,12 @@
     })
     di.index <- list(index = js('function (d) {return d.key;}'))
     di.extra <- extra
-    ## For certain types of track
-    ## TODO: we should use method dispatch instead
+    
+    # Do not set domain in display any more, but normalize data from domain to 0..1
     di.domain <- list(domain = {
-        if (inherits(track, "DomainValTrack"))
-            ## TODO: temporary solution for LineTrack and AreaTrack
-            if (inherits(track, c("LineTrack", "AreaTrack")))
-                NULL
-            else
-                track@Domain
-        else NULL
+        NULL
     })
+
     di.tooltip <- {
         toolti <- tooltip(track)
         stopifnot(
@@ -109,7 +104,7 @@ setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
             stop()
         )
         
-        ### TEMP: TO REMOVE IN FUTURE
+        ### TEMP: TO REMOVE IN FUTURE, AND MAKE SURE KEY IS UNIQUE
         if (use.class == "VlineTrack") {
             trackData(track)$key <- start(trackData(track))
         }
