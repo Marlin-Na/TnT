@@ -2,5 +2,9 @@
 
 language: R
 r: bioc-devel
-sudo: false
 cache: packages
+
+# test
+sudo: true
+group: deprecated-2017Q3
+
