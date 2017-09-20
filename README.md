@@ -2,6 +2,7 @@
 # TnT
 
 [![Travis-CI Build Status](https://travis-ci.org/Marlin-Na/TnT.svg?branch=master)](https://travis-ci.org/Marlin-Na/TnT)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/Marlin-Na/TnT?branch=master&svg=true)](https://ci.appveyor.com/project/Marlin-Na/TnT)
 
 TnT is a R package that wraps the [TnT javascript libraries](https://github.com/tntvis)
 to provide track-based visulizations from R. It depends on a number of bioconductor
