@@ -185,15 +185,14 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>btrack1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='track-constructors.html'>BlockTrack</a></span>(<span class='fu'>GRanges</span>(<span class='st'>"chr1"</span>, <span class='fu'>IRanges</span>(<span class='fl'>1</span>, <span class='fl'>123</span>)))
 <span class='no'>btrack2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='track-constructors.html'>BlockTrack</a></span>(<span class='fu'>GRanges</span>(<span class='st'>"chr2"</span>, <span class='fu'>IRanges</span>(<span class='fl'>3</span>, <span class='fl'>599</span>)))
-<span class='no'>ctrack</span> <span class='kw'>&lt;-</span> <span class='fu'>merge</span>(<span class='no'>btrack1</span>, <span class='no'>btrack2</span>)
-<span class='no'>board</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tntboard.html'>TnTBoard</a></span>(<span class='fu'>list</span>(<span class='no'>btrack1</span>, <span class='no'>btrack2</span>))
+<span class='no'>ctrack</span> <span class='kw'>&lt;-</span> <span class='fu'>merge</span>(<span class='no'>btrack1</span>, <span class='no'>btrack2</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: The 2 combined objects have no sequence levels in common. (Use</span>
+#&gt; <span class='warning'>  suppressWarnings() to suppress this warning.)</span></div><div class='input'><span class='no'>board</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tntboard.html'>TnTBoard</a></span>(<span class='fu'>list</span>(<span class='no'>btrack1</span>, <span class='no'>btrack2</span>))
 
 <span class='fu'>seqinfo</span>(<span class='no'>btrack1</span>)</div><div class='output co'>#&gt; Seqinfo object with 1 sequence from an unspecified genome; no seqlengths:
 #&gt;   seqnames seqlengths isCircular genome
 #&gt;   chr1             NA         NA   &lt;NA&gt;</div><div class='input'><span class='fu'>seqinfo</span>(<span class='no'>btrack2</span>)</div><div class='output co'>#&gt; Seqinfo object with 1 sequence from an unspecified genome; no seqlengths:
 #&gt;   seqnames seqlengths isCircular genome
-#&gt;   chr2             NA         NA   &lt;NA&gt;</div><div class='input'><span class='fu'>seqinfo</span>(<span class='no'>ctrack</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: The 2 combined objects have no sequence levels in common. (Use</span>
-#&gt; <span class='warning'>  suppressWarnings() to suppress this warning.)</span></div><div class='output co'>#&gt; Seqinfo object with 2 sequences from an unspecified genome; no seqlengths:
+#&gt;   chr2             NA         NA   &lt;NA&gt;</div><div class='input'><span class='fu'>seqinfo</span>(<span class='no'>ctrack</span>)</div><div class='output co'>#&gt; Seqinfo object with 2 sequences from an unspecified genome; no seqlengths:
 #&gt;   seqnames seqlengths isCircular genome
 #&gt;   chr1             NA         NA   &lt;NA&gt;
 #&gt;   chr2             NA         NA   &lt;NA&gt;</div><div class='input'><span class='fu'>seqinfo</span>(<span class='no'>board</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: The 2 combined objects have no sequence levels in common. (Use</span>
