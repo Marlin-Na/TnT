@@ -63,6 +63,8 @@ test_that("Conversion of JSON", {
     )
 })
 
+library(jsonlite)
+
 test_that("Conversion of data frame", {
     df <- {
         df <- data.frame(x = 1:3)
@@ -77,7 +79,6 @@ test_that("Conversion of data frame", {
     #   2. a list of data frame (exons of each transcript)
     
     # TODO
-    library(jsonlite)
     expect_js_identical(
         jc(data = df['d']),
         jc(data = toJSON(df['d'], pretty = 2))
