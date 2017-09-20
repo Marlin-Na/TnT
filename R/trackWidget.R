@@ -114,6 +114,8 @@ if (interactive()) local({
 #'   is useful if you want to save an expression in a variable.
 #'
 #' @name TnT-shiny
+#' @return An output or render function that enables the use of the converted
+#'     htmlwidget within Shiny applications.
 #' @export
 #' @examples
 #' if (interactive() && require(shiny)) {
