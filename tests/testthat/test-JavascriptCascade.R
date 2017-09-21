@@ -44,8 +44,9 @@ test_that("JSCascade to JS Conversion", {
                         jc(emptyarg = js("")))
 })
 
+library(jsonlite)
+
 test_that("Conversion of JSON", {
-    library(jsonlite)
     json <- toJSON(iris, pretty = TRUE)
     expect_js_identical(
         jc(x = json),
@@ -62,8 +63,6 @@ test_that("Conversion of JSON", {
         jc(x = js('"chr"'))
     )
 })
-
-library(jsonlite)
 
 test_that("Conversion of data frame", {
     df <- {
