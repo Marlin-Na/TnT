@@ -7,6 +7,7 @@ Authors@R: c(person("Jialin", "Ma", email="marlin-@gmx.cn", role = c("cre", "aut
 Description: A R interface to the TnT javascript library (https://github.com/
     tntvis) to provide interactive and flexible visualization of track-based
     genomic data.
+biocViews: Infrastructure, Visualization
 Depends:
     R (>= 3.4),
     GenomicRanges
