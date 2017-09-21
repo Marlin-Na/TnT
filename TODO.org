@@ -1,0 +1,12 @@
+#             Dear Emacs, please make this -*-org-*- mode!
+
+* Pre-Release
+** Interfaces
+*** DONE Support domain setting for LineTrack and AreaTrack
+    CLOSED: [2017-09-21 Thu 07:59]
+*** TODO Alternative constructors to create GeneTrack and TxTrack from EnsDb
+*** TODO Alternative constructors for LineTrack and AreaTrack showing coverage of GRanges
+
+** Long-term
+*** TODO Implement interfaces to TnT tree
+
