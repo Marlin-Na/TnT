@@ -1,7 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^notes\.Rmd$
-^notes\.html$
 ^build\.sh$
 ^_pkgdown\.yml$
 ^\.travis\.yml$
