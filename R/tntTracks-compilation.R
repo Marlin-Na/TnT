@@ -13,11 +13,12 @@
     
     di.init <- setNames(list(ma()), feaname)
     di.color <- list(color = {
-        ## TODO: temporary solution for LineTrack and AreaTrack
+        ## LineTrack and AreaTrack do not support multiple color values
+        ## This is a tempoary solution
         if (inherits(track, c("LineTrack", "AreaTrack"))) {
             co <- unique(trackData(track)$color)
             if (length(co) > 1) {
-                # TODO: add informative warning in constructor
+                # TODO: Also add warning in constructor?
                 warning("LineTrack and AreaTrack do not support multiple color values")
                 co <- co[1]
             }

@@ -5,7 +5,23 @@
 
 ####  Class Def for TnT Board   ========
 
-
+# A TnT Board is the object that holds a list of tracks and settings for the browser,
+# it contains the following slots:
+#
+#   o ViewRange
+#       Class "GRanges" that specifies the initial viewing range of rendered browser.
+#       According to the its seqlevel, trackdata that on extra chromosomes will be
+#       dropped before converted to JavaScript. It should be suppiled when constructing
+#       the Board.
+#   o CoordRange
+#       Class "IRanges" that defines the left and right coordinate of the board.
+#   o ZoomAllow
+#       Class "IRanges" that describes the minimal and maximal extent of the
+#       board (i.e. the limit when zooming in and out).
+#   o AllowDrag
+#       Logical, whether allow drag and zoom
+#   o TrackList
+#       List of tracks.
 
 setClass("TnTBoard",
     slots = c(
@@ -285,7 +301,7 @@ wakeupBoard <- function (tntboard) {
     if (length(viewrange0) > 1)
         stop()
     
-    # Then ViewRange is not set
+    # Then length(viewrange0) == 0
     
     commonseqs <- {
         li.tseqs <- lapply(tracklist0, function (t) seqlevelsInUse(t))
@@ -371,7 +387,7 @@ wakeupBoard <- function (tntboard) {
     tntboard@Chromosome <- seqlv
     tntboard
 }
-    
+
 
 .selectZoom <- function (tntboard) {
     zoomalo <- tntboard@ZoomAllow
