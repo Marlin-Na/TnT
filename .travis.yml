@@ -2,7 +2,7 @@
 
 language: R
 r: bioc-devel
-cache: packages
+# cache: packages
 
 # test
 sudo: true
