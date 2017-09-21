@@ -44,9 +44,19 @@ test_that("JSCascade to JS Conversion", {
                         jc(emptyarg = js("")))
 })
 
-library(jsonlite)
+# Travis gives the following error:
+#     Error: package 'jsonlite' was installed by an R version with different internals;
+#     it needs to be reinstalled for use with this R version
+# Thus temporary disable some test
+skip_if_no_jsonlite <- function () {
+    tryCatch(library(jsonlite), error = function (e) {
+        skip("jsonlite can not be loaded...")
+    })
+}
 
 test_that("Conversion of JSON", {
+    skip_if_no_jsonlite()
+    
     json <- toJSON(iris, pretty = TRUE)
     expect_js_identical(
         jc(x = json),
@@ -76,6 +86,8 @@ test_that("Conversion of data frame", {
     # In practice, we may need to convert data frame that have columns of:
     #   1. a nested data frame (e.g. tooltip)
     #   2. a list of data frame (exons of each transcript)
+    
+    skip_if_no_jsonlite()
     
     # TODO
     expect_js_identical(
