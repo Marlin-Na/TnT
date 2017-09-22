@@ -110,7 +110,7 @@
       
       </header><script src="Notshown-trackWidget_files/htmlwidgets-0.9/htmlwidgets.js"></script><script src="Notshown-trackWidget_files/d3-3.5.17/d3.v3.min.js"></script><link href="Notshown-trackWidget_files/tnt.genome-0.1.6/tnt.genome.css" rel="stylesheet">
 <script src="Notshown-trackWidget_files/tnt.genome-0.1.6/tnt.genome.min.js"></script><link href="Notshown-trackWidget_files/tnt.tooltip-0.2.0/tnt.tooltip.css" rel="stylesheet">
-<script src="Notshown-trackWidget_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="Notshown-trackWidget_files/trackWidget-binding-0.0.1/trackWidget.js"></script><div class="row">
+<script src="Notshown-trackWidget_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="Notshown-trackWidget_files/trackWidget-binding-0.99.0/trackWidget.js"></script><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
       <h1>trackWidget</h1>
@@ -163,8 +163,8 @@
 <span class="st">        .add_track(blockTrack);</span>
 <span class="st">    board</span>
 <span class="st">'</span>)</code></pre></div>
-<div id="htmlwidget-3b6f6e4febaaf1f035b7" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3b6f6e4febaaf1f035b7">{"x":{"tntdef":"\n    var axisTrack = tnt.board.track()\n        .height(20)\n        .color(\"white\")\n        .display(tnt.board.track.feature.axis());\n\n    var blockTrack = tnt.board.track()\n        .height(30)\n        .color(\"grey\")\n        .data(tnt.board.track.data.sync()\n            .retriever(function () {\n                return [\n                    {start: 200, end: 350},\n                    {start: 400, end: 450}\n                ]\n            })\n        )\n        .display(\n            tnt.board.track.feature.block()\n            .color(\"red\")\n        );\n\n    var board = tnt.board()\n        .from(100)\n        .to(500)\n        .min(0)\n        .max(1000)\n        .add_track(axisTrack)\n        .add_track(blockTrack);\n    board\n"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
+<div id="htmlwidget-3fd33b32267df0020112" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3fd33b32267df0020112">{"x":{"tntdef":"\n    var axisTrack = tnt.board.track()\n        .height(20)\n        .color(\"white\")\n        .display(tnt.board.track.feature.axis());\n\n    var blockTrack = tnt.board.track()\n        .height(30)\n        .color(\"grey\")\n        .data(tnt.board.track.data.sync()\n            .retriever(function () {\n                return [\n                    {start: 200, end: 350},\n                    {start: 400, end: 450}\n                ]\n            })\n        )\n        .display(\n            tnt.board.track.feature.block()\n            .color(\"red\")\n        );\n\n    var board = tnt.board()\n        .from(100)\n        .to(500)\n        .min(0)\n        .max(1000)\n        .add_track(axisTrack)\n        .add_track(blockTrack);\n    board\n"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
 </div>
 <div id="create-a-tnt-board-with-jscascade-util-functions" class="section level2">
 <h2 class="hasAnchor">
@@ -204,8 +204,8 @@ tntdef &lt;-<span class="st"> </span><span class="kw">jc</span>(
     <span class="dt">add_track =</span> blockTrack
 )
 <span class="kw"><a href="../../reference/trackWidget.html">trackWidget</a></span>(tntdef)</code></pre></div>
-<div id="htmlwidget-6d581f0099cfee0e0cf7" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6d581f0099cfee0e0cf7">{"x":{"tntdef":"tnt.board()\n.from(0)\n.to(500)\n.min(0)\n.max(1000)\n.add_track(tnt.board.track()\n.height(20)\n.color(\"white\")\n.display(tnt.board.track.feature.axis()))\n.add_track(tnt.board.track()\n.height(30)\n.color(\"green\")\n.data(tnt.board.track.data.sync()\n.retriever(function() {\n            return [\n                {start: 200, end: 350},\n                {start: 550, end: 770}\n            ];\n        }))\n.display(tnt.board.track.feature.block()\n.color(\"red\")\n.index(function (d) {return d.start})))"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
+<div id="htmlwidget-6cbd7daed7a9790e89b8" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6cbd7daed7a9790e89b8">{"x":{"tntdef":"tnt.board()\n.from(0)\n.to(500)\n.min(0)\n.max(1000)\n.add_track(tnt.board.track()\n.height(20)\n.color(\"white\")\n.display(tnt.board.track.feature.axis()))\n.add_track(tnt.board.track()\n.height(30)\n.color(\"green\")\n.data(tnt.board.track.data.sync()\n.retriever(function() {\n            return [\n                {start: 200, end: 350},\n                {start: 550, end: 770}\n            ];\n        }))\n.display(tnt.board.track.feature.block()\n.color(\"red\")\n.index(function (d) {return d.start})))"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
 </div>
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
@@ -232,16 +232,16 @@ tntdef &lt;-<span class="st"> </span><span class="kw">jc</span>(
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.12            knitr_1.17             
-##  [3] XVector_0.16.0          magrittr_1.5           
-##  [5] GenomicRanges_1.29.12   BiocGenerics_0.22.0    
-##  [7] zlibbioc_1.22.0         IRanges_2.11.12        
+##  [3] XVector_0.17.1          magrittr_1.5           
+##  [5] GenomicRanges_1.29.14   BiocGenerics_0.23.1    
+##  [7] zlibbioc_1.23.0         IRanges_2.11.17        
 ##  [9] stringr_1.2.0           GenomeInfoDb_1.13.4    
 ## [11] tools_3.4.1             parallel_3.4.1         
 ## [13] Biobase_2.37.2          htmltools_0.3.6        
 ## [15] yaml_2.1.14             rprojroot_1.2          
 ## [17] digest_0.6.12           GenomeInfoDbData_0.99.0
-## [19] htmlwidgets_0.9         S4Vectors_0.15.5       
-## [21] bitops_1.0-6            TnT_0.0.1              
+## [19] htmlwidgets_0.9         S4Vectors_0.15.8       
+## [21] bitops_1.0-6            TnT_0.99.0             
 ## [23] RCurl_1.95-4.8          evaluate_0.10.1        
 ## [25] rmarkdown_1.6           stringi_1.1.5          
 ## [27] compiler_3.4.1          methods_3.4.1          

@@ -110,7 +110,7 @@
       
       </header><script src="track-CompositeTrack_files/htmlwidgets-0.9/htmlwidgets.js"></script><script src="track-CompositeTrack_files/d3-3.5.17/d3.v3.min.js"></script><link href="track-CompositeTrack_files/tnt.genome-0.1.6/tnt.genome.css" rel="stylesheet">
 <script src="track-CompositeTrack_files/tnt.genome-0.1.6/tnt.genome.min.js"></script><link href="track-CompositeTrack_files/tnt.tooltip-0.2.0/tnt.tooltip.css" rel="stylesheet">
-<script src="track-CompositeTrack_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="track-CompositeTrack_files/trackWidget-binding-0.0.1/trackWidget.js"></script><div class="row">
+<script src="track-CompositeTrack_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="track-CompositeTrack_files/trackWidget-binding-0.99.0/trackWidget.js"></script><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
       <h1>Composite Track</h1>
@@ -126,8 +126,15 @@
     <span class="kw">library</span>(TnT)
     <span class="kw">library</span>(GenomicFeatures)
     <span class="kw">library</span>(AnnotationHub)
-})
-<span class="kw">set.seed</span>(<span class="dv">42</span>)</code></pre></div>
+})</code></pre></div>
+<pre><code>## Warning: multiple methods tables found for 'Ontology'</code></pre>
+<pre><code>## Warning: replacing previous import 'AnnotationDbi::Ontology' by
+## 'BiocGenerics::Ontology' when loading 'GenomicFeatures'</code></pre>
+<pre><code>## Warning: no function found corresponding to methods exports from
+## 'DelayedArray' for: 'acbind', 'arbind'</code></pre>
+<pre><code>## Warning: no function found corresponding to methods exports from
+## 'SummarizedExperiment' for: 'acbind', 'arbind'</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">42</span>)</code></pre></div>
 <div id="composite-a-block-track-and-a-pin-track" class="section level2">
 <h2 class="hasAnchor">
 <a href="#composite-a-block-track-and-a-pin-track" class="anchor"></a>Composite a Block Track and a Pin Track</h2>
@@ -212,12 +219,12 @@ cpg &lt;-<span class="st"> </span>ah[[<span class="kw">names</span>(ah[ah<span c
 ##  [3] GenomicFeatures_1.29.8                 
 ##  [4] AnnotationDbi_1.39.2                   
 ##  [5] Biobase_2.37.2                         
-##  [6] TnT_0.0.1                              
-##  [7] GenomicRanges_1.29.12                  
+##  [6] TnT_0.99.0                             
+##  [7] GenomicRanges_1.29.14                  
 ##  [8] GenomeInfoDb_1.13.4                    
-##  [9] IRanges_2.11.12                        
-## [10] S4Vectors_0.15.5                       
-## [11] BiocGenerics_0.22.0                    
+##  [9] IRanges_2.11.17                        
+## [10] S4Vectors_0.15.8                       
+## [11] BiocGenerics_0.23.1                    
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] SummarizedExperiment_1.6.0    lattice_0.20-35              
@@ -228,14 +235,14 @@ cpg &lt;-<span class="st"> </span>ah[[<span class="kw">names</span>(ah[ah<span c
 ## [11] DBI_0.7                       BiocParallel_1.10.0          
 ## [13] bit64_0.9-7                   matrixStats_0.52.2           
 ## [15] GenomeInfoDbData_0.99.0       stringr_1.2.0                
-## [17] zlibbioc_1.22.0               Biostrings_2.44.0            
+## [17] zlibbioc_1.23.0               Biostrings_2.44.0            
 ## [19] htmlwidgets_0.9               memoise_1.1.0                
 ## [21] evaluate_0.10.1               knitr_1.17                   
 ## [23] biomaRt_2.32.0                httpuv_1.3.5                 
 ## [25] BiocInstaller_1.27.4          curl_2.8.1                   
 ## [27] Rcpp_0.12.12                  xtable_1.8-2                 
 ## [29] backports_1.1.0               DelayedArray_0.3.19          
-## [31] jsonlite_1.5                  XVector_0.16.0               
+## [31] jsonlite_1.5                  XVector_0.17.1               
 ## [33] mime_0.5                      bit_1.1-12                   
 ## [35] Rsamtools_1.28.0              digest_0.6.12                
 ## [37] stringi_1.1.5                 shiny_1.0.3                  
