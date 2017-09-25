@@ -35,7 +35,10 @@
     
     # Do not set domain in display any more, but normalize data from domain to 0..1
     di.domain <- list(domain = {
-        NULL
+        if (inherits(track, "PinTrack")) # TODO: This can be removed when
+            c(0L, 1L)                    #       default value in upstream is fixed.
+        else
+            NULL
     })
 
     di.tooltip <- {
