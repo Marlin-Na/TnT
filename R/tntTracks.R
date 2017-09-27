@@ -84,6 +84,7 @@ PosTrackData <- function (pos, color = "black", tooltip = mcols(pos)) {
 }
 
 PosValTrackData <- function (pos, val, domain = numeric(), color = "black", tooltip = mcols(pos)) {
+    force(tooltip)
     mcols(pos) <- NULL
     
     trackdata <- RangeTrackData(range = pos, color = color, tooltip = tooltip)
