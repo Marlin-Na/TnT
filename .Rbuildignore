@@ -1,6 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^build\.sh$
+^build\.R$
 ^_pkgdown\.yml$
 ^\.travis\.yml$
 ^appveyor\.yml$
