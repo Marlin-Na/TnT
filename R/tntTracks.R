@@ -185,10 +185,9 @@ GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "bl
     # TODO: use "single.strand.genes.only = FALSE" ?
     gr <- GenomicFeatures::genes(txdb)
     labels <- gr$gene_id
-    tooltip <- data.frame(
-        # TODO: choose proper tooltip
-        "Location" = as.character(gr),
-        "Gene ID" = gr$gene_id,
+    tooltip <- data.frame(stringsAsFactors = FALSE,
+        "gene_id" = gr$gene_id,
+        #"location" = as.character(gr),
         check.names = FALSE
     )
     
@@ -262,14 +261,14 @@ TxTrackDataFromGRanges <- function (gr, type = gr$type, tx_id = gr$tx_id, tx_nam
     
     if (is.null(gr.tx$tx_name))
         gr.tx$tooltip <- data.frame(stringsAsFactors = FALSE,
-            tx_id    = gr.tx$tx_id,
-            location = as.character(gr.tx) 
+            tx_id    = gr.tx$tx_id
+            # location = as.character(gr.tx) 
         )
     else
-        gr.tx$tooltip <- data.frame(
+        gr.tx$tooltip <- data.frame(stringsAsFactors = FALSE,
             tx_id    = gr.tx$tx_id,
-            tx_name  = gr.tx$tx_name,
-            location = as.character(gr.tx) 
+            tx_name  = gr.tx$tx_name
+            # location = as.character(gr.tx) 
         )
     
     if (length(color) != 1)
@@ -311,7 +310,7 @@ TxTrackDataFromGRangesList <- function (grl, color = "red", tooltip = mcols(grl)
     gr.exons$offset <-
         start(gr.exons) - start(gr.txs)[match(keys.gr.exons, gr.txs$key)]
     
-    df.exons <- as.data.frame(gr.exons)[c("start", "end", "offset", "coding")]
+    df.exons <- as.data.frame(gr.exons, optional = TRUE)[c("start", "end", "offset", "coding")]
     ldf.exons <- splitdf(df.exons, keys.gr.exons)[as.character(gr.txs$key)]
     gr.txs$exons <- ldf.exons
     new("TxTrackData", gr.txs)
@@ -390,9 +389,9 @@ TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "red"
     }
     gr.txs$key <- as.integer(gr.txs$tx_id)
     gr.txs$id <- as.character(gr.txs$tx_id)
-    gr.txs$tooltip <- data.frame(
-        "Location" = as.character(gr.txs),
-        "Transcript Name" = gr.txs$tx_name,
+    gr.txs$tooltip <- data.frame(stringsAsFactors = FALSE,
+        "tx_id"   = gr.txs$tx_id,
+        "tx_name" = gr.txs$tx_name,
         check.names = FALSE
     )
     gr.txs$gene_id <- NULL
