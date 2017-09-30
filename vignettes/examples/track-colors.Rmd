@@ -56,8 +56,8 @@ This example shows a gene track that genes have different colors based on their 
 First is to get the data from EnsDb.
 
 ```{r}
-library(EnsDb.Hsapiens.v86)
-gene <- genes(EnsDb.Hsapiens.v86)
+library(EnsDb.Hsapiens.v75)
+gene <- genes(EnsDb.Hsapiens.v75)
 ```
 
 TnT has defined a helper function `mapcol` to scale qualitative values to colors.
