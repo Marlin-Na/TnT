@@ -49,9 +49,9 @@ every gene, then add them to the tooltip.
 ```{r}
 head(df.tooltip <- TnT::tooltip(geneTrack))
 
-genename <- AnnotationDbi::select(org.Hs.eg.db, as.character(df.tooltip$`Gene ID`),
+genename <- AnnotationDbi::select(org.Hs.eg.db, as.character(df.tooltip$gene_id),
                       columns = "SYMBOL", keytype = "ENTREZID")
-df.tooltip$`Gene Name` <- genename$SYMBOL[match(df.tooltip$`Gene ID`, genename$ENTREZID)]
+df.tooltip$gene_symbol <- genename$SYMBOL[match(df.tooltip$gene_id, genename$ENTREZID)]
 TnT::tooltip(geneTrack) <- df.tooltip
 head(TnT::tooltip(geneTrack))
 ```
@@ -59,7 +59,7 @@ head(TnT::tooltip(geneTrack))
 We can also modify the label to show gene symbol instead of entrez ID.
 
 ```{r}
-geneTrack$display_label <- TnT::strandlabel(TnT::tooltip(geneTrack)$`Gene Name`,
+geneTrack$display_label <- TnT::strandlabel(TnT::tooltip(geneTrack)$gene_symbol,
                                             strand(TnT::trackData(geneTrack)))
 ```
 
@@ -80,7 +80,7 @@ Columns of empty strings will be regarded as subsection titles, for example:
 head(df.tooltip)
 df.tooltip <- cbind(
     data.frame(`Identity` = ""),
-    df.tooltip[c("Gene ID", "Location", "Gene Name")]
+    df.tooltip[c("gene_id", "gene_symbol")]
 )
 ```
 
