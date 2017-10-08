@@ -77,7 +77,7 @@ TnTBoard <- function (tracklist, view.range = GRanges(),
     if (is(tracklist, "TnTTrack"))
         tracklist <- list(tracklist)
     else
-        stopifnot(all(sapply(tracklist, inherits, what = "TnTTrack")))
+        stopifnot(all(vapply(tracklist, inherits, logical(1L), what = "TnTTrack")))
     
     if (is.numeric(coord.range)) {
         if (length(coord.range) == 2L)
@@ -133,7 +133,7 @@ setMethod(range, signature = c(x = "TnTBoard"),
         if (length(list(...)))
             warning("Extra arguments ignored.")
         li.track <- tracklist(x)
-        stopifnot(all(sapply(li.track, inherits, what = c("RangeTrack", "CompositeTrack"))))
+        stopifnot(all(vapply(li.track, inherits, logical(1L), what = c("RangeTrack", "CompositeTrack"))))
         
         rg <- do.call(range, c(unname(li.track),
             list(with.revmap=with.revmap, ignore.strand=ignore.strand, na.rm=na.rm)))

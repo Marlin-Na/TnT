@@ -7,7 +7,7 @@ setClass("CompositeTrack", contains = "TnTTrack", slots = c(Data = "CompositeTra
 
 setValidity("CompositeTrackData",
     function (object) {
-        if (!all(sapply(object, inherits, what = "RangeTrack")))
+        if (!all(vapply(object, inherits, logical(1L), what = "RangeTrack")))
             return("All components of CompositeTrack should be RangeTrack")
         return(TRUE)
     }
@@ -57,10 +57,10 @@ setMethod("merge", signature = c(x = "TnTTrack", y = "missing"),
 )
 
 merge_tracklist <- function (tracklist) {
-    stopifnot(all(sapply(tracklist, inherits, what = c("RangeTrack", "CompositeTrack"))))
+    stopifnot(all(vapply(tracklist, inherits, logical(1L), what = c("RangeTrack", "CompositeTrack"))))
     
     tracklist <- as.list(tracklist)
-    which.comp <- sapply(tracklist, inherits, what = "CompositeTrack")
+    which.comp <- vapply(tracklist, inherits, logical(1L), what = "CompositeTrack")
     tracklist[which.comp] <- lapply(tracklist[which.comp], trackData)
     tracklist <- c(tracklist, recursive = TRUE, use.names = FALSE)
     tracklist <- .consolidateSeqinfo(tracklist)
@@ -199,7 +199,7 @@ setMethod("seqlevelsInUse", signature = c(x = "CompositeTrack"),
 
 .range.track <- function (x, ..., with.revmap = FALSE, ignore.strand=FALSE, na.rm=FALSE) {
     li.tracks <- list(x, ...)
-    stopifnot(all(sapply(li.tracks, inherits, c("RangeTrack", "CompositeTrack"))))
+    stopifnot(all(vapply(li.tracks, inherits, logical(1L), c("RangeTrack", "CompositeTrack"))))
     
     joingr <- function (li.gr) {
         li.gr <- lapply(unname(li.gr), granges)

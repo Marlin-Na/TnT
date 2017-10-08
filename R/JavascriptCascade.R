@@ -228,7 +228,7 @@ setMethod("show", signature = "JavaScript",
         l_par_cum <- cumsum(lengths(regmatches(byline, gregexpr("(", byline, fixed = TRUE))))
         r_par_cum <- cumsum(lengths(regmatches(byline, gregexpr(")", byline, fixed = TRUE))))
         indent <- l_par_cum - r_par_cum
-        spaces <- sapply(indent, FUN = function (n) {
+        spaces <- vapply(indent, FUN.VALUE = character(1L), FUN = function (n) {
             paste(rep("  ", n), collapse = "")
         })
         out <- paste0(byline, "\n", spaces)
