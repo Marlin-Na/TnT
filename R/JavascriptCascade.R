@@ -68,11 +68,8 @@ JavaScript <- function (code) {
     new("JavaScript", code)
 }
 
-JSCascade <- function (..., .listData) {
-    if (missing(.listData))
-        lst <- list(...)
-    else
-        lst <- .listData
+JSCascade <- function (...) {
+    lst <- list(...)
     
     # If the element is NULL, then drop the element from the list
     todrop <- vapply(lst, is.null, logical(1))
@@ -80,11 +77,8 @@ JSCascade <- function (..., .listData) {
     ans
 }
 
-MultiArgs <- function (..., .listData) {
-    if (missing(.listData))
-        new("MultiArgs", listData = list(...))
-    else
-        new("MultiArgs", listData = .listData)
+MultiArgs <- function (...) {
+    new("MultiArgs", listData = list(...))
 }
 
 NoArg <- MultiArgs()
