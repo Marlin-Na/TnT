@@ -162,7 +162,7 @@ setValidity("MultiArgs",
 
 setMethod("asJS", signature = "JSCascade",
     function (object) {
-        chr <- .convertToJSChar(jc = object)
+        chr <- .convertToJSChar(object)
         JavaScript(chr)
     }
 )
@@ -178,30 +178,28 @@ setMethod("asJC", signature = c(object = "JSCascade"),
 
 
 
-.convertToJSChar <- function (jc) {
-    .recurf <- function (el) {
-        if (inherits(el, "JSCascade")) {
-            jscalls <- names(el)
-            jsargs <- vapply(el, .recurf, character(1))
-            each <- sprintf("%s(%s)", jscalls, jsargs)
-            ans <- paste(each, collapse = "\n.")
-            return(ans)
-        }
-        if (inherits(el, "MultiArgs")) {
-            l <- vapply(el, FUN = .recurf, FUN.VALUE = character(1))
-            ans <- paste(l, collapse = ", ")
-            return(ans)
-        }
-        if (inherits(el, c("JavaScript", "json")))
-            return(as.character(el))
-        
-        else {
-            ans <- jsonlite::toJSON(el, auto_unbox = TRUE,
-                                    pretty = if (inherits(el, "data.frame")) 2 else FALSE)
-            return(ans)
-        }
+.convertToJSChar <- function (el) {
+    # This function is called recursively by itself
+    if (inherits(el, "JSCascade")) {
+        jscalls <- names(el)
+        jsargs <- vapply(el, sys.function(), character(1))
+        each <- sprintf("%s(%s)", jscalls, jsargs)
+        ans <- paste(each, collapse = "\n.")
+        return(ans)
     }
-    .recurf(jc)
+    if (inherits(el, "MultiArgs")) {
+        l <- vapply(el, FUN = sys.function(), FUN.VALUE = character(1))
+        ans <- paste(l, collapse = ", ")
+        return(ans)
+    }
+    if (inherits(el, c("JavaScript", "json")))
+        return(as.character(el))
+    
+    else {
+        ans <- jsonlite::toJSON(el, auto_unbox = TRUE,
+                                pretty = if (inherits(el, "data.frame")) 2 else FALSE)
+        return(ans)
+    }
 }
 
 
