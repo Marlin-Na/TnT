@@ -174,7 +174,8 @@ setMethod("asJS", signature = "JSCascade",
 )
 
 setMethod("asJC", signature = c(object = "list"),
-    function (object) JSCascade(.listData = object)
+    function (object)
+        do.call(JSCascade, object)
 )
 
 setMethod("asJC", signature = c(object = "JSCascade"),

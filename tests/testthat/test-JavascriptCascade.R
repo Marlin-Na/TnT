@@ -16,7 +16,7 @@ test_that("JSCascade Construction", {
                   character = "character", jscascade = jc(multiargs = ma(1, "chr")),
                   javascript = js("'jscharacter'"))
     
-    j <- jc(.listData = call_list)
+    j <- do.call(jc, call_list)
     
     expect_identical(j, do.call(jc, call_list))
     expect_identical(j, asJC(call_list))
