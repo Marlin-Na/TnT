@@ -22,11 +22,11 @@
 #' identical(widget, trackWidget(widget))
 trackWidget <- function (tntdef, elementId = NULL) {
     # Determine the class of tntdef
-    if (inherits(tntdef, "TnTBoard"))
+    if (is(tntdef, "TnTBoard"))
         tntdef <- compileBoard(tntdef) # becomes a JSCascade
-    if (inherits(tntdef, "JSCascade"))
+    if (is(tntdef, "JSCascade"))
         tntdef <- asJS(tntdef)
-    if (inherits(tntdef, "JavaScript"))
+    if (is(tntdef, "JavaScript"))
         tntdef <- as.character(tntdef)
     
     if (inherits(tntdef, "htmlwidget"))

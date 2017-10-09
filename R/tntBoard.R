@@ -77,7 +77,7 @@ TnTBoard <- function (tracklist, view.range = GRanges(),
     if (is(tracklist, "TnTTrack"))
         tracklist <- list(tracklist)
     else
-        stopifnot(all(vapply(tracklist, inherits, logical(1L), what = "TnTTrack")))
+        stopifnot(all(vapply(tracklist, is, logical(1L), what = "TnTTrack")))
     
     if (is.numeric(coord.range)) {
         if (length(coord.range) == 2L)
@@ -133,7 +133,6 @@ setMethod(range, signature = c(x = "TnTBoard"),
         if (length(list(...)))
             warning("Extra arguments ignored.")
         li.track <- tracklist(x)
-        stopifnot(all(vapply(li.track, inherits, logical(1L), what = c("RangeTrack", "CompositeTrack"))))
         
         rg <- do.call(range, c(unname(li.track),
             list(with.revmap=with.revmap, ignore.strand=ignore.strand, na.rm=na.rm)))
@@ -198,7 +197,7 @@ setMethod("seqinfo", signature = "TnTBoard",
 compileBoard <- function (tntboard) {
     b <- wakeupBoard(tntboard)
     
-    if (inherits(b, "TnTGenome"))
+    if (is(b, "TnTGenome"))
         spec <- .compileBoardSpec(b, use.tnt.genome = TRUE)
     else
         spec <- .compileBoardSpec(b)
@@ -376,7 +375,7 @@ wakeupBoard <- function (tntboard) {
 }
 
 .fillGenome <- function (tntboard) {
-    if (!inherits(tntboard, "TnTGenome"))
+    if (!is(tntboard, "TnTGenome"))
         return(tntboard)
     
     stopifnot(length(tntboard@ViewRange) == 1)
@@ -414,9 +413,9 @@ wakeupBoard <- function (tntboard) {
             length(b@CoordRange) == 1,
             length(b@ZoomAllow) == 1,
             length(b@AllowDrag) == 1,
-            if (inherits(b, "TnTGenome"))
+            if (is(b, "TnTGenome"))
                 length(b@Species) == 1 else TRUE,
-            if (inherits(b, "TnTGenome"))
+            if (is(b, "TnTGenome"))
                 length(b@Chromosome) == 1 else TRUE
         )
         b

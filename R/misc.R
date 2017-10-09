@@ -115,7 +115,7 @@ splitdf <- function (df, f) {
     if (length(li.seqinfo) == 0)
         return(Seqinfo())
     for (i in seq_along(li.seqinfo))
-        if (!inherits(li.seqinfo[[i]], "Seqinfo"))
+        if (!is(li.seqinfo[[i]], "Seqinfo"))
             li.seqinfo[[i]] <- seqinfo(li.seqinfo[[i]])
 
     target <- li.seqinfo[[1]]

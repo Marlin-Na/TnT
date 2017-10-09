@@ -7,7 +7,7 @@ setClass("CompositeTrack", contains = "TnTTrack", slots = c(Data = "CompositeTra
 
 setValidity("CompositeTrackData",
     function (object) {
-        if (!all(vapply(object, inherits, logical(1L), what = "RangeTrack")))
+        if (!all(vapply(object, is, logical(1L), what = "RangeTrack")))
             return("All components of CompositeTrack should be RangeTrack")
         return(TRUE)
     }
@@ -57,10 +57,12 @@ setMethod("merge", signature = c(x = "TnTTrack", y = "missing"),
 )
 
 merge_tracklist <- function (tracklist) {
-    stopifnot(all(vapply(tracklist, inherits, logical(1L), what = c("RangeTrack", "CompositeTrack"))))
+    for (i in seq_along(tracklist))
+        if (!(is(tracklist[[i]], "RangeTrack") || is(tracklist[[i]], "CompositeTrack")))
+            stop("All tracks have to inherit either 'RangeTrack' or 'CompositeTrack'")
     
     tracklist <- as.list(tracklist)
-    which.comp <- vapply(tracklist, inherits, logical(1L), what = "CompositeTrack")
+    which.comp <- vapply(tracklist, is, logical(1L), what = "CompositeTrack")
     tracklist[which.comp] <- lapply(tracklist[which.comp], trackData)
     tracklist <- c(tracklist, recursive = TRUE, use.names = FALSE)
     tracklist <- .consolidateSeqinfo(tracklist)
@@ -199,7 +201,6 @@ setMethod("seqlevelsInUse", signature = c(x = "CompositeTrack"),
 
 .range.track <- function (x, ..., with.revmap = FALSE, ignore.strand=FALSE, na.rm=FALSE) {
     li.tracks <- list(x, ...)
-    stopifnot(all(vapply(li.tracks, inherits, logical(1L), c("RangeTrack", "CompositeTrack"))))
     
     joingr <- function (li.gr) {
         li.gr <- lapply(unname(li.gr), granges)
@@ -207,13 +208,13 @@ setMethod("seqlevelsInUse", signature = c(x = "CompositeTrack"),
     }
     
     li.gr <- lapply(unname(li.tracks), function (track) {
-        if (inherits(track, "RangeTrack"))
+        if (is(track, "RangeTrack"))
             return(granges(trackData(track)))
-        if (inherits(track, "CompositeTrack")) {
+        if (is(track, "CompositeTrack")) {
             lgr <- lapply(trackData(track), trackData)
             return(joingr(lgr))
         }
-        stop()
+        stop(sprintf("Class %s is not supported.", class(track)))
     })
     
     inner_call <- function (...) {

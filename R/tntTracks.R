@@ -97,16 +97,16 @@ PosValTrackData <- function (pos, val, domain = numeric(), color = "black", tool
 }
 
 .is.nodomain <- function (t) {
-    if (inherits(t, "TnTTrack"))
+    if (is(t, "TnTTrack"))
         t <- trackData(t)
     d <- metadata(t)$domain
     return(is.null(d) || length(d) == 0)
 }
 getdomain <- function (t) {
-    if (inherits(t, "TnTTrack"))
+    if (is(t, "TnTTrack"))
         t <- trackData(t)
     
-    if (!inherits(t, "PosValTrackData"))
+    if (!is(t, "PosValTrackData"))
         return(NULL)
     
     if (.is.nodomain(t)) {
@@ -511,7 +511,7 @@ setMethod("compileTrackData", signature = "RangeTrackData",
         df <- as.data.frame(trackData, optional = TRUE) [
             c("start", "end", colnames(mcols(trackData)))]
         
-        if (inherits(trackData, "TxTrackData"))
+        if (is(trackData, "TxTrackData"))
             jc.data <- jc(
                 tnt.board.track.data.sync = ma(),
                 retriever = jc(tnr.range_data_retriever = jc(tnr.cp_tx_color_to_exon = df))

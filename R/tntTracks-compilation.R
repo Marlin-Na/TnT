@@ -15,7 +15,7 @@
     di.color <- list(color = {
         ## LineTrack and AreaTrack do not support multiple color values
         ## This is a tempoary solution
-        if (inherits(track, c("LineTrack", "AreaTrack"))) {
+        if (is(track, "LineTrack") || is(track, "AreaTrack")) {
             co <- unique(trackData(track)$color)
             if (length(co) > 1) {
                 # TODO: Also add warning in constructor?
@@ -35,7 +35,7 @@
     
     # Do not set domain in display any more, but normalize data from domain to 0..1
     di.domain <- list(domain = {
-        if (inherits(track, "PinTrack")) # TODO: This can be removed when
+        if (is(track, "PinTrack")) # TODO: This can be removed when
             c(0L, 1L)                    #       default value in upstream is fixed.
         else
             NULL
