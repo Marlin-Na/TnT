@@ -4,9 +4,6 @@ library(testthat)
 
 
 test_that("JSCascade Construction", {
-    expect_identical(jc, JSCascade)
-    expect_identical(ma, MultiArgs)
-    expect_identical(js, JavaScript)
     
     expect_error(jc(23L))
     expect_error(jc(ir = IRanges::IRanges(1,2)))
@@ -47,7 +44,7 @@ test_that("JSCascade to JS Conversion", {
 # Travis gives the following error:
 #     Error: package 'jsonlite' was installed by an R version with different internals;
 #     it needs to be reinstalled for use with this R version
-# Thus temporary disable some test
+# Thus temporarily disable some test
 skip_if_no_jsonlite <- function () {
     tryCatch(library(jsonlite), error = function (e) {
         skip("jsonlite can not be loaded...")

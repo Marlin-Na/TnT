@@ -502,7 +502,7 @@ setGeneric("compileTrackData",
 
 setMethod("compileTrackData", signature = "NoTrackData",
     function (trackData)
-        jc(tnt.board.track.data.empty = NoArg)
+        jc(tnt.board.track.data.empty = na)
 )
 
 setMethod("compileTrackData", signature = "RangeTrackData",

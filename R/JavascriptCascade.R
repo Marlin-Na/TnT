@@ -64,11 +64,14 @@ setClass("JavaScript", contains = "character")
 setClass("JSCascade", contains = "SimpleList")
 setClass("MultiArgs", contains = "SimpleList")
 
-JavaScript <- function (code) {
+
+#JavaScript <-
+js <- function (code) {
     new("JavaScript", code)
 }
 
-JSCascade <- function (...) {
+#JSCascade <-
+jc <- function (...) {
     lst <- list(...)
     
     # If the element is NULL, then drop the element from the list
@@ -77,16 +80,14 @@ JSCascade <- function (...) {
     ans
 }
 
-MultiArgs <- function (...) {
+#MultiArgs <-
+ma <- function (...) {
     new("MultiArgs", listData = list(...))
 }
 
-NoArg <- MultiArgs()
+#NoArg <-
+na <- ma()
 
-js <- JavaScript
-jc <- JSCascade
-ma <- MultiArgs
-na <- NoArg
 
 
 setGeneric("asJS",
@@ -163,13 +164,13 @@ setValidity("MultiArgs",
 setMethod("asJS", signature = "JSCascade",
     function (object) {
         chr <- .convertToJSChar(object)
-        JavaScript(chr)
+        js(chr)
     }
 )
 
 setMethod("asJC", signature = c(object = "list"),
     function (object)
-        do.call(JSCascade, object)
+        do.call(jc, object)
 )
 
 setMethod("asJC", signature = c(object = "JSCascade"),
