@@ -11,13 +11,13 @@ build.doc <- function (path) {
 
 build.install <- function (path) {
     build.doc(path)
-    message("------------  Start installing roxygen  -------------------")
+    message("------------  Start installing package  -------------------")
     devtools::install(path, quick = FALSE)
 }
 
 build.check <- function (path) {
     build.doc(path)
-    message("------------  Start checking roxygen  ---------------------")
+    message("------------  Start checking package  ---------------------")
     devtools::check(path)
 }
 
