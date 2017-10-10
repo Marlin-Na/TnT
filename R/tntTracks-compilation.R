@@ -22,7 +22,7 @@
                 warning("LineTrack and AreaTrack do not support multiple color values")
                 co <- co[1]
             }
-            if (length(co) == 0)
+            if (!length(co))
                 NULL  ## empty track?
             else
                 co
@@ -68,7 +68,7 @@
     # TODO: if all the colors are identical,
     #       we may modify the color callback to reduce the size of file
     col <- trackData(track)$color
-    if (length(col) == 0)
+    if (!length(col))
         return(track)
     col <- col2hex(col)
     trackData(track)$color <- col
@@ -94,7 +94,7 @@ setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
                          "PinTrack", "LineTrack", "AreaTrack")
         use.class <- use.classes[which.min(match(use.classes, super.classes))]
         
-        if (length(use.class) == 0)
+        if (!length(use.class))
             stop(sprintf("Method for %s class not implemented", class))
         
         feaname <- switch(use.class,

@@ -97,7 +97,7 @@ splitdf <- function (df, f) {
     # returns a list of tracks with the same Seqinfo
     stopifnot(is.list(li.tracks))
     
-    if (length(li.tracks) == 0)
+    if (!length(li.tracks))
         return(li.tracks)
     s <- .mergeSeqinfo(li.tracks)
     for (i in seq_along(li.tracks))
@@ -112,7 +112,7 @@ splitdf <- function (df, f) {
     # It accepts a list of Seqinfo object or a list of tracks, returns the merged Seqinfo.
     # It checks whether the objects are identical before applying `merge`,
     # so that it is fast in some cases.
-    if (length(li.seqinfo) == 0)
+    if (!length(li.seqinfo))
         return(Seqinfo())
     for (i in seq_along(li.seqinfo))
         if (!is(li.seqinfo[[i]], "Seqinfo"))

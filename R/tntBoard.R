@@ -221,7 +221,7 @@ wakeupBoard <- function (tntboard) {
 
 
 .filterSeq <- function (tntboard, use.seq = seqlevelsInUse(tntboard@ViewRange)) {
-    stopifnot(length(use.seq) == 1)
+    stopifnot(length(use.seq) == 1L)
     
     li.t <- tracklist(tntboard)
     li.t <- lapply(li.t, keepSeqlevels, value = use.seq, pruning.mode = "coarse")
@@ -231,13 +231,13 @@ wakeupBoard <- function (tntboard) {
 }
 
 .selectCoord <- function (tntboard) {
-    if (length(tntboard@CoordRange) == 1)
+    if (length(tntboard@CoordRange) == 1L)
         return(tntboard)
-    if (length(tntboard@CoordRange) > 1)
+    if (length(tntboard@CoordRange) > 1L)
         stop()
     
     viewrg <- tntboard@ViewRange
-    stopifnot(length(viewrg) == 1)
+    stopifnot(length(viewrg) == 1L)
     
     # Use seqlevel from the view range
     seqlv <- seqlevelsInUse(viewrg)
@@ -265,7 +265,7 @@ wakeupBoard <- function (tntboard) {
         rg <- range(tntboard, ignore.strand = TRUE)
         rg <- keepSeqlevels(rg, seqlv, pruning.mode = "coarse")
         
-        stopifnot(length(rg) == 1) # TODO: However, there will be cases that all the tracks are empty
+        stopifnot(length(rg) == 1L) # TODO: However, there will be cases that all the tracks are empty
         
         ranges(rg) * .7
     }
@@ -286,7 +286,7 @@ wakeupBoard <- function (tntboard) {
     viewrange0 <- tntboard@ViewRange
     tracklist0 <- tracklist(tntboard)
     
-    if (length(viewrange0) == 1) {
+    if (length(viewrange0) == 1L) {
         # Already specified
         ## Update the combined seqinfo
         comb.seqinfo <- do.call(merge, unname(lapply(tracklist0, seqinfo)))
@@ -297,7 +297,7 @@ wakeupBoard <- function (tntboard) {
         
         return(tntboard)
     }
-    if (length(viewrange0) > 1)
+    if (length(viewrange0) > 1L)
         stop()
     
     # Then length(viewrange0) == 0
@@ -306,13 +306,13 @@ wakeupBoard <- function (tntboard) {
         li.tseqs <- lapply(tracklist0, function (t) seqlevelsInUse(t))
         li.tseqs <- li.tseqs[lengths(li.tseqs) != 0]
         
-        if (length(li.tseqs) == 0) {
+        if (!length(li.tseqs)) {
             # No "InUse" seqlevels
             li.tseqs <- lapply(tracklist0, seqlevels)
             li.tseqs <- li.tseqs[lengths(li.tseqs) != 0]
         }
         
-        if (length(li.tseqs) == 0)
+        if (!length(li.tseqs))
             # All seqlevels are empty...
             character()
         else
@@ -320,7 +320,7 @@ wakeupBoard <- function (tntboard) {
     }
     
     sel.seq <- {
-        if (length(commonseqs) == 0)
+        if (!length(commonseqs))
             stop("No common seqlevel is found in the track list.")
         if (length(commonseqs) == 1)
             sel.seq <- commonseqs
@@ -469,7 +469,7 @@ wakeupBoard <- function (tntboard) {
 #     li.colors <- lapply(tracklist, function (t) t@Background@.Data)
 #     colors <- unique(unlist(li.colors))
 #     
-#     if (length(colors) == 0L || length(colors) >= 2L)
+#     if (!length(colors) || length(colors) >= 2L)
 #         default <- Biobase::mkScalar("white")
 #     else
 #         default <- Biobase::mkScalar(colors)

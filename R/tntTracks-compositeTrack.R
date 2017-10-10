@@ -82,10 +82,10 @@ merge_tracklist <- function (tracklist) {
         
         f <- function(x, w = c("label", "height", "background")) {
             w <- match.arg(w)
-            if (length(x) == 1)
-                return(x)
-            if (length(x) == 0)
+            if (!length(x))
                 return(NULL)
+            if (length(x) == 1L)
+                return(x)
             if (w == "label")
                 return(paste(paste(x[-length(x)], collapse = ", "), x[length(x)], sep = " and "))
             if (w == "height")

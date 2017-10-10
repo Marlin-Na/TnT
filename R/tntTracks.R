@@ -100,7 +100,7 @@ PosValTrackData <- function (pos, val, domain = numeric(), color = "black", tool
     if (is(track, "TnTTrack"))
         track <- trackData(track)
     d <- metadata(track)$domain
-    return(is.null(d) || length(d) == 0)
+    return(is.null(d) || !length(d))
 }
 getdomain <- function (track) {
     if (is(track, "TnTTrack"))
@@ -112,11 +112,11 @@ getdomain <- function (track) {
     if (.is.nodomain(track)) {
         # Domain is not specified, automatically generate one
         val <- track$val
-        if (length(na.omit(val)) == 0) {
+        if (!length(na.omit(val))) {
             min <- 0L
             max <- 1L
         }
-        else if (length(na.omit(val)) == 1) {
+        else if (length(na.omit(val)) == 1L) {
             a <- na.omit(val)[1]
             min <- min(c(a, 0))
             max <- max(c(a, 0))
@@ -191,7 +191,7 @@ GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "bl
         check.names = FALSE
     )
     
-    if (length(color) > 1) {
+    if (length(color) > 1L) {
         color <- color[[1]]
         msg <- sprintf("GeneTrackDataFromTxDb does not support multiple color values, use %s", color)
         warning(msg)
@@ -421,10 +421,10 @@ setValidity("PosValTrackData",
         if (!is.numeric(val))
             return("'val' meta-column should be a numeric vector")
         
-        if (is.null(domain) || length(domain) == 0)
+        if (is.null(domain) || !length(domain))
             NULL # Domain is not specified, but it's okay
         else {
-            if (!is.numeric(domain) || length(domain) != 2)
+            if (!is.numeric(domain) || length(domain) != 2L)
                 return("Domain is not a length-two numeric vector")
             if (domain[1] > min(val)) # only give warnings
                 warning(

@@ -115,7 +115,7 @@ setValidity("JSCascade",
         if (any(isnull))
             return("NULL is not allowed in JSCascade")
       # Ensure the names are specified
-        if (length(lst) > 0)
+        if (length(lst))
             if (is.null(names(lst)) || any(names(lst) == ""))
                 return("Names must be specified.")
       # Only allow certain types of element
