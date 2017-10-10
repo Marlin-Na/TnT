@@ -7,7 +7,7 @@ setClass("CompositeTrack", contains = "TnTTrack", slots = c(Data = "CompositeTra
 
 setValidity("CompositeTrackData",
     function (object) {
-        if (!all(vapply(object, is, logical(1L), what = "RangeTrack")))
+        if (!all(vapply(object, is, logical(1L), class2 = "RangeTrack")))
             return("All components of CompositeTrack should be RangeTrack")
         return(TRUE)
     }
@@ -62,7 +62,7 @@ merge_tracklist <- function (tracklist) {
             stop("All tracks have to inherit either 'RangeTrack' or 'CompositeTrack'")
     
     tracklist <- as.list(tracklist)
-    which.comp <- vapply(tracklist, is, logical(1L), what = "CompositeTrack")
+    which.comp <- vapply(tracklist, is, logical(1L), class2 = "CompositeTrack")
     tracklist[which.comp] <- lapply(tracklist[which.comp], trackData)
     tracklist <- c(tracklist, recursive = TRUE, use.names = FALSE)
     tracklist <- .consolidateSeqinfo(tracklist)

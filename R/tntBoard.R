@@ -77,7 +77,7 @@ TnTBoard <- function (tracklist, view.range = GRanges(),
     if (is(tracklist, "TnTTrack"))
         tracklist <- list(tracklist)
     else
-        stopifnot(all(vapply(tracklist, is, logical(1L), what = "TnTTrack")))
+        stopifnot(all(vapply(tracklist, is, logical(1L), class2 = "TnTTrack")))
     
     if (is.numeric(coord.range)) {
         if (length(coord.range) == 2L)
