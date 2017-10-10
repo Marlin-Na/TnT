@@ -173,7 +173,7 @@ setMethod("seqinfo", signature = "CompositeTrack",
 )
 
 #' @rdname seqinfo
-setMethod("seqinfo<-", signature = c(x = "CompositeTrack"),
+setReplaceMethod("seqinfo", signature = c(x = "CompositeTrack"),
     function (x, new2old, pruning.mode, value) {
         ## We need to make sure the sub-tracks have the same seqinfo, otherwise
         ## functions like `seqlevels<-` will not work correctly.

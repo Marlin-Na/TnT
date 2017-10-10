@@ -649,7 +649,7 @@ setClass("AreaTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrack
 #' seqinfo(btrack2)
 #' seqinfo(ctrack)
 #' seqinfo(board)
-setMethod("seqinfo<-", signature = c(x = "RangeTrack"),
+setReplaceMethod("seqinfo", signature = c(x = "RangeTrack"),
     function (x, new2old, pruning.mode, value) {
         trackData(x) <- `seqinfo<-`(x = trackData(x), new2old = new2old,
                                     pruning.mode = pruning.mode, value = value)
@@ -717,7 +717,7 @@ setMethod("$", signature = c(x = "TnTTrack"),
 
 #' @rdname trackdata
 #' @param name Passed to the inner method for track data.
-setMethod("$<-", signature = c(x = "TnTTrack"),
+setReplaceMethod("$", signature = c(x = "TnTTrack"),
     function (x, name, value) {
         s <- match.call()
         s$x <- bquote(TnT::trackData(.(s$x)))
@@ -862,14 +862,14 @@ setMethod("tooltip", signature = "TnTTrack",
     }
 )
 #' @rdname tooltip
-setMethod("tooltip<-", signature = c(x = "TrackData", value = "data.frame"),
+setReplaceMethod("tooltip", signature = c(x = "TrackData", value = "data.frame"),
     function (x, value) {
         x$tooltip <- value
         x
     }
 )
 #' @rdname tooltip
-setMethod("tooltip<-", signature = c(x = "TnTTrack", value = "data.frame"),
+setReplaceMethod("tooltip", signature = c(x = "TnTTrack", value = "data.frame"),
     function (x, value) {
         tooltip(trackData(x)) <- value
         x
