@@ -112,8 +112,8 @@ TnTGenome <- function (tracklist, view.range = GRanges(),
 if (FALSE) {
     library(GenomicFeatures)
     gr <- GRanges("chr12", IRanges(1:4, width = 2))
-    t <- BlockTrack(gr)
-    b <- TnTBoard(t)
+    bt <- BlockTrack(gr)
+    b <- TnTBoard(bt)
     tracklist(b)
 }
 

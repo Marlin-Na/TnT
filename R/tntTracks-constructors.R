@@ -4,13 +4,13 @@
 
 
 new_track <- function (class, data, display = list(), background = NULL, height = NULL, label = NULL) {
-    t <- new(Class = class, Data = data, Display = display)
+    track <- new(Class = class, Data = data, Display = display)
     if (length(label) > 1L)
         label <- paste(label, collapse = " ")
-    trackSpec(t, "background") <- background
-    trackSpec(t, "height") <- height
-    trackSpec(t, "label") <- label
-    t
+    trackSpec(track, "background") <- background
+    trackSpec(track, "height")     <- height
+    trackSpec(track, "label")      <- label
+    track
 }
 
 

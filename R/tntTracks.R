@@ -96,22 +96,22 @@ PosValTrackData <- function (pos, val, domain = numeric(), color = "black", tool
     trackdata
 }
 
-.is.nodomain <- function (t) {
-    if (is(t, "TnTTrack"))
-        t <- trackData(t)
-    d <- metadata(t)$domain
+.is.nodomain <- function (track) {
+    if (is(track, "TnTTrack"))
+        track <- trackData(track)
+    d <- metadata(track)$domain
     return(is.null(d) || length(d) == 0)
 }
-getdomain <- function (t) {
-    if (is(t, "TnTTrack"))
-        t <- trackData(t)
+getdomain <- function (track) {
+    if (is(track, "TnTTrack"))
+        track <- trackData(track)
     
-    if (!is(t, "PosValTrackData"))
+    if (!is(track, "PosValTrackData"))
         return(NULL)
     
-    if (.is.nodomain(t)) {
+    if (.is.nodomain(track)) {
         # Domain is not specified, automatically generate one
-        val <- t$val
+        val <- track$val
         if (length(na.omit(val)) == 0) {
             min <- 0L
             max <- 1L
@@ -133,7 +133,7 @@ getdomain <- function (t) {
         return(c(min, max))
     }
     else
-        return(metadata(t)$domain)
+        return(metadata(track)$domain)
 }
 
 setMethod("show", signature = "PosValTrackData",
@@ -878,21 +878,21 @@ setReplaceMethod("tooltip", signature = c(x = "TnTTrack", value = "data.frame"),
 
 # EXAMPLE
 if (FALSE) local({
-    t <- BlockTrack(GRanges("chr12", IRanges(1:15 * 100, width = 10), label = paste("range", 1:15)))
+    bt <- BlockTrack(GRanges("chr12", IRanges(1:15 * 100, width = 10), label = paste("range", 1:15)))
     gr <- GRanges("chr12", IRanges(1:15 * 100, width = 10), label = paste("range", 1:15))
-    t <- BlockTrack(gr)
-    trackData(t)
+    bt <- BlockTrack(gr)
+    trackData(bt)
     # Warning messages:
     #     1: In (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE,  :
     #        row names were found from a short variable and have been discarded
     #     2: In (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE,  :
     #        row names were found from a short variable and have been discarded
-    tooltip(t)
-    tooltip(t) <- c(1:15)
-    tooltip(t) <- data.frame(start = start(gr))
+    tooltip(bt)
+    tooltip(bt) <- c(1:15)
+    tooltip(bt) <- data.frame(start = start(gr))
     
-    compileTrack(t)
-    TnTBoard(list(t), view.range = range(trackData(t)))
+    compileTrack(bt)
+    TnTBoard(list(bt), view.range = range(trackData(bt)))
 })
 
 
