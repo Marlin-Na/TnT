@@ -913,6 +913,7 @@ setMethod("show", signature = "RangeTrack",
         dout[-1] <- paste0("|  ", dout[-1])
         dout <- paste(dout, collapse = "\n")
         cat(dout)
+        cat("\n")
     }
 )
 
