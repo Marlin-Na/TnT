@@ -59,11 +59,14 @@ TxTrackFromGRanges(gr, label = deparse(substitute(gr)), color = "red",
 
 \item{tooltip}{A data frame that is parallel to range or pos.}
 
-\item{color}{Character vector that sets the color of the features.
+\item{color}{Character vector or integer vector that sets the color of the features.
+It can be color names, hexadecimal string or positive integer \code{i} meaning
+\code{\link{palette}()[i]}, as described in \code{\link[grDevices]{col2rgb}}.
 It can be parallel to the data (i.e. have the same length) thus sets colors
 of each individual feature.}
 
-\item{background}{Length-one character vector that sets background of the track.}
+\item{background}{Length-one character vector that sets background of the track,
+could be NULL.}
 
 \item{height}{Length-one numeric vector that sets height of the track.}
 
@@ -85,7 +88,7 @@ source, and will be rendered as transcripts. Two meta-columns ("type", "tx_id") 
 the grouping.}
 }
 \value{
-Returns an object that inherits "TnTTrack" class.
+Returns an object that extends "TnTTrack" class.
 }
 \description{
 Track Constructors
