@@ -843,7 +843,7 @@ setMethod("show", signature = "RangeTrack",
     function (object) {
         background <- trackSpec(object, "background")
         if (is.null(background))
-            background <- par("bg")
+            background <- graphics::par("bg")
         height     <- trackSpec(object, "height")
         label      <- trackSpec(object, "label")
         cat("A", class(object), "\n")
