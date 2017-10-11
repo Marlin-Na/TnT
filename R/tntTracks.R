@@ -61,7 +61,14 @@ RangeTrackData <- function (range, color = "black", tooltip = mcols(range), key 
         else
             as(range, "GRanges")
     
-    color <- if (length(range)) color else character(0)
+    color <- {
+        # TODO: Convert factor to integer or character? And which is better?
+        if (!length(range))
+            color <- character(0)
+        if (is.numeric(color))
+            color <- as.integer(color)
+        color
+    }
     
     tooltip <-
         if (is.null(tooltip))
@@ -449,11 +456,12 @@ setValidity("RangeTrackData",
                 return("Missing 'tooltip' meta-column in RangeTrackData")
             else
                 return("The 'tooltip' meta-column should be a data frame")
-        if (!is.character(object$color))
+        if (!is.character(object$color) && !is.integer(object$color)) {
             if (is.null(object$color))
                 return("Missing 'color' meta-column in RangeTrackData")
             else
-                return("The 'color' meta-column should be a character")
+                return("The 'color' meta-column should be either character or integer")
+        }
         
         k <- object$key
         if (is.null(k))

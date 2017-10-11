@@ -25,13 +25,17 @@ new_track <- function (class, data, display = list(), background = NULL, height 
 #'
 #' @param label Character, shown as label of the track on the left, could be NULL.
 #' @param tooltip A data frame that is parallel to range or pos.
-#' @param color Character vector that sets the color of the features.
+#' @param color
+#'     Character vector or integer vector that sets the color of the features.
+#'     It can be color names, hexadecimal string or positive integer \code{i} meaning
+#'     \code{\link{palette}()[i]}, as described in \code{\link[grDevices]{col2rgb}}.
 #'     It can be parallel to the data (i.e. have the same length) thus sets colors
 #'     of each individual feature.
-#' @param background Length-one character vector that sets background of the track.
+#' @param background Length-one character vector that sets background of the track,
+#'     could be NULL.
 #' @param height Length-one numeric vector that sets height of the track.
 #' 
-#' @return Returns an object that inherits "TnTTrack" class.
+#' @return Returns an object that extends "TnTTrack" class.
 #' @seealso
 #'     You can find various examples at \url{http://tnt.marlin.pub/articles/examples/},
 #'     also see \code{\link{composite-track}} on how to create a composite track.
