@@ -119,23 +119,6 @@ setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
         track
     }
 )
-# EXAMPLE
-if (FALSE) {
-    gr <- GRanges("chr12", IRanges(1:4 * 10 + 1, width = 5))
-    mcols(gr) <- data.frame(check.names = FALSE,
-        Location = "",
-        Chromosome = 12, Start = start(gr), End = end(gr),
-        Description = "",
-        "What's for?" = "Unknown"
-    )
-    track <- BlockTrack(gr)
-    
-    track
-    wakeupTrack(track)
-    
-    TnTBoard(list(track), view.range = GRanges("chr12", IRanges(1, 100)))
-}
-
 
 # setGeneric("compileTrack",
 #            function (tntTrack) standardGeneric("compileTrack"))
@@ -170,18 +153,6 @@ compileTrack <- function (tntTrack, wakeup = TRUE) {
     jc.data <- jc(data = compileTrackData(trackData(tntTrack)))
     c(jc.spec, jc.display, jc.data)
 }
-
-## Example
-if (FALSE) local({
-    btrack <- BlockTrack(GRanges("chr12", IRanges(21,234)))
-    compileTrack(btrack)
-    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
-    gtrack <- GeneTrack(txdb, seqlevel = "chr3")
-    compileTrack(gtrack)
-    ptrack <- PinTrack(GRanges("chr21", IRanges(1:10, width = 1), value = runif(10)))
-    compileTrack(ptrack)
-})
-
 
 
 

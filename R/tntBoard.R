@@ -108,15 +108,6 @@ TnTGenome <- function (tracklist, view.range = GRanges(),
 }
 
 
-## EXAMPLE
-if (FALSE) {
-    library(GenomicFeatures)
-    gr <- GRanges("chr12", IRanges(1:4, width = 2))
-    bt <- BlockTrack(gr)
-    b <- TnTBoard(bt)
-    tracklist(b)
-}
-
 
 
 

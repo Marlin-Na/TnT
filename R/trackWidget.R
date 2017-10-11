@@ -60,43 +60,10 @@ trackWidget <- function (tntdef, elementId = NULL) {
         elementId = elementId
     )
 }
-## Example
-if (interactive()) local({
-    trackWidget('
-    var axisTrack = tnt.board.track()
-        .height(20)
-        .color("white")
-        .display(tnt.board.track.feature.axis());
 
-    var blockTrack = tnt.board.track()
-        .height(30)
-        .color("grey")
-        .data(tnt.board.track.data.sync()
-            .retriever(function () {
-                return [
-                    {start: 200, end: 350},
-                    {start: 400, end: 450}
-                ]
-            })
-        )
-        .display(
-            tnt.board.track.feature.block()
-            .color("red")
-        );
-
-    var board = tnt.board()
-        .from(100)
-        .to(500)
-        .min(0)
-        .max(1000)
-        .add_track(axisTrack)
-        .add_track(blockTrack);
-    board
-    ')
-})
+## Example: vignettes/examples/Notshown-trackWidget.Rmd
 
 
-# TODO: provide shiny bindings
 
 
 #' Shiny bindings for TnT

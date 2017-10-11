@@ -20,13 +20,12 @@
 ## Templates for JS Callback and Promise     ------------------------------------
 
 tooltipCallback <- function (header, entries) {
+    # Example:
+    #   tooltipCallback(header = "Tooltip Header",
+    #                   entries = c("Start", "End", "Description"))
     stopifnot(length(header) == 1)
     jc(tnr.tooltip_callback = ma(header, entries))
 }
-# EXAMPLE
-if (interactive()) local({
-    tooltipCallback(header = "Tooltip Header", entries = c("Start", "End", "Description"))
-})
 
 
 
@@ -171,14 +170,6 @@ GeneTrackData <- function (range, labels = paste("Gene", mcols(range)$gene_id),
     validObject(range)
     range
 }
-### EXAMPLE
-if (FALSE) {
-    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
-    gene <- genes(txdb, columns = c("gene_id", "tx_id"))
-    GeneTrackData(gene[1:4])
-    ir <- IRanges(1:3, width = 10)
-    GeneTrackData(ir, labels = paste("gene", 1:3))
-}
 
 GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "black") {
     seqlevel.ori <- seqlevels(txdb)
@@ -205,11 +196,6 @@ GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "bl
     }
     
     GeneTrackData(range = gr, labels = labels, color = color, tooltip = tooltip)
-}
-### EXAMPLE
-if (FALSE) {
-    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
-    GeneTrackDataFromTxDb(txdb, c("chrX", "chrY"))
 }
 
 TxTrackDataFromGRanges <- function (gr, type = gr$type, tx_id = gr$tx_id, tx_name = gr$tx_name,
@@ -326,19 +312,6 @@ TxTrackDataFromGRangesList <- function (grl, color = "red", tooltip = mcols(grl)
     gr.txs$exons <- ldf.exons
     new("TxTrackData", gr.txs)
 }
-### EXAMPLE
-if (FALSE) {
-    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
-    grl <- exonsBy(txdb)[1:3]
-    a <- TxTrackDataFromGRangesList(grl)
-    a[1]$key
-    # When one of the GRanges is empty
-    grl$`1` <- grl$`1`[numeric(0)]
-    b <- TxTrackDataFromGRangesList(grl)
-    b[1]$key
-    compileTrackData(b)
-}
-
 
 
 TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "red") {
@@ -537,13 +510,6 @@ setMethod("compileTrackData", signature = "RangeTrackData",
         jc.data
     }
 )
-# EXAMPLE
-if (FALSE) local({
-    data <- RangeTrackData(range = IRanges::IRanges(1:4, 5:8),
-                           tooltip = data.frame(start = 1:4, width = 5))
-    compileTrackData(data)
-    compileTrackData(data, full = TRUE)
-})
 
 setMethod("compileTrackData", signature = "PosTrackData",
     function (trackData, full = FALSE) {
@@ -586,26 +552,7 @@ setMethod("compileTrackData", signature = "PosValTrackData",
     }
 )
 
-##EXAMPLE
-if (FALSE) {
-    gpos <- GRanges("chr12", IRanges(seq(1, 10, 3), width = 1))
-    mcols(gpos) <- as.data.frame(gpos)
-    pt <- PosTrackData(gpos)
-    compileTrackData(pt)
-    compileTrackData(pt, full = TRUE)
-    pt <- PosValTrackData(gpos, val = start(gpos))
-    compileTrackData(pt)
-    compileTrackData(pt, full = TRUE)
-}
 
-
-
-# EXAMPLE
-if (FALSE) local({
-    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
-    tdata <- TxTrackDataFromTxDb(txdb, "chrUn_gl000221")
-    compileTrackData(tdata)
-})
 
 
 
@@ -887,25 +834,6 @@ setReplaceMethod("tooltip", signature = c(x = "TnTTrack", value = "data.frame"),
         x
     }
 )
-
-# EXAMPLE
-if (FALSE) local({
-    bt <- BlockTrack(GRanges("chr12", IRanges(1:15 * 100, width = 10), label = paste("range", 1:15)))
-    gr <- GRanges("chr12", IRanges(1:15 * 100, width = 10), label = paste("range", 1:15))
-    bt <- BlockTrack(gr)
-    trackData(bt)
-    # Warning messages:
-    #     1: In (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE,  :
-    #        row names were found from a short variable and have been discarded
-    #     2: In (function (..., row.names = NULL, check.rows = FALSE, check.names = TRUE,  :
-    #        row names were found from a short variable and have been discarded
-    tooltip(bt)
-    tooltip(bt) <- c(1:15)
-    tooltip(bt) <- data.frame(start = start(gr))
-    
-    compileTrack(bt)
-    TnTBoard(list(bt), view.range = range(trackData(bt)))
-})
 
 
 

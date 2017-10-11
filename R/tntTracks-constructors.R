@@ -133,17 +133,6 @@ FeatureTrack <- function (range, label = deparse(substitute(range)),
     new_track("GeneTrack", background = background, height = height,
               label = label, data = data, display = list())
 }
-##EXAMPLE
-if (FALSE) {
-    library(GenomicFeatures)
-    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
-    gr <- genes(txdb)
-    ft <- FeatureTrack(gr)
-    seqlevels(ft, pru = "coarse") <- "chr12"
-    compileTrack(ft)
-    TnTBoard(ft, GRanges("chr12", IRanges(1,10000)))
-    
-}
 
 #' @rdname track-constructors
 #' @param grl For `GroupFeatureTrack` function, a GRangesList object that represents grouped ranges
@@ -169,15 +158,6 @@ GroupFeatureTrack <- function (grl, label = deparse(substitute(grl)),
                                        labels = names)
     new_track("TxTrack", background = background, height = height,
               label = label, data = data, display = list())
-}
-# EXAMPLE
-if (FALSE) {
-    library(GenomicFeatures)
-    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
-    exby <- exonsBy(txdb)
-    names(exby) <- paste("tx", names(exby))
-    gft <- GroupFeatureTrack(exby)
-    TnTBoard(gft, viewrange = GRanges("chrX", IRanges(1000, 100000)))
 }
 
 #' @rdname track-constructors

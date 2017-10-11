@@ -92,9 +92,22 @@ tntdef <- jc(
     add_track = axisTrack,
     add_track = blockTrack
 )
+asJS(tntdef)
 trackWidget(tntdef)
 ```
 
+```{r}
+genome <- jc(
+    tnt.board.genome = ma(),
+    species = "human",
+    chr = 10,
+    from = 410000,
+    to = 420000,
+    min_coord = js("new Promise(function (res) {res(-10000)})"),
+    max_coord = js("new Promise(function (res) {res(420000)})")
+)
+trackWidget(genome)
+```
 
 <br/> <br/>
 

@@ -5,55 +5,7 @@
 ### It can be created with the function "jc" and possibly "ma", then can be
 ### converted to "JavaScript" with "asJS".
 ###
-### The following is an example of using JSCascade to construct a TnT browser
-
-### EXAMPLE
-if (FALSE) local({
-    axisTrack <- jc(
-        tnt.board.track = ma(),
-        height = 20,
-        color = "white",
-        display = jc(tnt.board.track.feature.axis = ma())
-    )
-    blockTrack <- jc(
-        tnt.board.track = ma(),
-        height = 30,
-        color = "yellow",
-        data = jc(
-            tnt.board.track.data.sync = ma(),
-            retriever = js("function() {return [{start : 200, end : 350}]}")
-        ),
-        display = jc(
-            tnt.board.track.feature.block = ma(),
-            color = "blue",
-            index = js("function (d) {return d.start}")
-        )
-    )
-    tntdef <- jc(
-        tnt.board = ma(),
-        from = 0,
-        to = 500,
-        min = 50,
-        max = 1000,
-        add_track = axisTrack,
-        add_track = blockTrack
-    )
-    tntdef
-    asJS(tntdef)
-    trackWidget(tntdef)
-    
-    genome <- jc(
-        tnt.board.genome = ma(),
-        species = "human",
-        chr = 10,
-        from = 410000,
-        to = 420000,
-        min_coord = js("new Promise(function (res) {res(-10000)})"),
-        max_coord = js("new Promise(function (res) {res(420000)})")
-    )
-    trackWidget(genome)
-})
-### EXAMPLE END
+### Example: vignettes/examples/Notshown-trackWidget.Rmd
 
 
 

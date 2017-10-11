@@ -1,0 +1,60 @@
+---
+title: "Track Wakeup"
+---
+
+```{r}
+expose_all <- function (package) {
+    attachname <- paste0(package, "_all")
+    while (attachname %in% search()) detach(attachname, character.only = TRUE)
+    pkgns <- loadNamespace(package)
+    attach(pkgns, name = attachname)
+    invisible(pkgns)
+}
+suppressMessages(expose_all("TnT"))
+```
+
+
+## Track Wakeup
+
+```{r}
+gr <- GRanges("chr12", IRanges(1:4 * 10 + 1, width = 5))
+mcols(gr) <- data.frame(check.names = FALSE,
+    Location = "",
+    Chromosome = 12, Start = start(gr), End = end(gr),
+    Description = "",
+    "What's for?" = "Unknown"
+)
+track <- BlockTrack(gr)
+w.track <- wakeupTrack(track)
+
+trackSpec(track)
+trackSpec(w.track)
+
+track@Display
+w.track@Display
+
+track$color
+w.track$color
+
+compileTrack(track)
+
+TnTBoard(list(track), view.range = GRanges("chr12", IRanges(1, 100)))
+```
+
+<br/> <br/>
+
+
+## TODO: CompositeTrack Wakeup
+
+## Misc-PinTrack-Compilation
+
+```{r}
+ptrack <- PinTrack(GRanges("chr21", IRanges(1:2, width = 1), value = runif(2)))
+compileTrack(ptrack)
+```
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
