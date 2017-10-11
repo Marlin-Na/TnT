@@ -234,7 +234,7 @@ wakeupBoard <- function (tntboard) {
     if (length(tntboard@CoordRange) == 1L)
         return(tntboard)
     if (length(tntboard@CoordRange) > 1L)
-        stop()
+        stop("Length of CoordRange is larger than one.")
     
     viewrg <- tntboard@ViewRange
     stopifnot(length(viewrg) == 1L)
@@ -298,7 +298,7 @@ wakeupBoard <- function (tntboard) {
         return(tntboard)
     }
     if (length(viewrange0) > 1L)
-        stop()
+        stop("Length of ViewRange is larger than one.")
     
     # Then length(viewrange0) == 0
     
@@ -393,7 +393,7 @@ wakeupBoard <- function (tntboard) {
     if (length(zoomalo) == 1)
         return(tntboard)
     if (length(zoomalo) > 1)
-        stop()
+        stop("Length of ZoomAllow is larger than one.")
     
     # Then ZoomAllow is not set
     coord <- tntboard@CoordRange

@@ -92,7 +92,7 @@ merge_tracklist <- function (tracklist) {
                 return(na.fail(max(na.omit(x))))
             if (w == "background")
                 return(x[1])
-            stop()
+            stop("<internal> Unmatched argument")
         }
         list(
             label      = f(labels,      "label"),

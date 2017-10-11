@@ -105,7 +105,7 @@ setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
             PinTrack     = "tnt.board.track.feature.pin",
             LineTrack    = "tnt.board.track.feature.line",
             AreaTrack    = "tnt.board.track.feature.area",
-            stop()
+            stop("<internal> Unmatched track class")
         )
         
         ### TEMP: TO REMOVE IN FUTURE, AND MAKE SURE KEY IS UNIQUE

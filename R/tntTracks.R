@@ -235,8 +235,12 @@ TxTrackDataFromGRanges <- function (gr, type = gr$type, tx_id = gr$tx_id, tx_nam
     gr <- gr[gr$type %in% c("exon", "cds")]
     gr.tx <- {
         gr.tx <- split(gr, gr$tx_id, drop = TRUE)
-        gr.tx <- range(gr.tx)
-        gr.tx <- if (any(lengths(gr.tx) != 1L)) stop() else unlist(gr.tx)
+        gr.tx <- range(gr.tx)  # Becomes a GRangesList
+        if (any(lengths(gr.tx) != 1L)) {
+            # TODO: to be more verbose
+            stop("Features on the same transcript can not locate on different strands")
+        }
+        gr.tx <- unlist(gr.tx) # To GRanges
         
         gr.tx$tx_id <- gr$tx_id[match(names(gr.tx), gr$tx_id)] # match character to integer
         gr.tx$tx_id <- na.fail(gr.tx$tx_id)
