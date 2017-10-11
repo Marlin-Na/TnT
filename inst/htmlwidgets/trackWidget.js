@@ -27,7 +27,7 @@ HTMLWidgets.widget({
                 }
                 
                 tnt.tooltip.table()
-                    .width(250)
+                    .width(180)
                     .call(this, {
                         header: header,
                         rows: tooltip_rows
