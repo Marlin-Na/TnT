@@ -10,6 +10,7 @@ expose_all <- function (package) {
     attach(pkgns, name = attachname)
     invisible(pkgns)
 }
+library(GenomicFeatures)
 suppressMessages(expose_all("TnT"))
 ```
 
