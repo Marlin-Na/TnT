@@ -2,10 +2,9 @@
 title: "Colors of Track"
 ---
 
-Colors of features in a track can be specified with a character vector which will
-be expanded to the same length of track data. The values will be part of the track
-data and can be modified after the track is constructed.
-
+Colors of features in a track can be specified with a character vector or a positive
+integer vector which will be expanded to the same length of track data. The values will
+be part of the track data and can be modified after the track is constructed.
 
 ```{r}
 suppressPackageStartupMessages({
@@ -32,22 +31,28 @@ TnT::TnTBoard(track)
 
 ## Use Color Palettes
 
-R have functions to assist the picking of colors, by which a qualitative value
-can be mapped to colors, e.g. the `rainbow` function.
+Colors can be also specified with a positive integer vector `i`, meaning `palette()[i]`,
+as in R base graphics.
 
 ```{r}
-# A helper function
-showCols <- function (colors) {
-    data <- GRanges("Unknown", IRanges(seq_along(colors), width = 2), "Color" = colors)
-    track <- TnT::BlockTrack(data, color = data$"Color", label = NULL)
-    TnT::TnTBoard(track, view.range = range(data))
-}
-showCols(rainbow(6))
-showCols(heat.colors(6))
-showCols(terrain.colors(6))
-showCols(topo.colors(6))
-showCols(cm.colors(6))
+data <- GRanges("Unknown", IRanges(1:6, width = 2), "Color" = 1:6)
+track <- TnT::BlockTrack(data, color = data$"Color", label = NULL)
+board <- TnT::TnTBoard(track, view.range = range(data))
+board
 ```
+
+You can use color palette to change the mapping of colors.
+
+```{r}
+grDevices::palette(grDevices::rainbow(6))
+board
+```
+
+```{r}
+grDevices::palette(grDevices::terrain.colors(6))
+board
+```
+
 
 ## Gene Colors
 
@@ -56,17 +61,22 @@ This example shows a gene track that genes have different colors based on their 
 First is to get the data from EnsDb.
 
 ```{r}
-library(EnsDb.Hsapiens.v75)
+suppressPackageStartupMessages(
+    library(EnsDb.Hsapiens.v75)
+)
 gene <- genes(EnsDb.Hsapiens.v75)
 ```
 
-TnT has defined a helper function `mapcol` to scale qualitative values to colors.
-We supply the scaled color to the track constructor.
+In the track constructor, specify the colors of features by converting the
+`gene_biotype` to integer vector. Then set the color palette and build the
+browser.
 
 ```{r}
 genetrack <- TnT::FeatureTrack(gene, tooltip = as.data.frame(gene),
-                               color = TnT::mapcol(gene$gene_biotype,
-                                                   palette.fun = grDevices::rainbow))
+                               color = as.integer(factor(gene$gene_biotype)))
+# Set color palette
+palette(terrain.colors(length(unique(gene$gene_biotype))))
+
 TnT::TnTGenome(genetrack, view.range = gene[gene$symbol == "BRCA2"][1] * .5)
 ```
 
