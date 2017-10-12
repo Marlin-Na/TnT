@@ -23,6 +23,36 @@
 NULL
 
 
+#' Save a TnTBoard to an HTML file
+#' 
+#' A simple wrapper of \code{\link[htmlwidgets]{saveWidget}}, which saves a
+#' TnTBoard/TnTGenome object to an HTML file (e.g. for sharing with others).
+#'
+#' @param tntdef A TnTBoard/TnTGenome object to save.
+#' @param file,selfcontained,libdir,background,knitrOptions
+#'     Passed to \code{\link[htmlwidgets]{saveWidget}}.
+#'
+#' @return NULL
+#' @export
+#' @examples
+#' data <- GRanges("chr2", IRanges(c(6,9,42), width = 1),
+#'                 value = c(0.3, 0.5, 0.9))
+#' track <- PinTrack(data, label = NULL, background = "green")
+#' genome <- TnTGenome(list(track))
+#' destfile <- tempfile(fileext = ".html")
+#' destfile
+#' saveTnT(genome, destfile)
+#' \dontrun{
+#' utils::browseURL(destfile)
+#' }
+saveTnT <- function (tntdef, file, selfcontained = TRUE, libdir = NULL,
+                     background = "white", knitrOptions = list()) {
+    stopifnot(is(tntdef, "TnTBoard"))
+    tntdef <- trackWidget(tntdef)
+    htmlwidgets::saveWidget(tntdef, file, selfcontained, libdir, background, knitrOptions)
+}
+
+
 
 #' Scale Qualitative Values to Color
 #' 
