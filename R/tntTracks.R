@@ -224,7 +224,7 @@ TxTrackDataFromGRanges <- function (gr, type = gr$type, tx_id = gr$tx_id, tx_nam
         gr.tx <- range(gr.tx)  # Becomes a GRangesList
         if (any(lengths(gr.tx) != 1L)) {
             # TODO: to be more verbose
-            stop("Features on the same transcript can not locate on different strands")
+            stop("Features in the same group can not locate on different strands")
         }
         gr.tx <- unlist(gr.tx) # To GRanges
         
