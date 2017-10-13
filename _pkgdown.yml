@@ -84,6 +84,7 @@ reference:
   - title: Utils
     desc: Some small util functions.
     contents:
+    - '`saveTnT`'
     - '`mapcol`'
     - '`strandlabel`'
     - '`trackWidget`'
