@@ -89,13 +89,10 @@ setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
         class <- class(track)
         
         # Simulate a method dispatch
-        super.classes <- c(class, getAllSuperClasses(getClass(class)))
-        use.classes <- c("BlockTrack", "GeneTrack", "TxTrack", "VlineTrack",
-                         "PinTrack", "LineTrack", "AreaTrack")
-        use.class <- use.classes[which.min(match(use.classes, super.classes))]
-        
-        if (!length(use.class))
-            stop(sprintf("Method for %s class not implemented", class))
+        use.class <- match.class(class,
+            c("BlockTrack", "GeneTrack", "TxTrack", "VlineTrack",
+              "PinTrack", "LineTrack", "AreaTrack")
+        )
         
         feaname <- switch(use.class,
             BlockTrack   = "tnt.board.track.feature.block",
