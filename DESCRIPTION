@@ -1,6 +1,6 @@
 Package: TnT
 Title: Interactive Visualization for Genomic Features
-Version: 0.99.8
+Version: 0.99.9
 Authors@R: c(person("Jialin", "Ma", email="marlin-@gmx.cn", role = c("cre", "aut")),
             person("Miguel", "Pignatelli", email="emepyc@gmail.com", role=c("aut")),
             person("Toby", "Hocking", email="toby.hocking@r-project.org", role = c("aut")))
