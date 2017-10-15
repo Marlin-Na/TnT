@@ -23,6 +23,22 @@
 NULL
 
 
+
+match.class <- function (class, choices) {
+    # Match a class to a list of known classes
+    #   (i.e. matching the first direct superclass in that list)
+    #   It can be used to simulate a method dispatch.
+    super.classes <- c(class, getAllSuperClasses(getClass(class)))
+    matched <- choices[which.min(match(choices, super.classes))]   
+    
+    if (!length(matched))
+        stop(sprintf("Unmatched class %s", sQuote(class)))
+    if (! matched %in% choices) # Sanity check
+        stop("<internal> Wrongly matched class")
+    matched
+}
+
+
 #' Save a TnTBoard to an HTML file
 #' 
 #' A simple wrapper of \code{\link[htmlwidgets]{saveWidget}}, which saves a
