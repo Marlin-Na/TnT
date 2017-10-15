@@ -6,3 +6,5 @@
 inst/doc
 tmp
 gh-pages
+
+build.R
