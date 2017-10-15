@@ -5,7 +5,6 @@
 #### TrackData classes      ========
 setClass("TrackData")
 
-setClass("NoTrackData", contains = c("NULL", "TrackData"))
 setClass("RangeTrackData", contains = c("GRanges", "TrackData"))
 setClass("PosTrackData", contains = "RangeTrackData")
 setClass("PosValTrackData", contains = "PosTrackData")
@@ -16,7 +15,6 @@ setClass("TxTrackData", contains = "RangeTrackData")
 
 #### TrackData constructors     ========
 
-NoTrackData <- function () new("NoTrackData")
 
 RangeTrackData <- function (range, color = "black", tooltip = mcols(range), key = seq_along(range)) {
     range <-
@@ -450,10 +448,10 @@ setValidity("TxTrackData",
 setGeneric("compileTrackData",
            function (trackData, ...) standardGeneric("compileTrackData"))
 
-setMethod("compileTrackData", signature = "NoTrackData",
-    function (trackData)
-        jc(tnt.board.track.data.empty = na)
-)
+# setMethod("compileTrackData", signature = "NoTrackData",
+#     function (trackData)
+#         jc(tnt.board.track.data.empty = na)
+# )
 
 setMethod("compileTrackData", signature = "RangeTrackData",
     function (trackData, full = FALSE) {
