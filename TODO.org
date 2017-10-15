@@ -8,6 +8,10 @@
 *** TODO Alternative constructors for LineTrack and AreaTrack showing coverage of GRanges
 *** TODO Additional argument specifying columns of tooltip in *TrackFromTxDb
 
+** Internal
+
+*** TODO Use GRanges instead of the *TrackData virtual classes for TrackData
+
 ** Long-term
 *** TODO Implement interfaces to TnT tree
 
