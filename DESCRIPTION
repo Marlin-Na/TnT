@@ -36,9 +36,10 @@ LazyData: true
 VignetteBuilder: knitr
 URL: https://github.com/Marlin-Na/TnT
 BugReports: https://github.com/Marlin-Na/TnT/issues
-Collate:
+Collate: 
     'JavascriptCascade.R'
     'misc.R'
+    'tntTracks-trackData.R'
     'tntTracks.R'
     'tntBoard.R'
     'tntTracks-compilation.R'
