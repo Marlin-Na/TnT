@@ -12,6 +12,9 @@ saveTnT(tntdef, file, selfcontained = TRUE, libdir = NULL,
 
 \item{file, selfcontained, libdir, background, knitrOptions}{Passed to \code{\link[htmlwidgets]{saveWidget}}.}
 }
+\value{
+Return NULL.
+}
 \description{
 A simple wrapper of \code{\link[htmlwidgets]{saveWidget}}, which saves a
 TnTBoard/TnTGenome object to an HTML file (e.g. for sharing with others).

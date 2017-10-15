@@ -32,7 +32,7 @@ NULL
 #' @param file,selfcontained,libdir,background,knitrOptions
 #'     Passed to \code{\link[htmlwidgets]{saveWidget}}.
 #'
-#' @return NULL
+#' @return Return NULL.
 #' @export
 #' @examples
 #' data <- GRanges("chr2", IRanges(c(6,9,42), width = 1),
