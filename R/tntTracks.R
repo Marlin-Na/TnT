@@ -319,7 +319,7 @@ setMethod("show", signature = "RangeTrack",
     function (object) {
         background <- trackSpec(object, "background")
         if (is.null(background))
-            background <- paste("missing, use", sQuote(graphics::par("bg")))
+            background <- paste("missing, use", sQuote("white"))
         height     <- trackSpec(object, "height")
         label      <- trackSpec(object, "label")
         cat("A", class(object), "\n")
