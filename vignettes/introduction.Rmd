@@ -42,19 +42,17 @@ This vignette will also be extended in the future to include more details.
 
 ## Install
 
-TnT is currently not on Bioconductor or CRAN, please install with
-
-```{r, eval=FALSE}
-devtools::install_github("marlin-na/TnT")
-```
-
-If not successful, try to install a few dependencies from bioconductor.
-Be aware that the installation process may take a while if this is the first time to install
-bioconductor packages.
+You can install the stable version of TnT from Bioconductor:
 
 ```{r, eval=FALSE}
 source("https://bioconductor.org/biocLite.R")
-biocLite(c("GenomicRanges"))
+biocLite("TnT")
+```
+
+Or alternatively, install the devel version from github:
+
+```{r, eval=FALSE}
+devtools::install_github("marlin-na/TnT")
 ```
 
 Then attach the package.
