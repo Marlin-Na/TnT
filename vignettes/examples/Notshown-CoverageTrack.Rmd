@@ -1,0 +1,302 @@
+---
+title: "Coverage Track"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+expose_all <- function (package) {
+    attachname <- paste0(package, "_all")
+    while (attachname %in% search()) detach(attachname, character.only = TRUE)
+    pkgns <- loadNamespace(package)
+    attach(pkgns, name = attachname)
+    invisible(pkgns)
+}
+suppressMessages(expose_all("TnT"))
+```
+
+
+## Coverage Feature
+
+https://github.com/tntvis/tnt.board/blob/master/examples/dynamic_ranges/ranges.js
+
+```{r}
+trackWidget('
+var data = [
+    {start:1,end:10,height:0.840188},
+    {start:11,end:20,height:0.394383},
+    {start:21,end:30,height:0.783099},
+    {start:31,end:40,height:0.79844},
+    {start:41,end:50,height:0.911647},
+    {start:51,end:60,height:0.197551},
+    {start:61,end:70,height:0.335223},
+    {start:71,end:80,height:0.76823},
+    {start:81,end:90,height:0.277775},
+    {start:91,end:100,height:0.55397},
+    {start:101,end:110,height:0.477397},
+    {start:111,end:120,height:0.628871},
+    {start:121,end:130,height:0.364784},
+    {start:131,end:140,height:0.513401},
+    {start:141,end:150,height:0.95223},
+    {start:151,end:160,height:0.916195},
+    {start:161,end:170,height:0.635712},
+    {start:171,end:180,height:0.717297},
+    {start:181,end:190,height:0.141603},
+    {start:191,end:200,height:0.606969},
+    {start:201,end:210,height:0.0163006},
+    {start:211,end:220,height:0.242887},
+    {start:221,end:230,height:0.137232},
+    {start:231,end:240,height:0.804177},
+    {start:241,end:250,height:0.156679},
+    {start:251,end:260,height:0.400944},
+    {start:261,end:270,height:0.12979},
+    {start:271,end:280,height:0.108809},
+    {start:281,end:290,height:0.998925},
+    {start:291,end:300,height:0.218257},
+    {start:301,end:310,height:0.512932},
+    {start:311,end:320,height:0.839112},
+    {start:321,end:330,height:0.61264},
+    {start:331,end:340,height:0.296032},
+    {start:341,end:350,height:0.637552},
+    {start:351,end:360,height:0.524287},
+    {start:361,end:370,height:0.493583},
+    {start:371,end:380,height:0.972775},
+    {start:381,end:390,height:0.292517},
+    {start:391,end:400,height:0.771358},
+    {start:401,end:410,height:0.526745},
+    {start:411,end:420,height:0.769914},
+    {start:421,end:430,height:0.400229},
+    {start:431,end:440,height:0.891529},
+    {start:441,end:450,height:0.283315},
+    {start:451,end:460,height:0.352458},
+    {start:461,end:470,height:0.807725},
+    {start:471,end:480,height:0.919026},
+    {start:481,end:490,height:0.0697553},
+    {start:491,end:500,height:0.949327},
+    {start:501,end:510,height:0.525995},
+    {start:511,end:520,height:0.0860558},
+    {start:521,end:530,height:0.192214},
+    {start:531,end:540,height:0.663227},
+    {start:541,end:550,height:0.890233},
+    {start:551,end:560,height:0.348893},
+    {start:561,end:570,height:0.0641713},
+    {start:571,end:580,height:0.020023},
+    {start:581,end:590,height:0.457702},
+    {start:591,end:600,height:0.0630958},
+    {start:601,end:610,height:0.23828},
+    {start:611,end:620,height:0.970634},
+    {start:621,end:630,height:0.902208},
+    {start:631,end:640,height:0.85092},
+    {start:641,end:650,height:0.266666},
+    {start:651,end:660,height:0.53976},
+    {start:661,end:670,height:0.375207},
+    {start:671,end:680,height:0.760249},
+    {start:681,end:690,height:0.512535},
+    {start:691,end:700,height:0.667724},
+    {start:701,end:710,height:0.531606},
+    {start:711,end:720,height:0.0392803},
+    {start:721,end:730,height:0.437638},
+    {start:731,end:740,height:0.931835},
+    {start:741,end:750,height:0.93081},
+    {start:751,end:760,height:0.720952},
+    {start:761,end:770,height:0.284293},
+    {start:771,end:780,height:0.738534},
+    {start:781,end:790,height:0.639979},
+    {start:791,end:800,height:0.354049},
+    {start:801,end:810,height:0.687861},
+    {start:811,end:820,height:0.165974},
+    {start:821,end:830,height:0.440105},
+    {start:831,end:840,height:0.880075},
+    {start:841,end:850,height:0.829201},
+    {start:851,end:860,height:0.330337},
+    {start:861,end:870,height:0.228968},
+    {start:871,end:880,height:0.893372},
+    {start:881,end:890,height:0.35036},
+    {start:891,end:900,height:0.68667},
+    {start:901,end:910,height:0.956468},
+    {start:911,end:920,height:0.58864},
+    {start:921,end:930,height:0.657304},
+    {start:931,end:940,height:0.858676},
+    {start:941,end:950,height:0.43956},
+    {start:951,end:960,height:0.92397},
+    {start:961,end:970,height:0.398437},
+    {start:971,end:980,height:0.814767},
+    {start:981,end:990,height:0.684219},
+    {start:991,end:1000,height:0.910972}
+];
+
+
+// The coverage custom feature
+var coverageFeature = tnt.board.track.feature()
+    .index(function(d) {
+        return d.start + "-" + d.end;
+    });
+
+var coverageFeatureInverse = tnt.board.track.feature()
+    .index(function(d) {
+        return d.start + "-" + d.end;
+    });
+
+
+// Create new elements
+coverageFeature.create(function (el) {
+    var xScale = coverageFeature.scale();
+    var track = this;
+    var y = track.height();
+
+    var barScale = d3.scale.linear()
+        .domain([0, 1])
+        .range([0, y]);
+    var colorScale = d3.scale.linear()
+        .domain([0, 1])
+        .range(["#5ba633", "#027be3"]);
+
+    var g = el
+        .append("g");
+
+    g.append("rect")
+        .attr("x", function (d) {
+            return xScale(d.start);
+        })
+        .attr("y", function (d) {
+            return y - barScale(d.height);
+            //return 0;
+        })
+        .attr("width", function (d) {
+            return xScale(d.end) - xScale(d.start);
+        })
+        .attr("height", function (d) {
+            return barScale(d.height);
+        })
+        .style("fill", function (d) {
+            return colorScale(d.height);
+        })
+});
+
+coverageFeatureInverse.create(function (el) {
+    var xScale = coverageFeature.scale();
+    var track = this;
+    var y = track.height();
+
+    var barScale = d3.scale.linear()
+        .domain([0, 1])
+        .range([0, y]);
+    var colorScale = d3.scale.linear()
+        .domain([0, 1])
+        .range(["#5ba633", "#027be3"]);
+
+    var g = el
+        .append("g");
+
+    g.append("rect")
+        .attr("x", function (d) {
+            return xScale(d.start);
+        })
+        .attr("y", function (d) {
+            //return y - barScale(d.height);
+            return 0;
+        })
+        .attr("width", function (d) {
+            return xScale(d.end) - xScale(d.start);
+        })
+        .attr("height", function (d) {
+            return barScale(d.height);
+        })
+        .style("fill", function (d) {
+            return colorScale(d.height);
+        })
+});
+
+coverageFeature.move(function (el) {
+    var xScale = coverageFeature.scale();
+
+    el.select("g")
+        .select("rect")
+        .attr("x", function (d) {
+            return xScale(d.start);
+        })
+        .attr("width", function (d) {
+            return xScale(d.end) - xScale(d.start);
+        })
+});
+
+coverageFeatureInverse.move(function (el) {
+    var xScale = coverageFeature.scale();
+
+    el.select("g")
+        .select("rect")
+        .attr("x", function (d) {
+            return xScale(d.start);
+        })
+        .attr("width", function (d) {
+            return xScale(d.end) - xScale(d.start);
+        })
+});
+
+// The board
+var myBoard = tnt.board().from(20).to(500).max(1000);
+
+// The location track
+var location_track = tnt.board.track()
+    .height(20)
+    .color("white")
+    .display(tnt.board.track.feature.axis()
+        .orientation("top")
+    );
+
+// The ranges track
+var ranges_track = tnt.board.track()
+    .label("coverage plot")
+    .height(80)
+    .color("white")
+    .data (tnt.board.track.data.sync()
+        .retriever (function (loc) {
+            // Return only the range on display
+            var rangeData = data.filter(function (d) {
+                return (d.start > loc.from) && (d.end < loc.to);
+            });
+            // if necessary group or edit the number of elements to show
+            // rangeData = getNewRange(data, loc)
+            return rangeData;
+        })
+    )
+    .display(coverageFeature);
+
+var ranges_track2 = tnt.board.track()
+    .label("coverage plot")
+    .height(80)
+    .color("white")
+    .data (tnt.board.track.data.sync()
+        .retriever (function (loc) {
+            // Return only the range on display
+            var rangeData = data.filter(function (d) {
+                return (d.start > loc.from) && (d.end < loc.to);
+            });
+            // if necessary group or edit the number of elements to show
+            // rangeData = getNewRange(data, loc)
+            return rangeData;
+        })
+    )
+    .display(coverageFeatureInverse);
+
+// Add the tracks and start
+myBoard
+    .add_track(location_track)
+    .add_track(ranges_track2)
+    .add_track(ranges_track);
+
+myBoard
+
+//myBoard(document.getElementById("mydiv"));
+//myBoard.start();
+
+')
+```
+
+<br/> <br/>
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
