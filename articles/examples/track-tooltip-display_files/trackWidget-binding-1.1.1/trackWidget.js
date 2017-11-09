@@ -153,6 +153,13 @@ HTMLWidgets.widget({
                 // Set the initial width
                 tntins.width(initial_width);
                 
+                // Remove the old one
+                // TODO: better approach ?
+                for (var i = 0; i < el.childNodes.length; i++) {
+                    el.removeChild(el.childNodes[i]);
+                }
+                
+                
                 tntins(el);
                 tntins.start();
                 

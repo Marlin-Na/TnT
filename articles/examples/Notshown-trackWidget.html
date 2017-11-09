@@ -110,7 +110,7 @@
       
       </header><script src="Notshown-trackWidget_files/htmlwidgets-0.9/htmlwidgets.js"></script><script src="Notshown-trackWidget_files/d3-3.5.17/d3.v3.min.js"></script><link href="Notshown-trackWidget_files/tnt.genome-0.1.6/tnt.genome.css" rel="stylesheet">
 <script src="Notshown-trackWidget_files/tnt.genome-0.1.6/tnt.genome.min.js"></script><link href="Notshown-trackWidget_files/tnt.tooltip-0.2.0/tnt.tooltip.css" rel="stylesheet">
-<script src="Notshown-trackWidget_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="Notshown-trackWidget_files/trackWidget-binding-1.1.0/trackWidget.js"></script><div class="row">
+<script src="Notshown-trackWidget_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="Notshown-trackWidget_files/trackWidget-binding-1.1.1/trackWidget.js"></script><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
       <h1>trackWidget</h1>
@@ -163,8 +163,8 @@
 <span class="st">        .add_track(blockTrack);</span>
 <span class="st">    board</span>
 <span class="st">'</span>)</code></pre></div>
-<div id="htmlwidget-25907ce241b818895fc9" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-25907ce241b818895fc9">{"x":{"tntdef":"\n    var axisTrack = tnt.board.track()\n        .height(20)\n        .color(\"white\")\n        .display(tnt.board.track.feature.axis());\n\n    var blockTrack = tnt.board.track()\n        .height(30)\n        .color(\"grey\")\n        .data(tnt.board.track.data.sync()\n            .retriever(function () {\n                return [\n                    {start: 200, end: 350},\n                    {start: 400, end: 450}\n                ]\n            })\n        )\n        .display(\n            tnt.board.track.feature.block()\n            .color(\"red\")\n        );\n\n    var board = tnt.board()\n        .from(100)\n        .to(500)\n        .min(0)\n        .max(1000)\n        .add_track(axisTrack)\n        .add_track(blockTrack);\n    board\n"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
+<div id="htmlwidget-007f23b39fe01c5897de" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-007f23b39fe01c5897de">{"x":{"tntdef":"\n    var axisTrack = tnt.board.track()\n        .height(20)\n        .color(\"white\")\n        .display(tnt.board.track.feature.axis());\n\n    var blockTrack = tnt.board.track()\n        .height(30)\n        .color(\"grey\")\n        .data(tnt.board.track.data.sync()\n            .retriever(function () {\n                return [\n                    {start: 200, end: 350},\n                    {start: 400, end: 450}\n                ]\n            })\n        )\n        .display(\n            tnt.board.track.feature.block()\n            .color(\"red\")\n        );\n\n    var board = tnt.board()\n        .from(100)\n        .to(500)\n        .min(0)\n        .max(1000)\n        .add_track(axisTrack)\n        .add_track(blockTrack);\n    board\n"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
 </div>
 <div id="create-a-tnt-board-with-jscascade-util-functions" class="section level2">
 <h2 class="hasAnchor">
@@ -227,8 +227,8 @@ tntdef &lt;-<span class="st"> </span><span class="kw">jc</span>(
 ##      .color("red")
 ##      .index(function (d) {return d.start})))</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/trackWidget.html">trackWidget</a></span>(tntdef)</code></pre></div>
-<div id="htmlwidget-09877c2c49575ca3fa20" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-09877c2c49575ca3fa20">{"x":{"tntdef":"tnt.board()\n.from(0)\n.to(500)\n.min(0)\n.max(1000)\n.add_track(tnt.board.track()\n.height(20)\n.color(\"white\")\n.display(tnt.board.track.feature.axis()))\n.add_track(tnt.board.track()\n.height(30)\n.color(\"green\")\n.data(tnt.board.track.data.sync()\n.retriever(function() {\n            return [\n                {start: 200, end: 350},\n                {start: 550, end: 770}\n            ];\n        }))\n.display(tnt.board.track.feature.block()\n.color(\"red\")\n.index(function (d) {return d.start})))"},"evals":[],"jsHooks":[]}</script><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genome &lt;-<span class="st"> </span><span class="kw">jc</span>(
+<div id="htmlwidget-b35be80f1a13983fc76b" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b35be80f1a13983fc76b">{"x":{"tntdef":"tnt.board()\n.from(0)\n.to(500)\n.min(0)\n.max(1000)\n.add_track(tnt.board.track()\n.height(20)\n.color(\"white\")\n.display(tnt.board.track.feature.axis()))\n.add_track(tnt.board.track()\n.height(30)\n.color(\"green\")\n.data(tnt.board.track.data.sync()\n.retriever(function() {\n            return [\n                {start: 200, end: 350},\n                {start: 550, end: 770}\n            ];\n        }))\n.display(tnt.board.track.feature.block()\n.color(\"red\")\n.index(function (d) {return d.start})))"},"evals":[],"jsHooks":[]}</script><div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">genome &lt;-<span class="st"> </span><span class="kw">jc</span>(
     <span class="dt">tnt.board.genome =</span> <span class="kw">ma</span>(),
     <span class="dt">species =</span> <span class="st">"human"</span>,
     <span class="dt">chr =</span> <span class="dv">10</span>,
@@ -238,8 +238,8 @@ tntdef &lt;-<span class="st"> </span><span class="kw">jc</span>(
     <span class="dt">max_coord =</span> <span class="kw">js</span>(<span class="st">"new Promise(function (res) {res(420000)})"</span>)
 )
 <span class="kw"><a href="../../reference/trackWidget.html">trackWidget</a></span>(genome)</code></pre></div>
-<div id="htmlwidget-f98711c7573b049a217f" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-f98711c7573b049a217f">{"x":{"tntdef":"tnt.board.genome()\n.species(\"human\")\n.chr(10)\n.from(410000)\n.to(420000)\n.min_coord(new Promise(function (res) {res(-10000)}))\n.max_coord(new Promise(function (res) {res(420000)}))"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
+<div id="htmlwidget-c51203d7366d949417e4" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c51203d7366d949417e4">{"x":{"tntdef":"tnt.board.genome()\n.species(\"human\")\n.chr(10)\n.from(410000)\n.to(420000)\n.min_coord(new Promise(function (res) {res(-10000)}))\n.max_coord(new Promise(function (res) {res(420000)}))"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
 </div>
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
@@ -275,7 +275,7 @@ tntdef &lt;-<span class="st"> </span><span class="kw">jc</span>(
 ## [15] yaml_2.1.14             rprojroot_1.2          
 ## [17] digest_0.6.12           GenomeInfoDbData_0.99.1
 ## [19] htmlwidgets_0.9         S4Vectors_0.16.0       
-## [21] bitops_1.0-6            TnT_1.1.0              
+## [21] bitops_1.0-6            TnT_1.1.1              
 ## [23] RCurl_1.95-4.8          evaluate_0.10.1        
 ## [25] rmarkdown_1.6           stringi_1.1.5          
 ## [27] compiler_3.4.1          methods_3.4.1          
