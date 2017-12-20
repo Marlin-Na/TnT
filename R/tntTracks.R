@@ -48,15 +48,15 @@ setClass("TnTTrack", slots = c(
     Display = "list"
 ))
 
-setClass("RangeTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
+setClass("RangeBasedTrack", contains = "TnTTrack", slots = c(Data = "RangeTrackData"))
 
-setClass("BlockTrack", contains = "RangeTrack", slots = c(Data = "RangeTrackData"))
-setClass("GeneTrack", contains = "RangeTrack", slots = c(Data = "GeneTrackData"))
-setClass("TxTrack", contains = "RangeTrack", slots = c(Data = "TxTrackData"))
+setClass("BlockTrack", contains = "RangeBasedTrack", slots = c(Data = "RangeTrackData"))
+setClass("GeneTrack", contains = "RangeBasedTrack", slots = c(Data = "GeneTrackData"))
+setClass("TxTrack", contains = "RangeBasedTrack", slots = c(Data = "TxTrackData"))
 
-setClass("VlineTrack", contains = "RangeTrack", slots = c(Data = "PosTrackData"))
+setClass("VlineTrack", contains = "RangeBasedTrack", slots = c(Data = "PosTrackData"))
 
-setClass("DomainValTrack", contains = "RangeTrack")
+setClass("DomainValTrack", contains = "RangeBasedTrack")
 
 setClass("PinTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrackData"))
 setClass("LineTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrackData"))
@@ -72,7 +72,7 @@ setClass("AreaTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrack
 #' @param x A TnTTrack or TnTBoard object. 
 #' @param new2old,pruning.mode,value Passed to seqinfo method for GenomicRanges.
 #' @name seqinfo
-#' @aliases seqinfo<-,RangeTrack-method
+#' @aliases seqinfo<-,RangeBasedTrack-method
 #' @return \code{seqinfo} returns a SeqInfo object.
 #' @examples
 #' btrack1 <- BlockTrack(GRanges("chr1", IRanges(1, 123)))
@@ -84,7 +84,7 @@ setClass("AreaTrack", contains = "DomainValTrack", slots = c(Data = "PosValTrack
 #' seqinfo(btrack2)
 #' seqinfo(ctrack)
 #' seqinfo(board)
-setReplaceMethod("seqinfo", signature = c(x = "RangeTrack"),
+setReplaceMethod("seqinfo", signature = c(x = "RangeBasedTrack"),
     function (x, new2old, pruning.mode, value) {
         trackData(x) <- `seqinfo<-`(x = trackData(x), new2old = new2old,
                                     pruning.mode = pruning.mode, value = value)
@@ -93,14 +93,14 @@ setReplaceMethod("seqinfo", signature = c(x = "RangeTrack"),
 )
 
 #' @rdname seqinfo
-setMethod("seqinfo", signature = c("RangeTrack"),
+setMethod("seqinfo", signature = c("RangeBasedTrack"),
     function (x) {
         seqinfo(trackData(x))
     }
 )
 
 #' @rdname seqinfo
-setMethod("seqlevelsInUse", signature = c(x = "RangeTrack"),
+setMethod("seqlevelsInUse", signature = c(x = "RangeBasedTrack"),
     function (x) seqlevelsInUse(trackData(x))
 )
 
@@ -315,7 +315,7 @@ setReplaceMethod("tooltip", signature = c(x = "TnTTrack", value = "data.frame"),
 
 ###   Show Method   ############################################################
 
-setMethod("show", signature = "RangeTrack",
+setMethod("show", signature = "RangeBasedTrack",
     function (object) {
         background <- trackSpec(object, "background")
         if (is.null(background))

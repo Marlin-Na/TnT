@@ -9,7 +9,7 @@
 
 
 .initDisplay <- function (track, feaname, extra = list()) {
-    # For RangeTrack
+    # For RangeBasedTrack
     
     di.init <- setNames(list(ma()), feaname)
     di.color <- list(color = {
@@ -84,7 +84,7 @@
 # #' @return A TnTTrack
 setGeneric("wakeupTrack", function (track) standardGeneric("wakeupTrack"))
 
-setMethod("wakeupTrack", signature = c(track = "RangeTrack"),
+setMethod("wakeupTrack", signature = c(track = "RangeBasedTrack"),
     function (track) {
         class <- class(track)
         

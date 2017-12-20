@@ -7,8 +7,8 @@ setClass("CompositeTrack", contains = "TnTTrack", slots = c(Data = "CompositeTra
 
 setValidity("CompositeTrackData",
     function (object) {
-        if (!all(vapply(object, is, logical(1L), class2 = "RangeTrack")))
-            return("All components of CompositeTrack should be RangeTrack")
+        if (!all(vapply(object, is, logical(1L), class2 = "RangeBasedTrack")))
+            return("All components of CompositeTrack should be RangeBasedTrack")
         return(TRUE)
     }
 )
@@ -58,8 +58,8 @@ setMethod("merge", signature = c(x = "TnTTrack", y = "missing"),
 
 merge_tracklist <- function (tracklist) {
     for (i in seq_along(tracklist))
-        if (!(is(tracklist[[i]], "RangeTrack") || is(tracklist[[i]], "CompositeTrack")))
-            stop("All tracks have to inherit either 'RangeTrack' or 'CompositeTrack'")
+        if (!(is(tracklist[[i]], "RangeBasedTrack") || is(tracklist[[i]], "CompositeTrack")))
+            stop("All tracks have to inherit either 'RangeBasedTrack' or 'CompositeTrack'")
     
     tracklist <- as.list(tracklist)
     which.comp <- vapply(tracklist, is, logical(1L), class2 = "CompositeTrack")
@@ -208,7 +208,7 @@ setMethod("seqlevelsInUse", signature = c(x = "CompositeTrack"),
     }
     
     li.gr <- lapply(unname(li.tracks), function (track) {
-        if (is(track, "RangeTrack"))
+        if (is(track, "RangeBasedTrack"))
             return(granges(trackData(track)))
         if (is(track, "CompositeTrack")) {
             lgr <- lapply(trackData(track), trackData)
@@ -228,10 +228,10 @@ setMethod("seqlevelsInUse", signature = c(x = "CompositeTrack"),
 #' @param x A TnTTrack object.
 #' @param ...,with.revmap,ignore.strand,na.rm
 #'     Passed to \code{\link[GenomicRanges]{range,GenomicRanges-method}}.
-#' @aliases range,RangeTrack-method
+#' @aliases range,RangeBasedTrack-method
 #' @return Returns a GRanges object.
 #' @name range-TnTTrack
-setMethod("range", signature = c(x = "RangeTrack"), .range.track)
+setMethod("range", signature = c(x = "RangeBasedTrack"), .range.track)
 
 #' @rdname range-TnTTrack
 setMethod("range", signature = c(x = "CompositeTrack"), .range.track)
