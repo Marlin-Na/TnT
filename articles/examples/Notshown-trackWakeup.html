@@ -110,7 +110,7 @@
       
       </header><script src="Notshown-trackWakeup_files/htmlwidgets-0.9/htmlwidgets.js"></script><script src="Notshown-trackWakeup_files/d3-3.5.17/d3.v3.min.js"></script><link href="Notshown-trackWakeup_files/tnt.genome-0.1.6/tnt.genome.css" rel="stylesheet">
 <script src="Notshown-trackWakeup_files/tnt.genome-0.1.6/tnt.genome.min.js"></script><link href="Notshown-trackWakeup_files/tnt.tooltip-0.2.0/tnt.tooltip.css" rel="stylesheet">
-<script src="Notshown-trackWakeup_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="Notshown-trackWakeup_files/trackWidget-binding-1.1.1/trackWidget.js"></script><div class="row">
+<script src="Notshown-trackWakeup_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="Notshown-trackWakeup_files/trackWidget-binding-1.1.3/trackWidget.js"></script><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
       <h1>Track Wakeup</h1>
@@ -294,8 +294,8 @@ w.track &lt;-<span class="st"> </span><span class="kw">wakeupTrack</span>(track)
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/tntboard.html">TnTBoard</a></span>(<span class="kw">list</span>(track), <span class="dt">view.range =</span> <span class="kw">GRanges</span>(<span class="st">"chr12"</span>, <span class="kw">IRanges</span>(<span class="dv">1</span>, <span class="dv">100</span>)))</code></pre></div>
 <pre><code>## - Missing argument `coord.range` and seqlength is unknown:
 ##   automatically set coordinate limit to 3..52 ...</code></pre>
-<div id="htmlwidget-7d29d0db64d7528545ff" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7d29d0db64d7528545ff">{"x":{"tntdef":"tnt.board()\n.from(1)\n.to(100)\n.min(3)\n.max(52)\n.zoom_out(150)\n.zoom_in(10)\n.allow_drag(true)\n.add_track(tnt.board.track()\n.label(\"gr\")\n.color(\"#FFFFFF\")\n.height(30)\n.display(tnt.board.track.feature.block()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.on(\"click\", tnr.tooltip_callback(\"gr\", [\"Location\",\"Chromosome\",\"Start\",\"End\",\"Description\",\"What's for?\"])))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.range_data_retriever([\n  {\n    \"start\": 11,\n    \"end\": 15,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 11,\n      \"End\": 15,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 1\n  },\n  {\n    \"start\": 21,\n    \"end\": 25,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 21,\n      \"End\": 25,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 2\n  },\n  {\n    \"start\": 31,\n    \"end\": 35,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 31,\n      \"End\": 35,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 3\n  },\n  {\n    \"start\": 41,\n    \"end\": 45,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 41,\n      \"End\": 45,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 4\n  }\n]\n, false))))"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
+<div id="htmlwidget-4cce9681f2158027ffb4" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4cce9681f2158027ffb4">{"x":{"tntdef":"tnt.board()\n.from(1)\n.to(100)\n.min(3)\n.max(52)\n.zoom_out(150)\n.zoom_in(10)\n.allow_drag(true)\n.add_track(tnt.board.track()\n.label(\"gr\")\n.color(\"#FFFFFF\")\n.height(30)\n.display(tnt.board.track.feature.block()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.on(\"click\", tnr.tooltip_callback(\"gr\", [\"Location\",\"Chromosome\",\"Start\",\"End\",\"Description\",\"What's for?\"])))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.range_data_retriever([\n  {\n    \"start\": 11,\n    \"end\": 15,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 11,\n      \"End\": 15,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 1\n  },\n  {\n    \"start\": 21,\n    \"end\": 25,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 21,\n      \"End\": 25,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 2\n  },\n  {\n    \"start\": 31,\n    \"end\": 35,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 31,\n      \"End\": 35,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 3\n  },\n  {\n    \"start\": 41,\n    \"end\": 45,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 41,\n      \"End\": 45,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 4\n  }\n]\n, false))))"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
 </div>
 <div id="todo-compositetrack-wakeup" class="section level2">
 <h2 class="hasAnchor">
@@ -324,23 +324,23 @@ w.track &lt;-<span class="st"> </span><span class="kw">wakeupTrack</span>(track)
 ##            {
 ##              "pos": 1,
 ##              "tooltip": {
-##                "value": 0.7866
+##                "value": 0.9767
 ##              },
 ##              "color": "#FF0000",
 ##              "key": 1,
-##              "val": 0.7866
+##              "val": 0.9767
 ##            },
 ##            {
 ##              "pos": 2,
 ##              "tooltip": {
-##                "value": 0.6292
+##                "value": 0.1044
 ##              },
 ##              "color": "#FF0000",
 ##              "key": 2,
-##              "val": 0.6292
+##              "val": 0.1044
 ##            }
 ##          ]
-##          , [0,0.7866]), false)))</code></pre>
+##          , [0,0.9767]), false)))</code></pre>
 </div>
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
@@ -368,7 +368,7 @@ w.track &lt;-<span class="st"> </span><span class="kw">wakeupTrack</span>(track)
 ## 
 ## other attached packages:
 ## [1] GenomicFeatures_1.29.11 AnnotationDbi_1.39.3    Biobase_2.38.0         
-## [4] GenomicRanges_1.30.0    GenomeInfoDb_1.14.0     IRanges_2.12.0         
+## [4] GenomicRanges_1.30.1    GenomeInfoDb_1.14.0     IRanges_2.12.0         
 ## [7] S4Vectors_0.16.0        BiocGenerics_0.24.0    
 ## 
 ## loaded via a namespace (and not attached):
@@ -386,7 +386,7 @@ w.track &lt;-<span class="st"> </span><span class="kw">wakeupTrack</span>(track)
 ## [23] GenomeInfoDbData_0.99.1    rtracklayer_1.37.3        
 ## [25] stringr_1.2.0              knitr_1.17                
 ## [27] htmlwidgets_0.9            Biostrings_2.45.4         
-## [29] TnT_1.1.1                  grid_3.4.1                
+## [29] TnT_1.1.3                  grid_3.4.1                
 ## [31] rprojroot_1.2              bit64_0.9-7               
 ## [33] R6_2.2.2                   BiocParallel_1.11.8       
 ## [35] XML_3.98-1.9               rmarkdown_1.6             

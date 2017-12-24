@@ -114,9 +114,33 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#tnt" class="anchor"></a>TnT</h1></div>
 
-<p>TnT is a R package that wraps the <a href="https://github.com/tntvis">TnT javascript libraries</a> to provide track-based visulizations from R. It depends on a number of bioconductor packages and is useful for displaying genomic features (as a simple genome browser).</p>
-<p>To get started, please read <a href="https://tnt.marlin.pub/articles/introduction.html">Introduction to TnT</a> and see various <a href="https://tnt.marlin.pub/articles/examples">examples</a>.</p>
-<p>This package is a <a href="https://summerofcode.withgoogle.com/dashboard/project/5521605556961280/overview/">GSoC 2017 project</a> by Jialin Ma, kindly mentored by Toby Hocking and Miguel Pignatelli, under the organization of R project for statistical computing. Miguel Pignatelli is also the author of TnT javascript libraries which the R package relies on. See the <a href="http://weblog.marlin.pub/post/tnt/tnt-gsoc17/">blog post</a> for a summary of the project.</p>
+<p>TnT is a R package that wraps the <a href="https://github.com/tntvis">TnT javascript libraries</a> to provide track-based visulizations from R. It is useful for displaying genomic features as a simple genome browser, particularly when working with relevant Bioconductor packages.</p>
+<p>To install the stable version from biocondcutor, use</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">"https://bioconductor.org/biocLite.R"</span>)
+<span class="kw">biocLite</span>(<span class="st">"TnT"</span>)</code></pre></div>
+<p>Or alternatively, install the latest version from github with</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"Marlin-Na/TnT"</span>)</code></pre></div>
+<p>To get started, checkout:</p>
+<ul>
+<li>The package vignette <a href="https://tnt.marlin.pub/articles/introduction.html">Introduction to TnT</a>
+</li>
+<li>
+<a href="https://tnt.marlin.pub/articles/examples">Examples</a> of different track types.</li>
+</ul>
+<p>You can also find the <a href="http://bioconductor.org/packages/release/bioc/html/TnT.html">package</a> on Bioconductor.</p>
+<div id="gsoc-2017" class="section level3">
+<h3 class="hasAnchor">
+<a href="#gsoc-2017" class="anchor"></a>GSoC 2017</h3>
+<p>This R package was a Google Summer of Code project in 2017, kindly mentored by Toby Dylan Hocking and Miguel Pignatelli, under the organization of R project for statistical computing.</p>
+<p>Please see:</p>
+<ul>
+<li><a href="https://summerofcode.withgoogle.com/dashboard/project/5521605556961280/overview/">The project link</a></li>
+<li>
+<a href="https://github.com/rstats-gsoc/gsoc2017/wiki/Interactive-Genome-Browser-in-R">Wiki</a> of the project idea</li>
+<li>
+<a href="http://weblog.marlin.pub/post/tnt/tnt-gsoc17/">My blog post</a> as a summary of the project.</li>
+</ul>
+</div>
 </div>
   </div>
 

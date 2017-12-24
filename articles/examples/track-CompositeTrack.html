@@ -110,7 +110,7 @@
       
       </header><script src="track-CompositeTrack_files/htmlwidgets-0.9/htmlwidgets.js"></script><script src="track-CompositeTrack_files/d3-3.5.17/d3.v3.min.js"></script><link href="track-CompositeTrack_files/tnt.genome-0.1.6/tnt.genome.css" rel="stylesheet">
 <script src="track-CompositeTrack_files/tnt.genome-0.1.6/tnt.genome.min.js"></script><link href="track-CompositeTrack_files/tnt.tooltip-0.2.0/tnt.tooltip.css" rel="stylesheet">
-<script src="track-CompositeTrack_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="track-CompositeTrack_files/trackWidget-binding-1.1.1/trackWidget.js"></script><div class="row">
+<script src="track-CompositeTrack_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="track-CompositeTrack_files/trackWidget-binding-1.1.3/trackWidget.js"></script><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
       <h1>Composite Track</h1>
@@ -171,7 +171,8 @@ txdb &lt;-<span class="st"> </span>TxDb.Hsapiens.UCSC.hg19.knownGene
 gtrack &lt;-<span class="st"> </span>TnT<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/TnT/topics/track-constructors">GeneTrackFromTxDb</a></span>(txdb, <span class="dt">label =</span> <span class="st">"Gene"</span>, <span class="dt">color =</span> <span class="st">"burlywood3"</span>)
 
 ah &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/AnnotationHub/topics/AnnotationHub-class">AnnotationHub</a></span>()</code></pre></div>
-<pre><code>## snapshotDate(): 2017-10-27</code></pre>
+<pre><code>## updating metadata: retrieving 1 resource
+## snapshotDate(): 2017-10-27</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ah &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/AnnotationHub/topics/AnnotationHub-class">query</a></span>(ah, <span class="st">"cpgisland"</span>)
 cpg &lt;-<span class="st"> </span>ah[[<span class="kw">names</span>(ah[ah<span class="op">$</span>genome <span class="op">==</span><span class="st"> "hg19"</span>])]]</code></pre></div>
 <pre><code>## loading from cache '/home/jialin//.AnnotationHub/5086'</code></pre>
@@ -212,8 +213,8 @@ cpg &lt;-<span class="st"> </span>ah[[<span class="kw">names</span>(ah[ah<span c
 ##  [3] GenomicFeatures_1.29.11                
 ##  [4] AnnotationDbi_1.39.3                   
 ##  [5] Biobase_2.38.0                         
-##  [6] TnT_1.1.1                              
-##  [7] GenomicRanges_1.30.0                   
+##  [6] TnT_1.1.3                              
+##  [7] GenomicRanges_1.30.1                   
 ##  [8] GenomeInfoDb_1.14.0                    
 ##  [9] IRanges_2.12.0                         
 ## [10] S4Vectors_0.16.0                       
