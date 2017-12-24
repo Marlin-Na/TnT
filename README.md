@@ -4,7 +4,6 @@
 
 [![Bioc](http://www.bioconductor.org/shields/years-in-bioc/TnT.svg)](https://www.bioconductor.org/packages/devel/bioc/html/TnT.html#since)
 [![Travis-CI Build Status](https://travis-ci.org/Marlin-Na/TnT.svg?branch=master)](https://travis-ci.org/Marlin-Na/TnT)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/Marlin-Na/TnT?branch=master&svg=true)](https://ci.appveyor.com/project/Marlin-Na/TnT)
 [![Bioconductor Release](https://www.bioconductor.org/shields/build/release/bioc/TnT.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/TnT/)
 [![Bioconductor Devel](https://www.bioconductor.org/shields/build/devel/bioc/TnT.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/TnT/)
 
