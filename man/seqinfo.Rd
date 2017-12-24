@@ -4,21 +4,21 @@
 \docType{methods}
 \name{seqinfo}
 \alias{seqinfo}
-\alias{seqinfo<-,RangeTrack-method}
-\alias{seqinfo,RangeTrack-method}
-\alias{seqlevelsInUse,RangeTrack-method}
+\alias{seqinfo<-,RangeBasedTrack-method}
+\alias{seqinfo,RangeBasedTrack-method}
+\alias{seqlevelsInUse,RangeBasedTrack-method}
 \alias{seqinfo,TnTBoard-method}
 \alias{seqinfo,CompositeTrack-method}
 \alias{seqinfo<-,CompositeTrack-method}
 \alias{seqlevelsInUse,CompositeTrack-method}
 \title{Seqinfo of TnTTrack and TnTBoard}
 \usage{
-\S4method{seqinfo}{RangeTrack}(x, new2old = NULL, pruning.mode = c("error",
-  "coarse", "fine", "tidy")) <- value
+\S4method{seqinfo}{RangeBasedTrack}(x, new2old = NULL,
+  pruning.mode = c("error", "coarse", "fine", "tidy")) <- value
 
-\S4method{seqinfo}{RangeTrack}(x)
+\S4method{seqinfo}{RangeBasedTrack}(x)
 
-\S4method{seqlevelsInUse}{RangeTrack}(x)
+\S4method{seqlevelsInUse}{RangeBasedTrack}(x)
 
 \S4method{seqinfo}{TnTBoard}(x)
 

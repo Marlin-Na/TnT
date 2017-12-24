@@ -3,11 +3,11 @@
 \docType{methods}
 \name{range-TnTTrack}
 \alias{range-TnTTrack}
-\alias{range,RangeTrack-method}
+\alias{range,RangeBasedTrack-method}
 \alias{range,CompositeTrack-method}
 \title{Range of Tracks}
 \usage{
-\S4method{range}{RangeTrack}(x, ..., with.revmap = FALSE,
+\S4method{range}{RangeBasedTrack}(x, ..., with.revmap = FALSE,
   ignore.strand = FALSE, na.rm = FALSE)
 
 \S4method{range}{CompositeTrack}(x, ..., with.revmap = FALSE,
