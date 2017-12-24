@@ -3,6 +3,8 @@
 language: R
 r: bioc-devel
 # cache: packages
+r_packages:
+  - devtools
 
 # test
 sudo: true
