@@ -33,24 +33,24 @@ Output and render functions for using TnT within Shiny
 applications and interactive Rmd documents.
 }
 \examples{
-if (interactive() && require(shiny)) {
-    ui <- fluidPage(fluidRow(
-        column(width = 2, {
-            "A Simple Example Here"
-        }),
-        column(width = 10, {
-            TnTOutput("out")
-        })
-    ))
-    server <- function (input, output) {
-        re.btrack <- reactive({
-            gr <- GRanges("chr12", IRanges(100, 1000))
-            BlockTrack(gr)
-        })
-        output$out <- renderTnT({
-            TnTBoard(re.btrack())
-        })
-    }
-    shinyApp(ui = ui, server = server)
+ui <- fluidPage(fluidRow(
+    column(width = 2, {
+        "A Simple Example Here"
+    }),
+    column(width = 10, {
+        TnTOutput("out")
+    })
+))
+server <- function (input, output) {
+    re.btrack <- reactive({
+        gr <- GRanges("chr12", IRanges(100, 1000))
+        BlockTrack(gr)
+    })
+    output$out <- renderTnT({
+        TnTBoard(re.btrack())
+    })
+}
+\dontrun{
+shinyApp(ui = ui, server = server)
 }
 }

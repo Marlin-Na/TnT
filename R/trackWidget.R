@@ -85,25 +85,25 @@ trackWidget <- function (tntdef, elementId = NULL) {
 #'     htmlwidget within Shiny applications.
 #' @export
 #' @examples
-#' if (interactive() && require(shiny)) {
-#'     ui <- fluidPage(fluidRow(
-#'         column(width = 2, {
-#'             "A Simple Example Here"
-#'         }),
-#'         column(width = 10, {
-#'             TnTOutput("out")
-#'         })
-#'     ))
-#'     server <- function (input, output) {
-#'         re.btrack <- reactive({
-#'             gr <- GRanges("chr12", IRanges(100, 1000))
-#'             BlockTrack(gr)
-#'         })
-#'         output$out <- renderTnT({
-#'             TnTBoard(re.btrack())
-#'         })
-#'     }
-#'     shinyApp(ui = ui, server = server)
+#' ui <- fluidPage(fluidRow(
+#'     column(width = 2, {
+#'         "A Simple Example Here"
+#'     }),
+#'     column(width = 10, {
+#'         TnTOutput("out")
+#'     })
+#' ))
+#' server <- function (input, output) {
+#'     re.btrack <- reactive({
+#'         gr <- GRanges("chr12", IRanges(100, 1000))
+#'         BlockTrack(gr)
+#'     })
+#'     output$out <- renderTnT({
+#'         TnTBoard(re.btrack())
+#'     })
+#' }
+#' \dontrun{
+#' shinyApp(ui = ui, server = server)
 #' }
 TnTOutput <- function (outputId, width = '100%', height = 'auto') {
     htmlwidgets::shinyWidgetOutput(outputId, 'trackWidget', width, height, package = "TnT")
