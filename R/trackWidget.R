@@ -85,6 +85,8 @@ trackWidget <- function (tntdef, elementId = NULL) {
 #'     htmlwidget within Shiny applications.
 #' @export
 #' @examples
+#' library(shiny)
+#' 
 #' ui <- fluidPage(fluidRow(
 #'     column(width = 2, {
 #'         "A Simple Example Here"

@@ -33,6 +33,8 @@ Output and render functions for using TnT within Shiny
 applications and interactive Rmd documents.
 }
 \examples{
+library(shiny)
+
 ui <- fluidPage(fluidRow(
     column(width = 2, {
         "A Simple Example Here"
