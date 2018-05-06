@@ -30,7 +30,7 @@ build.biocheck <- function (path) {
 build.site <- function (path) {
     build.install(path)
     message("------------  Start building documentation site  ----------")
-    pkgdown::build_site(pkg = path, path = file.path(path, "gh-pages"), examples = TRUE)
+    pkgdown::build_site(pkg = path)
 }
 
 build.serve <- function (path) {
