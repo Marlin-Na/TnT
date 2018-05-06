@@ -1,0 +1,20 @@
+pandoc: 1.19.2.1
+pkgdown: 1.0.0
+pkgdown_sha: ~
+articles:
+  Notshown-CoverageTrack: examples/Notshown-CoverageTrack.html
+  Notshown-trackDataConstructors: examples/Notshown-trackDataConstructors.html
+  Notshown-trackWakeup: examples/Notshown-trackWakeup.html
+  Notshown-trackWidget: examples/Notshown-trackWidget.html
+  index: examples/index.html
+  track-CompositeTrack: examples/track-CompositeTrack.html
+  track-colors: examples/track-colors.html
+  track-tooltip-display: examples/track-tooltip-display.html
+  tracktype-BlockTrack: examples/tracktype-BlockTrack.html
+  tracktype-GeneTrack: examples/tracktype-GeneTrack.html
+  tracktype-LineTrack-AreaTrack: examples/tracktype-LineTrack-AreaTrack.html
+  tracktype-PinTrack: examples/tracktype-PinTrack.html
+  tracktype-TxTrack: examples/tracktype-TxTrack.html
+  tracktype-VlineTrack: examples/tracktype-VlineTrack.html
+  introduction: introduction.html
+

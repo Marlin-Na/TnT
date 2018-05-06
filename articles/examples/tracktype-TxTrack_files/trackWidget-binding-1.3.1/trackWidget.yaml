@@ -1,0 +1,20 @@
+dependencies:
+ - name: d3
+   version: 3.5.17
+   src: htmlwidgets/lib/d3
+   script: d3.v3.min.js
+   # stylesheet:
+ - name: tnt.genome
+   version: 0.1.6
+   src: htmlwidgets/lib/tnt.genome
+   script: tnt.genome.min.js
+   stylesheet: tnt.genome.css
+ - name: tnt.tooltip
+   version: 0.2.0
+   src: htmlwidgets/lib/tnt.tooltip
+   script: tnt.tooltip.js
+   stylesheet: tnt.tooltip.css
+ - name: tnt.r
+   version: 0.0.1
+   src: htmlwidgets/lib/tnt.r
+   script: tnt.r.js

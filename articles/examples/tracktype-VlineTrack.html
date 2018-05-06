@@ -8,14 +8,17 @@
 <title>Vline Track • TnT</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
-<script src="../../jquery.sticky-kit.min.js"></script><script src="../../pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
+<script src="../../jquery.sticky-kit.min.js"></script><script src="../../pkgdown.js"></script><meta property="og:title" content="Vline Track">
+<meta property="og:description" content="">
+<meta name="twitter:card" content="summary">
+<!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -24,8 +27,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../../index.html">TnT</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../../index.html">TnT</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.3.1</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li class="dropdown">
@@ -108,18 +115,21 @@
 <!--/.navbar -->
 
       
-      </header><script src="tracktype-VlineTrack_files/htmlwidgets-0.9/htmlwidgets.js"></script><script src="tracktype-VlineTrack_files/d3-3.5.17/d3.v3.min.js"></script><link href="tracktype-VlineTrack_files/tnt.genome-0.1.6/tnt.genome.css" rel="stylesheet">
+      </header><script src="tracktype-VlineTrack_files/htmlwidgets-1.2/htmlwidgets.js"></script><script src="tracktype-VlineTrack_files/d3-3.5.17/d3.v3.min.js"></script><link href="tracktype-VlineTrack_files/tnt.genome-0.1.6/tnt.genome.css" rel="stylesheet">
 <script src="tracktype-VlineTrack_files/tnt.genome-0.1.6/tnt.genome.min.js"></script><link href="tracktype-VlineTrack_files/tnt.tooltip-0.2.0/tnt.tooltip.css" rel="stylesheet">
-<script src="tracktype-VlineTrack_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="tracktype-VlineTrack_files/trackWidget-binding-1.1.3/trackWidget.js"></script><div class="row">
-  <div class="col-md-9">
+<script src="tracktype-VlineTrack_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="tracktype-VlineTrack_files/tnt.r-0.0.1/tnt.r.js"></script><script src="tracktype-VlineTrack_files/trackWidget-binding-1.3.1/trackWidget.js"></script><div class="row">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Vline Track</h1>
             
-          </div>
+      
+      <small class="dont-index">Source: <a href="https://github.com/Marlin-Na/TnT/blob/master/vignettes/examples/tracktype-VlineTrack.Rmd"><code>vignettes/examples/tracktype-VlineTrack.Rmd</code></a></small>
+      <div class="hidden name"><code>tracktype-VlineTrack.Rmd</code></div>
+
+    </div>
 
     
     
-<div class="contents">
 <p>Vline Track displays vertical lines in the given positions (i.e. width-one GRanges).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>({
     <span class="kw">library</span>(TnT)
@@ -138,6 +148,8 @@ vltrack &lt;-<span class="st"> </span>TnT<span class="op">::</span><span class="
 ##   automatically select 204..1018 on seqlevel UnKnown...</code></pre>
 <pre><code>## - Missing argument `coord.range` and seqlength is unknown:
 ##   automatically set coordinate limit to 146..1076 ...</code></pre>
+<pre><code>## Warning in readLines(con): incomplete final line found on '/home/jialin/R/
+## x86_64-suse-linux-gnu-library/3.4/TnT/htmlwidgets/trackWidget.yaml'</code></pre>
 <div id="htmlwidget-bc22a8b475b8ef4176f0" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
 <script type="application/json" data-for="htmlwidget-bc22a8b475b8ef4176f0">{"x":{"tntdef":"tnt.board()\n.from(204)\n.to(1018)\n.min(146)\n.max(1076)\n.zoom_out(1031)\n.zoom_in(10)\n.allow_drag(true)\n.add_track(tnt.board.track()\n.label(\"\")\n.color(\"#FFFFFF\")\n.height(40)\n.display(tnt.board.track.feature.vline()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.on(\"click\", tnr.tooltip_callback(\"\", [\"Position\",\"Color\"])))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.pos_data_retriever([\n  {\n    \"pos\": 915,\n    \"tooltip\": {\n      \"Position\": 915,\n      \"Color\": \"red\"\n    },\n    \"color\": \"#FF0000\",\n    \"key\": 915\n  },\n  {\n    \"pos\": 937,\n    \"tooltip\": {\n      \"Position\": 937,\n      \"Color\": \"yellow\"\n    },\n    \"color\": \"#FFFF00\",\n    \"key\": 937\n  },\n  {\n    \"pos\": 286,\n    \"tooltip\": {\n      \"Position\": 286,\n      \"Color\": \"green\"\n    },\n    \"color\": \"#00FF00\",\n    \"key\": 286\n  },\n  {\n    \"pos\": 828,\n    \"tooltip\": {\n      \"Position\": 828,\n      \"Color\": \"cyan\"\n    },\n    \"color\": \"#00FFFF\",\n    \"key\": 828\n  },\n  {\n    \"pos\": 640,\n    \"tooltip\": {\n      \"Position\": 640,\n      \"Color\": \"blue\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 640\n  },\n  {\n    \"pos\": 517,\n    \"tooltip\": {\n      \"Position\": 517,\n      \"Color\": \"magenta\"\n    },\n    \"color\": \"#FF00FF\",\n    \"key\": 517\n  }\n]\n, false))))"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
 </div>
@@ -166,36 +178,39 @@ vltrack &lt;-<span class="st"> </span>TnT<span class="op">::</span><span class="
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-## [1] GenomicFeatures_1.29.11 AnnotationDbi_1.39.3    Biobase_2.38.0         
-## [4] TnT_1.1.3               GenomicRanges_1.30.1    GenomeInfoDb_1.14.0    
-## [7] IRanges_2.12.0          S4Vectors_0.16.0        BiocGenerics_0.24.0    
+## [1] GenomicFeatures_1.30.3 AnnotationDbi_1.40.0   Biobase_2.38.0        
+## [4] TnT_1.3.1              GenomicRanges_1.30.3   GenomeInfoDb_1.14.0   
+## [7] IRanges_2.12.0         S4Vectors_0.16.0       BiocGenerics_0.24.0   
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.13               compiler_3.4.1            
-##  [3] XVector_0.18.0             prettyunits_1.0.2         
-##  [5] bitops_1.0-6               tools_3.4.1               
-##  [7] zlibbioc_1.24.0            progress_1.1.2            
-##  [9] biomaRt_2.33.4             digest_0.6.12             
-## [11] bit_1.1-12                 lattice_0.20-35           
-## [13] jsonlite_1.5               evaluate_0.10.1           
-## [15] RSQLite_2.0                memoise_1.1.0             
-## [17] tibble_1.3.4               rlang_0.1.2.9000          
-## [19] Matrix_1.2-10              DelayedArray_0.3.21       
-## [21] DBI_0.7                    yaml_2.1.14               
-## [23] GenomeInfoDbData_0.99.1    rtracklayer_1.37.3        
-## [25] stringr_1.2.0              knitr_1.17                
-## [27] Biostrings_2.45.4          htmlwidgets_0.9           
-## [29] grid_3.4.1                 rprojroot_1.2             
-## [31] bit64_0.9-7                R6_2.2.2                  
-## [33] BiocParallel_1.11.8        XML_3.98-1.9              
-## [35] rmarkdown_1.6              blob_1.1.0                
-## [37] magrittr_1.5               matrixStats_0.52.2        
-## [39] GenomicAlignments_1.13.6   Rsamtools_1.29.1          
-## [41] backports_1.1.1            htmltools_0.3.6           
-## [43] SummarizedExperiment_1.7.9 assertthat_0.2.0          
-## [45] colorspace_1.3-2           stringi_1.1.5             
-## [47] RCurl_1.95-4.8</code></pre>
-</div>
+##  [1] SummarizedExperiment_1.8.1 progress_1.1.2            
+##  [3] lattice_0.20-35            colorspace_1.3-2          
+##  [5] htmltools_0.3.6            rtracklayer_1.38.3        
+##  [7] yaml_2.1.19                blob_1.1.1                
+##  [9] XML_3.98-1.10              rlang_0.2.0.9001          
+## [11] pkgdown_1.0.0              DBI_0.8                   
+## [13] BiocParallel_1.12.0        bit64_0.9-7               
+## [15] matrixStats_0.52.2         GenomeInfoDbData_1.0.0    
+## [17] stringr_1.3.0              zlibbioc_1.24.0           
+## [19] Biostrings_2.46.0          commonmark_1.4            
+## [21] htmlwidgets_1.2            memoise_1.1.0             
+## [23] evaluate_0.10.1            knitr_1.20                
+## [25] biomaRt_2.34.2             Rcpp_0.12.16              
+## [27] backports_1.1.2-9000       DelayedArray_0.4.1        
+## [29] desc_1.2.0                 jsonlite_1.5              
+## [31] XVector_0.18.0             fs_1.2.2                  
+## [33] bit_1.1-12                 Rsamtools_1.30.0          
+## [35] RMySQL_0.10.14             digest_0.6.15             
+## [37] stringi_1.2.2              grid_3.4.1                
+## [39] rprojroot_1.3-2            tools_3.4.1               
+## [41] bitops_1.0-6               magrittr_1.5              
+## [43] RCurl_1.95-4.10            RSQLite_2.1.0             
+## [45] crayon_1.3.4               Matrix_1.2-10             
+## [47] MASS_7.3-47                xml2_1.1.1                
+## [49] prettyunits_1.0.2          assertthat_0.2.0          
+## [51] rmarkdown_1.9              roxygen2_6.0.1            
+## [53] httr_1.3.1                 R6_2.2.2                  
+## [55] GenomicAlignments_1.14.2   compiler_3.4.1</code></pre>
 </div>
   </div>
 
@@ -218,11 +233,13 @@ vltrack &lt;-<span class="st"> </span>TnT<span class="op">::</span><span class="
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

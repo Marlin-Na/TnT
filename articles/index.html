@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Articles" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -37,7 +43,7 @@
   </head>
 
   <body>
-    <div class="container template-vignette-index">
+    <div class="container template-article-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -47,8 +53,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">TnT</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">TnT</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.3.1</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
@@ -124,6 +134,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -131,12 +142,12 @@
       
       </header>
 
-      <div class="page-header">
-  <h1>Articles <small>version&nbsp;1.1.3</small></h1>
-</div>
-
 <div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+      <h1>Articles</h1>
+    </div>
+
     <div class="section ">
       <h3>All vignettes</h3>
       <p class="section-desc"></p>
@@ -150,16 +161,21 @@
       <p class="section-desc"><p>Examples of TnT, including different track constructors.</p></p>
 
       <ul>
+        <li><a href="examples/Notshown-CoverageTrack.html">Coverage Track</a></li>
+        <li><a href="examples/Notshown-trackDataConstructors.html">TrackData Constructors</a></li>
+        <li><a href="examples/Notshown-trackWakeup.html">Track Wakeup</a></li>
+        <li><a href="examples/Notshown-trackWidget.html">trackWidget</a></li>
         <li><a href="examples/index.html">TnT Examples</a></li>
+        <li><a href="examples/track-CompositeTrack.html">Composite Track</a></li>
+        <li><a href="examples/track-colors.html">Colors of Track</a></li>
+        <li><a href="examples/track-tooltip-display.html">Tooltip Display in Tracks</a></li>
         <li><a href="examples/tracktype-BlockTrack.html">Block Track</a></li>
         <li><a href="examples/tracktype-GeneTrack.html">Gene Track and Feature Track</a></li>
         <li><a href="examples/tracktype-LineTrack-AreaTrack.html">Line Track and Area Track</a></li>
         <li><a href="examples/tracktype-PinTrack.html">Pin Track</a></li>
         <li><a href="examples/tracktype-TxTrack.html">TxTrack and GroupFeatureTrack</a></li>
         <li><a href="examples/tracktype-VlineTrack.html">Vline Track</a></li>
-        <li><a href="examples/track-CompositeTrack.html">Composite Track</a></li>
-        <li><a href="examples/track-tooltip-display.html">Tooltip Display in Tracks</a></li>
-        <li><a href="examples/track-colors.html">Colors of Track</a></li>
+        <li><a href="introduction.html">Introduction to TnT</a></li>
       </ul>
     </div>
   </div>
@@ -171,11 +187,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

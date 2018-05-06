@@ -18,13 +18,23 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Save a TnTBoard to an HTML file — saveTnT" />
+
+<meta property="og:description" content="A simple wrapper of saveWidget, which saves a
+TnTBoard/TnTGenome object to an HTML file (e.g. for sharing with others)." />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +57,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">TnT</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">TnT</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.3.1</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
@@ -124,6 +138,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -131,21 +146,25 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Save a TnTBoard to an HTML file</h1>
+    <small class="dont-index">Source: <a href='https://github.com/Marlin-Na/TnT/blob/master/R/misc.R'><code>R/misc.R</code></a></small>
+    <div class="hidden name"><code>saveTnT.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>A simple wrapper of <code><a href='http://www.rdocumentation.org/packages/htmlwidgets/topics/saveWidget'>saveWidget</a></code>, which saves a
 TnTBoard/TnTGenome object to an HTML file (e.g. for sharing with others).</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>saveTnT</span>(<span class='no'>tntdef</span>, <span class='no'>file</span>, <span class='kw'>selfcontained</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>libdir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>background</span> <span class='kw'>=</span> <span class='st'>"white"</span>, <span class='kw'>knitrOptions</span> <span class='kw'>=</span> <span class='fu'>list</span>())</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -169,9 +188,9 @@ TnTBoard/TnTGenome object to an HTML file (e.g. for sharing with others).</p>
 <span class='no'>track</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='track-constructors.html'>PinTrack</a></span>(<span class='no'>data</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>background</span> <span class='kw'>=</span> <span class='st'>"green"</span>)
 <span class='no'>genome</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tntboard.html'>TnTGenome</a></span>(<span class='fu'>list</span>(<span class='no'>track</span>))
 <span class='no'>destfile</span> <span class='kw'>&lt;-</span> <span class='fu'>tempfile</span>(<span class='kw'>fileext</span> <span class='kw'>=</span> <span class='st'>".html"</span>)
-<span class='no'>destfile</span></div><div class='output co'>#&gt; [1] "/tmp/RtmppsEE6O/file53a727c17e4.html"</div><div class='input'><span class='fu'>saveTnT</span>(<span class='no'>genome</span>, <span class='no'>destfile</span>)</div><div class='output co'>#&gt; <span class='message'>- Missing argument `view.range`:</span>
+<span class='no'>destfile</span></div><div class='output co'>#&gt; [1] "/tmp/Rtmp9792Ks/file64712490033e.html"</div><div class='input'><span class='fu'>saveTnT</span>(<span class='no'>genome</span>, <span class='no'>destfile</span>)</div><div class='output co'>#&gt; <span class='message'>- Missing argument `view.range`:</span>
 #&gt; <span class='message'>  automatically select 1..46 on seqlevel chr2...</span></div><div class='output co'>#&gt; <span class='message'>- Missing argument `coord.range` and seqlength is unknown:</span>
-#&gt; <span class='message'>  automatically set coordinate limit to -2..49 ...</span></div><div class='output co'>#&gt; <span class='warning'>Warning: file("") only supports open = "w+" and open = "w+b": using the former</span></div><div class='output co'>#&gt; <span class='error'>Error in dirname(to): a character vector argument expected</span></div><span class='co'># NOT RUN {</span>
+#&gt; <span class='message'>  automatically set coordinate limit to -2..49 ...</span></div><span class='co'># NOT RUN {</span>
 <span class='kw pkg'>utils</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/utils/topics/browseURL'>browseURL</a></span>(<span class='no'>destfile</span>)
 <span class='co'># }</span></pre>
   </div>
@@ -194,11 +213,14 @@ TnTBoard/TnTGenome object to an HTML file (e.g. for sharing with others).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

@@ -8,14 +8,17 @@
 <title>Track Wakeup • TnT</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
-<script src="../../jquery.sticky-kit.min.js"></script><script src="../../pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
+<script src="../../jquery.sticky-kit.min.js"></script><script src="../../pkgdown.js"></script><meta property="og:title" content="Track Wakeup">
+<meta property="og:description" content="">
+<meta name="twitter:card" content="summary">
+<!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body>
-    <div class="container template-vignette">
+    <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -24,8 +27,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../../index.html">TnT</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../../index.html">TnT</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.3.1</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li class="dropdown">
@@ -108,18 +115,21 @@
 <!--/.navbar -->
 
       
-      </header><script src="Notshown-trackWakeup_files/htmlwidgets-0.9/htmlwidgets.js"></script><script src="Notshown-trackWakeup_files/d3-3.5.17/d3.v3.min.js"></script><link href="Notshown-trackWakeup_files/tnt.genome-0.1.6/tnt.genome.css" rel="stylesheet">
+      </header><script src="Notshown-trackWakeup_files/htmlwidgets-1.2/htmlwidgets.js"></script><script src="Notshown-trackWakeup_files/d3-3.5.17/d3.v3.min.js"></script><link href="Notshown-trackWakeup_files/tnt.genome-0.1.6/tnt.genome.css" rel="stylesheet">
 <script src="Notshown-trackWakeup_files/tnt.genome-0.1.6/tnt.genome.min.js"></script><link href="Notshown-trackWakeup_files/tnt.tooltip-0.2.0/tnt.tooltip.css" rel="stylesheet">
-<script src="Notshown-trackWakeup_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="Notshown-trackWakeup_files/trackWidget-binding-1.1.3/trackWidget.js"></script><div class="row">
-  <div class="col-md-9">
+<script src="Notshown-trackWakeup_files/tnt.tooltip-0.2.0/tnt.tooltip.js"></script><script src="Notshown-trackWakeup_files/tnt.r-0.0.1/tnt.r.js"></script><script src="Notshown-trackWakeup_files/trackWidget-binding-1.3.1/trackWidget.js"></script><div class="row">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Track Wakeup</h1>
             
-          </div>
+      
+      <small class="dont-index">Source: <a href="https://github.com/Marlin-Na/TnT/blob/master/vignettes/examples/Notshown-trackWakeup.Rmd"><code>vignettes/examples/Notshown-trackWakeup.Rmd</code></a></small>
+      <div class="hidden name"><code>Notshown-trackWakeup.Rmd</code></div>
+
+    </div>
 
     
     
-<div class="contents">
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">expose_all &lt;-<span class="st"> </span><span class="cf">function</span> (package) {
     attachname &lt;-<span class="st"> </span><span class="kw">paste0</span>(package, <span class="st">"_all"</span>)
     <span class="cf">while</span> (attachname <span class="op">%in%</span><span class="st"> </span><span class="kw">search</span>()) <span class="kw">detach</span>(attachname, <span class="dt">character.only =</span> <span class="ot">TRUE</span>)
@@ -294,8 +304,10 @@ w.track &lt;-<span class="st"> </span><span class="kw">wakeupTrack</span>(track)
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../../reference/tntboard.html">TnTBoard</a></span>(<span class="kw">list</span>(track), <span class="dt">view.range =</span> <span class="kw">GRanges</span>(<span class="st">"chr12"</span>, <span class="kw">IRanges</span>(<span class="dv">1</span>, <span class="dv">100</span>)))</code></pre></div>
 <pre><code>## - Missing argument `coord.range` and seqlength is unknown:
 ##   automatically set coordinate limit to 3..52 ...</code></pre>
-<div id="htmlwidget-4cce9681f2158027ffb4" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4cce9681f2158027ffb4">{"x":{"tntdef":"tnt.board()\n.from(1)\n.to(100)\n.min(3)\n.max(52)\n.zoom_out(150)\n.zoom_in(10)\n.allow_drag(true)\n.add_track(tnt.board.track()\n.label(\"gr\")\n.color(\"#FFFFFF\")\n.height(30)\n.display(tnt.board.track.feature.block()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.on(\"click\", tnr.tooltip_callback(\"gr\", [\"Location\",\"Chromosome\",\"Start\",\"End\",\"Description\",\"What's for?\"])))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.range_data_retriever([\n  {\n    \"start\": 11,\n    \"end\": 15,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 11,\n      \"End\": 15,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 1\n  },\n  {\n    \"start\": 21,\n    \"end\": 25,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 21,\n      \"End\": 25,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 2\n  },\n  {\n    \"start\": 31,\n    \"end\": 35,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 31,\n      \"End\": 35,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 3\n  },\n  {\n    \"start\": 41,\n    \"end\": 45,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 41,\n      \"End\": 45,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 4\n  }\n]\n, false))))"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
+<pre><code>## Warning in readLines(con): incomplete final line found on '/home/jialin/R/
+## x86_64-suse-linux-gnu-library/3.4/TnT/htmlwidgets/trackWidget.yaml'</code></pre>
+<div id="htmlwidget-a0d8e1bc86bf2f6c1d33" style="width:100%;height:auto;" class="trackWidget html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a0d8e1bc86bf2f6c1d33">{"x":{"tntdef":"tnt.board()\n.from(1)\n.to(100)\n.min(3)\n.max(52)\n.zoom_out(150)\n.zoom_in(10)\n.allow_drag(true)\n.add_track(tnt.board.track()\n.label(\"gr\")\n.color(\"#FFFFFF\")\n.height(30)\n.display(tnt.board.track.feature.block()\n.color(function (d) {return d.color;})\n.index(function (d) {return d.key;})\n.on(\"click\", tnr.tooltip_callback(\"gr\", [\"Location\",\"Chromosome\",\"Start\",\"End\",\"Description\",\"What's for?\"])))\n.data(tnt.board.track.data.sync()\n.retriever(tnr.range_data_retriever([\n  {\n    \"start\": 11,\n    \"end\": 15,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 11,\n      \"End\": 15,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 1\n  },\n  {\n    \"start\": 21,\n    \"end\": 25,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 21,\n      \"End\": 25,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 2\n  },\n  {\n    \"start\": 31,\n    \"end\": 35,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 31,\n      \"End\": 35,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 3\n  },\n  {\n    \"start\": 41,\n    \"end\": 45,\n    \"tooltip\": {\n      \"Location\": \"\",\n      \"Chromosome\": 12,\n      \"Start\": 41,\n      \"End\": 45,\n      \"Description\": \"\",\n      \"What's for?\": \"Unknown\"\n    },\n    \"color\": \"#0000FF\",\n    \"key\": 4\n  }\n]\n, false))))"},"evals":[],"jsHooks":[]}</script><p><br><br></p>
 </div>
 <div id="todo-compositetrack-wakeup" class="section level2">
 <h2 class="hasAnchor">
@@ -304,10 +316,8 @@ w.track &lt;-<span class="st"> </span><span class="kw">wakeupTrack</span>(track)
 <div id="misc-pintrack-compilation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#misc-pintrack-compilation" class="anchor"></a>Misc-PinTrack-Compilation</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ptrack &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/track-constructors.html">PinTrack</a></span>(<span class="kw">GRanges</span>(<span class="st">"chr21"</span>, <span class="kw">IRanges</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">width =</span> <span class="dv">1</span>), <span class="dt">value =</span> <span class="kw">runif</span>(<span class="dv">2</span>)))</code></pre></div>
-<pre><code>## Warning in runif(2): '.Random.seed' is not an integer vector but of type
-## 'NULL', so ignored</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">compileTrack</span>(ptrack)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ptrack &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/track-constructors.html">PinTrack</a></span>(<span class="kw">GRanges</span>(<span class="st">"chr21"</span>, <span class="kw">IRanges</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">width =</span> <span class="dv">1</span>), <span class="dt">value =</span> <span class="kw">runif</span>(<span class="dv">2</span>)))
+<span class="kw">compileTrack</span>(ptrack)</code></pre></div>
 <pre><code>## JSCascade Object:
 ## ------
 ## tnt.board.track()
@@ -324,23 +334,23 @@ w.track &lt;-<span class="st"> </span><span class="kw">wakeupTrack</span>(track)
 ##            {
 ##              "pos": 1,
 ##              "tooltip": {
-##                "value": 0.9767
+##                "value": 0.2199
 ##              },
 ##              "color": "#FF0000",
 ##              "key": 1,
-##              "val": 0.9767
+##              "val": 0.2199
 ##            },
 ##            {
 ##              "pos": 2,
 ##              "tooltip": {
-##                "value": 0.1044
+##                "value": 0.205
 ##              },
 ##              "color": "#FF0000",
 ##              "key": 2,
-##              "val": 0.1044
+##              "val": 0.205
 ##            }
 ##          ]
-##          , [0,0.9767]), false)))</code></pre>
+##          , [0,0.2199]), false)))</code></pre>
 </div>
 <div id="session-info" class="section level2">
 <h2 class="hasAnchor">
@@ -367,36 +377,40 @@ w.track &lt;-<span class="st"> </span><span class="kw">wakeupTrack</span>(track)
 ## [8] datasets  base     
 ## 
 ## other attached packages:
-## [1] GenomicFeatures_1.29.11 AnnotationDbi_1.39.3    Biobase_2.38.0         
-## [4] GenomicRanges_1.30.1    GenomeInfoDb_1.14.0     IRanges_2.12.0         
-## [7] S4Vectors_0.16.0        BiocGenerics_0.24.0    
+## [1] GenomicFeatures_1.30.3 AnnotationDbi_1.40.0   Biobase_2.38.0        
+## [4] GenomicRanges_1.30.3   GenomeInfoDb_1.14.0    IRanges_2.12.0        
+## [7] S4Vectors_0.16.0       BiocGenerics_0.24.0   
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.13               compiler_3.4.1            
-##  [3] XVector_0.18.0             prettyunits_1.0.2         
-##  [5] bitops_1.0-6               tools_3.4.1               
-##  [7] zlibbioc_1.24.0            progress_1.1.2            
-##  [9] biomaRt_2.33.4             digest_0.6.12             
-## [11] bit_1.1-12                 jsonlite_1.5              
-## [13] lattice_0.20-35            evaluate_0.10.1           
-## [15] RSQLite_2.0                memoise_1.1.0             
-## [17] tibble_1.3.4               rlang_0.1.2.9000          
-## [19] Matrix_1.2-10              DelayedArray_0.3.21       
-## [21] DBI_0.7                    yaml_2.1.14               
-## [23] GenomeInfoDbData_0.99.1    rtracklayer_1.37.3        
-## [25] stringr_1.2.0              knitr_1.17                
-## [27] htmlwidgets_0.9            Biostrings_2.45.4         
-## [29] TnT_1.1.3                  grid_3.4.1                
-## [31] rprojroot_1.2              bit64_0.9-7               
-## [33] R6_2.2.2                   BiocParallel_1.11.8       
-## [35] XML_3.98-1.9               rmarkdown_1.6             
-## [37] blob_1.1.0                 magrittr_1.5              
-## [39] matrixStats_0.52.2         GenomicAlignments_1.13.6  
-## [41] Rsamtools_1.29.1           backports_1.1.1           
-## [43] htmltools_0.3.6            SummarizedExperiment_1.7.9
-## [45] assertthat_0.2.0           colorspace_1.3-2          
-## [47] stringi_1.1.5              RCurl_1.95-4.8</code></pre>
-</div>
+##  [1] SummarizedExperiment_1.8.1 progress_1.1.2            
+##  [3] lattice_0.20-35            colorspace_1.3-2          
+##  [5] htmltools_0.3.6            rtracklayer_1.38.3        
+##  [7] yaml_2.1.19                blob_1.1.1                
+##  [9] XML_3.98-1.10              rlang_0.2.0.9001          
+## [11] pkgdown_1.0.0              DBI_0.8                   
+## [13] BiocParallel_1.12.0        bit64_0.9-7               
+## [15] matrixStats_0.52.2         GenomeInfoDbData_1.0.0    
+## [17] stringr_1.3.0              zlibbioc_1.24.0           
+## [19] Biostrings_2.46.0          commonmark_1.4            
+## [21] htmlwidgets_1.2            memoise_1.1.0             
+## [23] evaluate_0.10.1            knitr_1.20                
+## [25] biomaRt_2.34.2             Rcpp_0.12.16              
+## [27] backports_1.1.2-9000       DelayedArray_0.4.1        
+## [29] desc_1.2.0                 jsonlite_1.5              
+## [31] TnT_1.3.1                  XVector_0.18.0            
+## [33] fs_1.2.2                   bit_1.1-12                
+## [35] Rsamtools_1.30.0           RMySQL_0.10.14            
+## [37] digest_0.6.15              stringi_1.2.2             
+## [39] grid_3.4.1                 rprojroot_1.3-2           
+## [41] tools_3.4.1                bitops_1.0-6              
+## [43] magrittr_1.5               RCurl_1.95-4.10           
+## [45] RSQLite_2.1.0              crayon_1.3.4              
+## [47] Matrix_1.2-10              MASS_7.3-47               
+## [49] xml2_1.1.1                 prettyunits_1.0.2         
+## [51] assertthat_0.2.0           rmarkdown_1.9             
+## [53] roxygen2_6.0.1             httr_1.3.1                
+## [55] R6_2.2.2                   GenomicAlignments_1.14.2  
+## [57] compiler_3.4.1</code></pre>
 </div>
   </div>
 
@@ -421,11 +435,13 @@ w.track &lt;-<span class="st"> </span><span class="kw">wakeupTrack</span>(track)
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
 </div>
+
+  
 
   </body>
 </html>

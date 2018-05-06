@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Function reference" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +53,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">TnT</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">TnT</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">1.3.1</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
@@ -124,6 +134,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -131,146 +142,141 @@
       
       </header>
 
-      <div class="row">
-  <div class="col-md-9">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;1.1.3</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    <table class="ref-index">
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <colgroup>
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-tracks" class="hasAnchor"><a href="#section-tracks" class="anchor"></a>Tracks</h2>
-            <p class="section-desc"><p>Track constructors and accessors.</p></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="track-constructors.html">BlockTrack</a></code> <code><a href="track-constructors.html">VlineTrack</a></code> <code><a href="track-constructors.html">PinTrack</a></code> <code><a href="track-constructors.html">LineTrack</a></code> <code><a href="track-constructors.html">AreaTrack</a></code> <code><a href="track-constructors.html">GeneTrackFromTxDb</a></code> <code><a href="track-constructors.html">FeatureTrack</a></code> <code><a href="track-constructors.html">GroupFeatureTrack</a></code> <code><a href="track-constructors.html">TxTrackFromTxDb</a></code> <code><a href="track-constructors.html">TxTrackFromGRanges</a></code> </p>
-          </td>
-          <td><p>Track Constructors</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="composite-track.html">merge</a></code> </p>
-          </td>
-          <td><p>Composite Track</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="tooltip.html">tooltip</a></code> <code><a href="tooltip.html">tooltip<-</a></code> </p>
-          </td>
-          <td><p>Access Track Tooltips</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="trackdata.html">trackdata</a></code> </p>
-          </td>
-          <td><p>Access Track Data</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="trackSpec.html">trackSpec</a></code> <code><a href="trackSpec.html">trackSpec<-</a></code> </p>
-          </td>
-          <td><p>Track Spec</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="range-TnTTrack.html">range</a></code> </p>
-          </td>
-          <td><p>Range of Tracks</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="seqinfo.html">seqinfo<-</a></code> <code><a href="seqinfo.html">seqinfo</a></code> <code><a href="seqinfo.html">seqlevelsInUse</a></code> </p>
-          </td>
-          <td><p>Seqinfo of TnTTrack and TnTBoard</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-tnt-board" class="hasAnchor"><a href="#section-tnt-board" class="anchor"></a>TnT Board</h2>
-            <p class="section-desc"><p>TnT Board and TnT Genome.</p></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="tntboard.html">TnTBoard</a></code> <code><a href="tntboard.html">TnTGenome</a></code> </p>
-          </td>
-          <td><p>TnTBoard</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="tracklist.html">tracklist</a></code> <code><a href="tracklist.html">tracklist<-</a></code> </p>
-          </td>
-          <td><p>Track List in TnTBoard</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="knit_print.TnTBoard.html">knit_print</a></code> </p>
-          </td>
-          <td><p>Printing TnTBoard in Rmarkdown</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="range-TnTBoard-method.html">range</a></code> </p>
-          </td>
-          <td><p>Range of TnTBoard</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="TnT-shiny.html">TnTOutput</a></code> <code><a href="TnT-shiny.html">renderTnT</a></code> </p>
-          </td>
-          <td><p>Shiny bindings for TnT</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-utils" class="hasAnchor"><a href="#section-utils" class="anchor"></a>Utils</h2>
-            <p class="section-desc"><p>Some small util functions.</p></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="saveTnT.html">saveTnT</a></code> </p>
-          </td>
-          <td><p>Save a TnTBoard to an HTML file</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="mapcol.html">mapcol</a></code> </p>
-          </td>
-          <td><p>Scale Qualitative Values to Color</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="strandlabel.html">strandlabel</a></code> </p>
-          </td>
-          <td><p>Display Labels with Strand</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="trackWidget.html">trackWidget</a></code> </p>
-          </td>
-          <td><p>Convert a TnTBoard to htmlwidget</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-tracks" class="hasAnchor"><a href="#section-tracks" class="anchor"></a>Tracks</h2>
+          <p class="section-desc"><p>Track constructors and accessors.</p></p>
+        </th>
+      </tr>
+      <tr>
+        <!--  -->
+        <td>
+          <p><code><a href="track-constructors.html">BlockTrack()</a></code> <code><a href="track-constructors.html">VlineTrack()</a></code> <code><a href="track-constructors.html">PinTrack()</a></code> <code><a href="track-constructors.html">LineTrack()</a></code> <code><a href="track-constructors.html">AreaTrack()</a></code> <code><a href="track-constructors.html">GeneTrackFromTxDb()</a></code> <code><a href="track-constructors.html">FeatureTrack()</a></code> <code><a href="track-constructors.html">GroupFeatureTrack()</a></code> <code><a href="track-constructors.html">TxTrackFromTxDb()</a></code> <code><a href="track-constructors.html">TxTrackFromGRanges()</a></code> </p>
+        </td>
+        <td><p>Track Constructors</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="composite-track.html">merge(<i>&lt;TnTTrack&gt;</i>,<i>&lt;TnTTrack&gt;</i>)</a></code> <code><a href="composite-track.html">merge(<i>&lt;TnTTrack&gt;</i>,<i>&lt;missing&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Composite Track</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="tooltip.html">tooltip()</a></code> <code><a href="tooltip.html">`tooltip<-`()</a></code> </p>
+        </td>
+        <td><p>Access Track Tooltips</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="trackdata.html">trackData()</a></code> <code><a href="trackdata.html">`trackData<-`()</a></code> <code><a href="trackdata.html">`$`(<i>&lt;TnTTrack&gt;</i>)</a></code> <code><a href="trackdata.html">`$<-`(<i>&lt;TnTTrack&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Access Track Data</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="trackSpec.html">trackSpec()</a></code> <code><a href="trackSpec.html">`trackSpec<-`()</a></code> </p>
+        </td>
+        <td><p>Track Spec</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="range-TnTTrack.html">range(<i>&lt;RangeBasedTrack&gt;</i>)</a></code> <code><a href="range-TnTTrack.html">range(<i>&lt;CompositeTrack&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Range of Tracks</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="seqinfo.html">`seqinfo<-`(<i>&lt;RangeBasedTrack&gt;</i>)</a></code> <code><a href="seqinfo.html">seqinfo(<i>&lt;RangeBasedTrack&gt;</i>)</a></code> <code><a href="seqinfo.html">seqlevelsInUse(<i>&lt;RangeBasedTrack&gt;</i>)</a></code> <code><a href="seqinfo.html">seqinfo(<i>&lt;TnTBoard&gt;</i>)</a></code> <code><a href="seqinfo.html">seqinfo(<i>&lt;CompositeTrack&gt;</i>)</a></code> <code><a href="seqinfo.html">`seqinfo<-`(<i>&lt;CompositeTrack&gt;</i>)</a></code> <code><a href="seqinfo.html">seqlevelsInUse(<i>&lt;CompositeTrack&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Seqinfo of TnTTrack and TnTBoard</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-tnt-board" class="hasAnchor"><a href="#section-tnt-board" class="anchor"></a>TnT Board</h2>
+          <p class="section-desc"><p>TnT Board and TnT Genome.</p></p>
+        </th>
+      </tr>
+      <tr>
+        <!--  -->
+        <td>
+          <p><code><a href="tntboard.html">TnTBoard()</a></code> <code><a href="tntboard.html">TnTGenome()</a></code> </p>
+        </td>
+        <td><p>TnTBoard</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="tracklist.html">tracklist()</a></code> <code><a href="tracklist.html">`tracklist<-`()</a></code> </p>
+        </td>
+        <td><p>Track List in TnTBoard</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="knit_print.TnTBoard.html">knit_print(<i>&lt;TnTBoard&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Printing TnTBoard in Rmarkdown</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="range-TnTBoard-method.html">range(<i>&lt;TnTBoard&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Range of TnTBoard</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="TnT-shiny.html">TnTOutput()</a></code> <code><a href="TnT-shiny.html">renderTnT()</a></code> </p>
+        </td>
+        <td><p>Shiny bindings for TnT</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-utils" class="hasAnchor"><a href="#section-utils" class="anchor"></a>Utils</h2>
+          <p class="section-desc"><p>Some small util functions.</p></p>
+        </th>
+      </tr>
+      <tr>
+        <!--  -->
+        <td>
+          <p><code><a href="saveTnT.html">saveTnT()</a></code> </p>
+        </td>
+        <td><p>Save a TnTBoard to an HTML file</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="mapcol.html">mapcol()</a></code> </p>
+        </td>
+        <td><p>Scale Qualitative Values to Color</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="strandlabel.html">strandlabel()</a></code> </p>
+        </td>
+        <td><p>Display Labels with Strand</p></td>
+      </tr><tr>
+        <!--  -->
+        <td>
+          <p><code><a href="trackWidget.html">trackWidget()</a></code> </p>
+        </td>
+        <td><p>Convert a TnTBoard to htmlwidget</p></td>
+      </tr>
+    </tbody>
+    </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -289,11 +295,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
