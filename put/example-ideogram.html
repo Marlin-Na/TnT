@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+
+<head>
+    <script src="https://eweitz.github.io/ideogram/dist/js/ideogram.min.js"></script>
+</head>
+
+<div id="example1"></div>
+<script>
+ const config1 = {
+     container: "#example1",
+     organism: "human",
+     chromosome: "17",
+     orientation: "vertical",
+     chrWidth: 8,
+     annotationsPath: 'https://eweitz.github.io/ideogram/data/annotations/1000_virtual_snvs.json',
+     annotationTracks: [
+         {id: 'pathogenicTrack', displayName: 'Pathogenic', color: '#F00', shape: shape},
+         {id: 'uncertainSignificanceTrack', displayName: 'Uncertain significance', color: '#CCC', shape: shape},
+         {id: 'benignTrack',  displayName: 'Benign', color: '#8D4', shape: shape}
+     ],
+     annotationHeight: 3.5
+ };
+ const ideogram1 = new Ideogram(config1);
+</script>
+
+</html>
