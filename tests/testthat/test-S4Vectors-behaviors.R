@@ -28,7 +28,8 @@ test_that("as.data.frame(DF) with nested df will have the nested df wrapped in A
     expect_identical(class(converted.df$x), "integer")
     expect_identical(class(converted.df$nested), c("AsIs", "data.frame"))
     # Unwrap the AsIs class
-    class(converted.df$nested) <- class(converted.df$nested)[class(converted.df$nested) != "AsIs"]
+    cl <- class(converted.df$nested)
+    class(converted.df$nested) <- cl[cl != "AsIs"]
     # No error now
     capture_output(print(converted.df))
 })
