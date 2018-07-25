@@ -456,7 +456,7 @@ setGeneric("compileTrackData",
 setMethod("compileTrackData", signature = "RangeTrackData",
     function (trackData, full = FALSE) {
         stopifnot(length(unique(seqnames(trackData))) == 1)
-        df <- as.data.frame(trackData, optional = TRUE) [
+        df <- .as.data.frame.GRanges(trackData, optional = TRUE) [
             c("start", "end", colnames(mcols(trackData)))]
         
         if (is(trackData, "TxTrackData"))
@@ -479,7 +479,7 @@ setMethod("compileTrackData", signature = "PosTrackData",
         stopifnot(length(unique(seqnames(trackData))) == 1)
         stopifnot(all(width(trackData) == 1))
         
-        df <- as.data.frame(trackData, optional = TRUE)[c("start", colnames(mcols(trackData)))]
+        df <- .as.data.frame.GRanges(trackData, optional = TRUE)[c("start", colnames(mcols(trackData)))]
         df <- S4Vectors::rename(df, c(start = "pos"))
         
         jc.data <- jc(
@@ -497,7 +497,7 @@ setMethod("compileTrackData", signature = "PosValTrackData",
         stopifnot(all(width(trackData) == 1))
         validObject(trackData)
         
-        df <- as.data.frame(trackData, optional = TRUE)[c("start", colnames(mcols(trackData)))]
+        df <- .as.data.frame.GRanges(trackData, optional = TRUE)[c("start", colnames(mcols(trackData)))]
         df <- S4Vectors::rename(df, c(start = "pos"))
         
         domain <- getdomain(trackData)
