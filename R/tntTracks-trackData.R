@@ -514,3 +514,32 @@ setMethod("compileTrackData", signature = "PosValTrackData",
         jc.data
     }
 )
+
+
+
+.as.data.frame.GRanges <- function(x) {
+    # An implementation of as.data.frame for GRanges due to 
+    # https://stat.ethz.ch/pipermail/bioc-devel/2018-July/013785.html
+    
+    stopifnot(is(x, "GRanges"))
+    
+    DF <- mcols(x)
+    mcols(x) <- NULL
+    ans <- as.data.frame(x)
+    
+    li <- as.list(DF)
+    li <- lapply(li, function(col) {
+        if (is(col, "SimpleList") || is(col, "CompressedList"))
+            col <- as.list(col)
+        if (is.list(col))
+            col <- I(col)
+        col
+    })
+    df <- do.call(data.frame, c(li, list(check.names = FALSE, stringsAsFactors = FALSE)))
+    
+    ans <- cbind(ans, df)
+    colnames(ans) <- make.unique(colnames(ans))
+    ans
+}
+
+
