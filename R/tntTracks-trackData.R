@@ -517,11 +517,12 @@ setMethod("compileTrackData", signature = "PosValTrackData",
 
 
 
-.as.data.frame.GRanges <- function(x) {
+.as.data.frame.GRanges <- function(x, optional = TRUE) {
     # An implementation of as.data.frame for GRanges due to 
     # https://stat.ethz.ch/pipermail/bioc-devel/2018-July/013785.html
     
     stopifnot(is(x, "GRanges"))
+    stopifnot(isTRUE(optional)) # An unused argument
     
     DF <- mcols(x)
     mcols(x) <- NULL
