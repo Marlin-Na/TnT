@@ -45,8 +45,9 @@ This vignette will also be extended in the future to include more details.
 You can install the stable version of TnT from Bioconductor:
 
 ```{r, eval=FALSE}
-source("https://bioconductor.org/biocLite.R")
-biocLite("TnT")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("TnT")
 ```
 
 Or alternatively, install the devel version from github:

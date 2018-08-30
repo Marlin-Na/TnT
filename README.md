@@ -16,8 +16,9 @@ when working with relevant Bioconductor packages.
 To install the stable version from biocondcutor, use
 
 ```R
-source("https://bioconductor.org/biocLite.R")
-biocLite("TnT")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("TnT")
 ```
 
 Or alternatively, install the latest version from github with
