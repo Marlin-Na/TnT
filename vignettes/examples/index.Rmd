@@ -11,7 +11,7 @@ knitr::kable(data.frame(check.names = FALSE,
     "Version" = c(
         sub(x = sub(x = R.Version()$version.string, "R version ", ""), " ",
             paste0(" ", R.Version()$nickname, " ")),
-        paste(as.character(BiocInstaller::biocVersion()),
+        paste(as.character(BiocInstaller::valid()),
               sprintf("(bioc-%s)", if (BiocInstaller::isDevel()) "devel" else "release")),
         Biobase::package.version("TnT")
     )

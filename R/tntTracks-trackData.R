@@ -142,7 +142,7 @@ GeneTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "bl
     
     if (!requireNamespace("GenomicFeatures", quietly = TRUE))
         stop("GenomicFeatures package is not available, ",
-             "please install with \"BiocInstaller::biocLite('GenomicFeatures')\"")
+             "please install with \"BiocManager::install('GenomicFeatures')\"")
     # TODO: use "single.strand.genes.only = FALSE" ?
     gr <- GenomicFeatures::genes(txdb)
     labels <- gr$gene_id
@@ -286,7 +286,7 @@ TxTrackDataFromTxDb <- function (txdb, seqlevel = seqlevels(txdb), color = "red"
     ## Extract features from txdb
     if (!requireNamespace("GenomicFeatures", quietly = TRUE))
         stop("GenomicFeatures package is not available, ",
-             "please install with \"BiocInstaller::biocLite('GenomicFeatures')\"")
+             "please install with \"BiocManager::install('GenomicFeatures')\"")
     gr.txs <- GenomicFeatures::transcripts(txdb, columns = c("tx_id", "tx_name", "gene_id"))
     gr.txs$gene_id <- as.character(gr.txs$gene_id) # contain NA values
     gr.cds <- GenomicFeatures::cds(txdb, columns = c("tx_id"))
