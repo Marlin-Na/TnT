@@ -327,8 +327,11 @@ setMethod("show", signature = "RangeBasedTrack",
         cat("| Background:\t", background, "\n", sep="")
         cat("| Height:\t", height, "\n", sep="")
         cat("| Data:\t")
-        dout <- capture.output(show(trackData(object)))
+        ## Currently there are issues printing data.frame inside of GRanges, so workaround
+        #dout <- capture.output(show(trackData(object)))
+        dout <- capture.output(show(as(as.data.frame(trackData(object)), "DataFrame")))
         dout[-1] <- paste0("|  ", dout[-1])
+        dout[1] <- ""
         dout <- paste(dout, collapse = "\n")
         cat(dout)
         cat("\n")
