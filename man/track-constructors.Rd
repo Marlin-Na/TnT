@@ -14,43 +14,100 @@
 \alias{TxTrackFromGRanges}
 \title{Track Constructors}
 \usage{
-BlockTrack(range, label = deparse(substitute(range)),
-  tooltip = mcols(range), color = "blue", background = NULL,
-  height = 30)
+BlockTrack(
+  range,
+  label = deparse(substitute(range)),
+  tooltip = mcols(range),
+  color = "blue",
+  background = NULL,
+  height = 30
+)
 
-VlineTrack(pos, label = deparse(substitute(pos)), tooltip = mcols(pos),
-  color = "green", background = NULL, height = 40)
+VlineTrack(
+  pos,
+  label = deparse(substitute(pos)),
+  tooltip = mcols(pos),
+  color = "green",
+  background = NULL,
+  height = 40
+)
 
-PinTrack(pos, value = mcols(pos)$value, domain = numeric(),
-  label = deparse(substitute(pos)), tooltip = mcols(pos), color = "red",
-  background = NULL, height = 40)
+PinTrack(
+  pos,
+  value = mcols(pos)$value,
+  domain = numeric(),
+  label = deparse(substitute(pos)),
+  tooltip = mcols(pos),
+  color = "red",
+  background = NULL,
+  height = 40
+)
 
-LineTrack(pos, value = mcols(pos)$value, domain = numeric(),
-  label = deparse(substitute(pos)), color = "yellow", background = NULL,
-  height = 70)
+LineTrack(
+  pos,
+  value = mcols(pos)$value,
+  domain = numeric(),
+  label = deparse(substitute(pos)),
+  color = "yellow",
+  background = NULL,
+  height = 70
+)
 
-AreaTrack(pos, value = mcols(pos)$value, domain = numeric(),
-  label = deparse(substitute(pos)), color = "pink", background = NULL,
-  height = 70)
+AreaTrack(
+  pos,
+  value = mcols(pos)$value,
+  domain = numeric(),
+  label = deparse(substitute(pos)),
+  color = "pink",
+  background = NULL,
+  height = 70
+)
 
-GeneTrackFromTxDb(txdb, seqlevel = seqlevels(txdb),
-  label = deparse(substitute(txdb)), color = "black", background = NULL,
-  height = 100)
+GeneTrackFromTxDb(
+  txdb,
+  seqlevel = seqlevels(txdb),
+  label = deparse(substitute(txdb)),
+  color = "black",
+  background = NULL,
+  height = 100
+)
 
-FeatureTrack(range, label = deparse(substitute(range)),
-  tooltip = mcols(range), names = base::names(range), color = "black",
-  background = NULL, height = 200)
+FeatureTrack(
+  range,
+  label = deparse(substitute(range)),
+  tooltip = mcols(range),
+  names = base::names(range),
+  color = "black",
+  background = NULL,
+  height = 200
+)
 
-GroupFeatureTrack(grl, label = deparse(substitute(grl)),
-  tooltip = mcols(grl), names = base::names(grl), color = "black",
-  background = NULL, height = 200)
+GroupFeatureTrack(
+  grl,
+  label = deparse(substitute(grl)),
+  tooltip = mcols(grl),
+  names = base::names(grl),
+  color = "black",
+  background = NULL,
+  height = 200
+)
 
-TxTrackFromTxDb(txdb, seqlevel = seqlevels(txdb),
-  label = deparse(substitute(txdb)), color = "red", background = NULL,
-  height = 300)
+TxTrackFromTxDb(
+  txdb,
+  seqlevel = seqlevels(txdb),
+  label = deparse(substitute(txdb)),
+  color = "red",
+  background = NULL,
+  height = 300
+)
 
-TxTrackFromGRanges(gr, label = deparse(substitute(gr)), color = "red",
-  background = NULL, height = 300)
+TxTrackFromGRanges(
+  gr,
+  label = deparse(substitute(gr)),
+  color = "red",
+  background = NULL,
+  height = 300
+)
 }
 \arguments{
 \item{range, pos}{GRanges or IRanges object. For pos, all the width should be one.}

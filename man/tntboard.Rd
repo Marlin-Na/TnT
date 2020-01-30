@@ -7,11 +7,22 @@
 \alias{TnTGenome}
 \title{TnTBoard}
 \usage{
-TnTBoard(tracklist, view.range = GRanges(), coord.range = IRanges(),
-  zoom.allow = IRanges(), allow.drag = TRUE, use.tnt.genome = FALSE)
+TnTBoard(
+  tracklist,
+  view.range = GRanges(),
+  coord.range = IRanges(),
+  zoom.allow = IRanges(),
+  allow.drag = TRUE,
+  use.tnt.genome = FALSE
+)
 
-TnTGenome(tracklist, view.range = GRanges(), coord.range = IRanges(),
-  zoom.allow = IRanges(), allow.drag = TRUE)
+TnTGenome(
+  tracklist,
+  view.range = GRanges(),
+  coord.range = IRanges(),
+  zoom.allow = IRanges(),
+  allow.drag = TRUE
+)
 }
 \arguments{
 \item{tracklist}{One track or a list of tracks to view.}

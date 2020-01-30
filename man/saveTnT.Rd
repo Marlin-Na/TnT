@@ -4,8 +4,14 @@
 \alias{saveTnT}
 \title{Save a TnTBoard to an HTML file}
 \usage{
-saveTnT(tntdef, file, selfcontained = TRUE, libdir = NULL,
-  background = "white", knitrOptions = list())
+saveTnT(
+  tntdef,
+  file,
+  selfcontained = TRUE,
+  libdir = NULL,
+  background = "white",
+  knitrOptions = list()
+)
 }
 \arguments{
 \item{tntdef}{A TnTBoard/TnTGenome object to save.}

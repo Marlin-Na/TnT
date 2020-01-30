@@ -46,4 +46,4 @@ Collate:
     'tntTracks-compositeTrack.R'
     'tntTracks-constructors.R'
     'trackWidget.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 7.0.2
