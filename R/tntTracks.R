@@ -123,9 +123,11 @@ setMethod("seqlevelsInUse", signature = c(x = "RangeBasedTrack"),
 #' @export
 #' @examples
 #' track <- BlockTrack(GRanges("chr1", IRanges(6, 54)))
-#' trackData(track) # track data of block track is an object that inherits GRanges.
+#' class(trackData(track)) # track data of block track is an object that inherits GRanges.
+#' #trackData(track)
 #' ctrack <- merge(track, track)
-#' trackData(ctrack) # track data of composite track is a list of tracks
+#' class(trackData(ctrack)) # track data of composite track is a list of tracks
+#' #trackData(ctrack)
 trackData <- function (x) {
     x@Data
 }
